@@ -1,8 +1,12 @@
 import React from 'react';
+import bgImage from '../assets/signupbg.png';
 
 const Signup = () => {
   return (
-    <div className="bg-[url('https://wstatic-prod-boc.krafton.com/PUBG_OFFICIAL/20241203/rXsnNVbH.png')] h-screen bg-cover bg-center flex flex-col items-center justify-center bg-gradient-to-r from-gray-800 to-black text-white">
+    <div className=" h-screen bg-cover bg-center flex flex-col items-center justify-center bg-gradient-to-r from-gray-800 to-black text-white"
+    style={{
+      backgroundImage: `url(${bgImage})`
+    }}>
       <div className="w-full max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg mx-4">
         <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
 
