@@ -23,12 +23,13 @@ const Navbar = () => {
         
         </a>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
+          <Link
+          to="/signup"
             type="button"
             className="text-white bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
           >
             Get started
-          </button>
+          </Link>
           <button
             onClick={toggleMenu}
             type="button"
