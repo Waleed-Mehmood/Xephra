@@ -35,7 +35,7 @@ const ResetPassword = () => {
     setNewPassword("");
     setConfirmPassword("");
     setAcceptTerms(false);
-    navigate('/login')
+    navigate('/dashboard')
   };
 
   return (
