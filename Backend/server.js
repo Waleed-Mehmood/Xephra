@@ -19,6 +19,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Import the router files
+const authRoutes = require('./routes/authRoutes');
+
+// Routes
+app.use('/user', authRoutes);
+
 // Connect to MongoDB
 connectDB();
 
