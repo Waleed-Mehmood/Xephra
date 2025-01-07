@@ -23,20 +23,20 @@ export const menuItems = [
     ),
   },
   {
-    name: "Posted Events",
-    key: "postedEvents",
+    name: "Upcoming Events",
+    key: "upcomingEvents",
     icon: <MdEventNote className="w-5 h-5" />,
   },
 
   {
-    name: "New Events",
-    key: "newEvents",
+    name: "Registered Events",
+    key: "registeredEvents",
     icon: <MdEventAvailable className="w-5 h-5" />,
   },
 
   {
-    name: "User Ranking",
-    key: "userRanking",
+    name: "Ranking Board",
+    key: "rankingBoard",
     icon: <PiRankingBold className="w-5 h-5" />,
   },
   {

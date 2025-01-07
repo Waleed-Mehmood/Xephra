@@ -1,4 +1,5 @@
 import React from "react";
+import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import Home from "./pages/Home";
@@ -6,7 +7,10 @@ import Signup from "./pages/Signup";
 import ForgetPassword from "./pages/ForgetPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/AdminDashboard/Dashboard";
+import UserDashboard from "./pages/UserDashboard/Dashboard";
 import Login from "./pages/Login";
+import UserProfile from "./components/UserDashobard/UserProfile";
+import EventDetail from "./components/UserDashobard/EventDetail";
 
 
 export default function App() {
@@ -20,6 +24,8 @@ export default function App() {
         <Route path="/forget" element={<ForgetPassword  />} />
         <Route path="/reset" element={<ResetPassword  />} />
         <Route path="/dashboard" element={<Dashboard  />} />
+        <Route path="/userdashboard" element={<UserDashboard  />} />
+        <Route path="/event/:eventId" element={<EventDetail />} />
       </Routes>
     </BrowserRouter>
   );

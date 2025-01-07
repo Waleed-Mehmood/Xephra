@@ -1,7 +1,210 @@
-import React from 'react'
+import React, { useState } from "react";
 
-export default function RankingApproval() {
+const RankingApproval = () => {
+  const [games, setGames] = useState([]);
+
+  // Add a new game row
+  const handleAddGame = () => {
+    setGames([
+      ...games,
+      {
+        id: Date.now(),
+        game: "",
+        rank: "",
+        score: "",
+        status: "-",
+        screenshot: null,
+      },
+    ]);
+  };
+
+  // Update game details
+  const handleInputChange = (id, field, value) => {
+    setGames((prevGames) =>
+      prevGames.map((game) =>
+        game.id === id ? { ...game, [field]: value } : game
+      )
+    );
+  };
+
+  // Handle screenshot upload
+  const handleScreenshotUpload = (id, file) => {
+    setGames((prevGames) =>
+      prevGames.map((game) =>
+        game.id === id ? { ...game, screenshot: file } : game
+      )
+    );
+  };
+
+  // Submit game details
+  const handleSubmit = (id) => {
+    setGames((prevGames) =>
+      prevGames.map((game) =>
+        game.id === id ? { ...game, status: "Pending" } : game
+      )
+    );
+    alert("Details submitted successfully!");
+  };
+
+  // Delete a row
+  const handleDelete = (id) => {
+    setGames((prevGames) => prevGames.filter((game) => game.id !== id));
+  };
+
   return (
-    <div>RankingApproval</div>
-  )
-}
+    <div className="bg-[#f7e8e8] border border-gray-300 rounded-lg p-6 mx-auto text-center">
+      <h1 className="text-2xl font-bold text-[#5C2D33] mb-6 font-['Press_Start_2P']">
+        User Game Entry
+      </h1>
+      <button
+        onClick={handleAddGame}
+        className="bg-[#5C2D33] text-white px-4 py-2 rounded-md hover:bg-[#854951] transition mb-6"
+      >
+        Add New Game
+      </button>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Game Name
+              </th>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Rank
+              </th>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Score
+              </th>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Screenshot
+              </th>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Status
+              </th>
+              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {games.map((game) => (
+              <tr key={game.id} className="bg-white hover:bg-[#f1dcdc] transition">
+                <td className="py-3 px-4 border border-gray-300">
+                  <input
+                    type="text"
+                    value={game.game}
+                    onChange={(e) =>
+                      handleInputChange(game.id, "game", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    placeholder="Enter game name"
+                    disabled={game.status !== "-"}
+                  />
+                </td>
+                <td className="py-3 px-4 border border-gray-300">
+                  <input
+                    type="number"
+                    value={game.rank}
+                    onChange={(e) =>
+                      handleInputChange(game.id, "rank", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    placeholder="Enter rank"
+                    disabled={game.status !== "-"}
+                  />
+                </td>
+                <td className="py-3 px-4 border border-gray-300">
+                  <input
+                    type="number"
+                    value={game.score}
+                    onChange={(e) =>
+                      handleInputChange(game.id, "score", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    placeholder="Enter score"
+                    disabled={game.status !== "-"}
+                  />
+                </td>
+                <td className="py-3 px-4 border border-gray-300">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      handleScreenshotUpload(game.id, e.target.files[0])
+                    }
+                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    disabled={game.status !== "-"}
+                  />
+                  {game.screenshot && (
+                    <img
+                      src={URL.createObjectURL(game.screenshot)}
+                      alt="Screenshot Preview"
+                      className="mt-2 w-20 h-20 object-cover border border-gray-300 rounded"
+                    />
+                  )}
+                </td>
+                <td className="py-3 px-4 border border-gray-300 text-center">
+                  <span
+                    className={`${
+                      game.status === "Pending" ? "text-yellow-600" : "text-gray-500"
+                    } font-bold`}
+                  >
+                    {game.status}
+                  </span>
+                </td>
+                <td className="py-3 px-4 border border-gray-300 text-center flex justify-center gap-2 items-center">
+                  {game.status === "-" ? (
+                    <button
+                      onClick={() => handleSubmit(game.id)}
+                      className="bg-[#5C2D33] text-white px-4 py-2 rounded-md hover:bg-[#854951] transition"
+                    >
+                      Submit
+                    </button>
+                  ) : (
+                    <span className="text-green-600 font-bold">Submitted</span>
+                  )}
+                  <button
+                    onClick={() => handleDelete(game.id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <style>{`
+        input[type="file"] {
+          display: block !important;
+          border: 1px solid #5C2D33; /* Match border color */
+          background-color: #f7e8e8; /* Match background color */
+          width: 100%;
+        }
+
+        input::placeholder {
+          color: #5C2D33;
+        }
+
+        @media (max-width: 768px) {
+          table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+          }
+          
+          th, td {
+            padding: 8px;
+          }
+
+          th {
+            white-space: nowrap;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default RankingApproval;

@@ -10,6 +10,7 @@ export default function Header({
   toggleSideMenu,
   toggleTheme,
   profileImage,
+  onMenuClick
 }) {
   return (
     <header
@@ -45,13 +46,14 @@ export default function Header({
           </button>
 
           {/* Profile Image */}
-          <Link to="/profile">
+          <Link>
             <img
               src={
                 profileImage ||
                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               } // Fallback to placeholder if n o profile image
               alt="Profile"
+              onClick={() => onMenuClick("userProfile")}
               className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover"
             />
           </Link>
