@@ -1,12 +1,15 @@
+
 import React, { useState } from "react";
-import Header from "../../components/AdminDashobard/Header";
-import { menuItems } from "../../components/AdminDashobard/AdminMenus";
-import PostedEvents from "../../components/AdminDashobard/PostedEvents";
-import NewEvents from "../../components/AdminDashobard/NewEvents";
-import UserRanking from "../../components/AdminDashobard/UserRanking";
-import RankingApproval from "../../components/AdminDashobard/RankingApproval";
-import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
+import Header from "../../components/UserDashobard/Header";
+import { menuItems } from "../../components/UserDashobard/UserMenus";
 import logo from "../../assets/logo.png";
+import UserProfile from "../../components/UserDashobard/UserProfile";
+import DashboardUser from "../../components/UserDashobard/DashboardUser";
+import UpcomingEvents from "../../components/UserDashobard/UpcomingEvents";
+import RegisteredEvents from "../../components/UserDashobard/RegisteredEvents";
+import RankingBoard from "../../components/UserDashobard/RankingBoard";
+import RankingApproval from "../../components/UserDashobard/RankingApproval";
+
 
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
@@ -45,18 +48,17 @@ function Sidebar({ onMenuClick, dark }) {
 }
 
 // Mobile Sidebar component
-function MobileSidebar({ dark, togglePagesMenu, isPagesMenuOpen }) {
+function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
   return (
     <div
-      className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto ${
-        dark ? "bg-gray-800" : "bg-white"
-      } md:hidden transition duration-150 ease-in-out transform`}
+      className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto transform transition-transform ${
+        isSideMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } ${dark ? "bg-gray-800" : "bg-white"} md:hidden`}
     >
-      <Sidebar
-        dark={dark}
-        togglePagesMenu={togglePagesMenu}
-        isPagesMenuOpen={isPagesMenuOpen}
-      />
+      <Sidebar dark={dark} onMenuClick={(key) => { 
+        onMenuClick(key); 
+        toggleSideMenu(); // Close sidebar after clicking an item
+      }} />
     </div>
   );
 }
@@ -65,36 +67,37 @@ function MobileSidebar({ dark, togglePagesMenu, isPagesMenuOpen }) {
 function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const [isPagesMenuOpen, setIsPagesMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
 
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen);
-  const togglePagesMenu = () => setIsPagesMenuOpen(!isPagesMenuOpen);
   const toggleTheme = () => setDark(!dark);
 
   const renderContent = () => {
     switch (activeMenu) {
       case "dashboard":
-        return <Dashboardadmin />;
-      case "postedEvents":
-        return <PostedEvents />;
-      case "newEvents":
-        return <NewEvents />;
-      case "userRanking":
-        return <UserRanking />;
+        return <DashboardUser />;
+      case "upcomingEvents":
+        return <UpcomingEvents />;
+      case "registeredEvents":
+        return <RegisteredEvents />;
+      case "rankingBoard":
+        return <RankingBoard />;
       case "rankingApproval":
         return <RankingApproval />;
+      case "userProfile":
+        return <UserProfile />;
       default:
-        return <Dashboardadmin />;
+        return <DashboardUser />;
     }
   };
 
   return (
     <div
-      className={`flex h-screen ${dark ? "bg-[#b7ab95]" : "bg-gray-50"} ${
+      className={`flex h-full ${dark ? "bg-[#b7ab95]" : "bg-gray-50"} ${
         isSideMenuOpen ? "overflow-hidden" : ""
       }`}
     >
+      {/* Sidebar for larger screens */}
       <aside
         className={`z-20 w-64 overflow-y-auto ${
           dark ? "bg-[#5c2d33]" : "bg-white"
@@ -102,33 +105,36 @@ function Dashboard() {
       >
         <Sidebar
           dark={dark}
-          togglePagesMenu={togglePagesMenu}
-          isPagesMenuOpen={isPagesMenuOpen}
           onMenuClick={setActiveMenu}
         />
       </aside>
 
+      {/* Backdrop for mobile sidebar */}
       {isSideMenuOpen && (
         <div
           onClick={toggleSideMenu}
-          className="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center md:hidden"
+          className="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
         />
       )}
 
+      {/* Mobile sidebar */}
       <MobileSidebar
         dark={dark}
-        togglePagesMenu={togglePagesMenu}
-        isPagesMenuOpen={isPagesMenuOpen}
+        isSideMenuOpen={isSideMenuOpen}
+        toggleSideMenu={toggleSideMenu}
+        onMenuClick={setActiveMenu}
       />
 
+      {/* Main content */}
       <div className="flex flex-col flex-1 w-full">
         <Header
           dark={dark}
           toggleSideMenu={toggleSideMenu}
           toggleTheme={toggleTheme}
+          onMenuClick={setActiveMenu}
         />
 
-        <main className="flex-1 p-6">{renderContent()}</main>
+        <main className="flex-1 p-6 min-h-screen">{renderContent()}</main>
       </div>
     </div>
   );

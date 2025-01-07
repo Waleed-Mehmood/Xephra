@@ -45,18 +45,17 @@ function Sidebar({ onMenuClick, dark }) {
 }
 
 // Mobile Sidebar component
-function MobileSidebar({ dark, togglePagesMenu, isPagesMenuOpen }) {
+function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
   return (
     <div
-      className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto ${
-        dark ? "bg-gray-800" : "bg-white"
-      } md:hidden transition duration-150 ease-in-out transform`}
+      className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto transform transition-transform ${
+        isSideMenuOpen ? "translate-x-0" : "-translate-x-full"
+      } ${dark ? "bg-gray-800" : "bg-white"} md:hidden`}
     >
-      <Sidebar
-        dark={dark}
-        togglePagesMenu={togglePagesMenu}
-        isPagesMenuOpen={isPagesMenuOpen}
-      />
+      <Sidebar dark={dark} onMenuClick={(key) => { 
+        onMenuClick(key); 
+        toggleSideMenu(); // Close sidebar after clicking an item
+      }} />
     </div>
   );
 }
@@ -65,11 +64,9 @@ function MobileSidebar({ dark, togglePagesMenu, isPagesMenuOpen }) {
 function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const [isPagesMenuOpen, setIsPagesMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
 
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen);
-  const togglePagesMenu = () => setIsPagesMenuOpen(!isPagesMenuOpen);
   const toggleTheme = () => setDark(!dark);
 
   const renderContent = () => {
@@ -95,6 +92,7 @@ function Dashboard() {
         isSideMenuOpen ? "overflow-hidden" : ""
       }`}
     >
+      {/* Sidebar for larger screens */}
       <aside
         className={`z-20 w-64 overflow-y-auto ${
           dark ? "bg-[#5c2d33]" : "bg-white"
@@ -102,25 +100,27 @@ function Dashboard() {
       >
         <Sidebar
           dark={dark}
-          togglePagesMenu={togglePagesMenu}
-          isPagesMenuOpen={isPagesMenuOpen}
           onMenuClick={setActiveMenu}
         />
       </aside>
 
+      {/* Backdrop for mobile sidebar */}
       {isSideMenuOpen && (
         <div
           onClick={toggleSideMenu}
-          className="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center md:hidden"
+          className="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
         />
       )}
 
+      {/* Mobile sidebar */}
       <MobileSidebar
         dark={dark}
-        togglePagesMenu={togglePagesMenu}
-        isPagesMenuOpen={isPagesMenuOpen}
+        isSideMenuOpen={isSideMenuOpen}
+        toggleSideMenu={toggleSideMenu}
+        onMenuClick={setActiveMenu}
       />
 
+      {/* Main content */}
       <div className="flex flex-col flex-1 w-full">
         <Header
           dark={dark}
