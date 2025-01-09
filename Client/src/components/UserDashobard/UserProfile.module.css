@@ -87,10 +87,6 @@
     -moz-appearance: textfield;
   }
   
-  input[type="file"] {
-    display: none;
-  }
-  
   .uploadBtn {
     padding: 12px 20px;
     background-color: #854951;

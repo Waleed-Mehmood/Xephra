@@ -74,7 +74,7 @@ function Dashboard() {
       case "dashboard":
         return <Dashboardadmin />;
       case "postedEvents":
-        return <PostedEvents />;
+        return <PostedEvents setActiveMenu={setActiveMenu} />;
       case "newEvents":
         return <NewEvents />;
       case "userRanking":
@@ -88,7 +88,7 @@ function Dashboard() {
 
   return (
     <div
-      className={`flex h-screen ${dark ? "bg-[#b7ab95]" : "bg-gray-50"} ${
+      className={`flex h-full ${dark ? "bg-[#b7ab95]" : "bg-gray-50"} ${
         isSideMenuOpen ? "overflow-hidden" : ""
       }`}
     >
@@ -128,7 +128,7 @@ function Dashboard() {
           toggleTheme={toggleTheme}
         />
 
-        <main className="flex-1 p-6">{renderContent()}</main>
+        <main className="flex-1 p-6 min-h-screen">{renderContent()}</main>
       </div>
     </div>
   );
