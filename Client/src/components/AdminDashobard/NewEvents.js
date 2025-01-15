@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NewEvents = ({ setActiveMenu }) => {
+const NewEvents = ({ setActiveMenu,dark }) => {
   const [formData, setFormData] = useState({
     title: "",
     game: "",
@@ -48,7 +48,7 @@ const NewEvents = ({ setActiveMenu }) => {
   };
 
   return (
-    <div className="mx-auto py-16 px-4 bg-[#5C2D33] rounded-lg">
+    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
       <h2 className="text-2xl font-bold text-[#b6a99a] mb-6">Create New Tournament</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col">
@@ -136,7 +136,7 @@ const NewEvents = ({ setActiveMenu }) => {
 
         <button
           type="submit"
-          className="bg-[#69363f] text-white px-6 py-2 rounded-md hover:bg-[#8f404f] transition"
+          className={`text-white px-6 py-2 rounded-md transition ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
         >
           Create Event
         </button>

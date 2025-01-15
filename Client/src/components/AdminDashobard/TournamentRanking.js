@@ -114,44 +114,17 @@ const TournamentRanking = () => {
   ];
 
   return (
+    <div className="bg-[#B7AB95]">
     <div className="container mx-auto py-16 px-4">
-      {/* Inject the custom scrollbar styles internally */}
-      <style>
-        {`
-          html, body {
-            height: 100%;
-            overflow-y: scroll;
-          }
-
-          ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-          }
-
-          ::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background-color: #854951;
-            background-image: -webkit-linear-gradient(90deg,
-                                                      transparent,
-                                                      rgba(0, 0, 0, 0.4) 50%,
-                                                      transparent,
-                                                      transparent);
-          }
-
-          ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-          }
-        `}
-      </style>
-      
-      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-[#8F404F] text-center">
+    <div className="bg-[#854951] rounded-lg shadow-lg p-8 mb-8">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">
         {tournament.title}
       </h1>
-      <p className="text-sm md:text-lg text-gray-400 text-center mb-8">
+      <p className="text-sm md:text-lg text-white text-center">
         Compete for the prize pool of{" "}
-        <span className="text-[#69363f]">{tournament.prizePool}</span>
+        <span className="text-[#B6A99A]">{tournament.prizePool}</span>
       </p>
+      </div>
       <div className="bg-[#232122] rounded-lg p-6 shadow-lg">
         <ul className="divide-y divide-[#393939]">
           {dummyRankings.map((user, index) => (
@@ -181,6 +154,7 @@ const TournamentRanking = () => {
           ))}
         </ul>
       </div>
+    </div>
     </div>
   );
 };

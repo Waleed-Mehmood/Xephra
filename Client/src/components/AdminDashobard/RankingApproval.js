@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const RankingApproval = () => {
+const RankingApproval = ({dark}) => {
   const [games, setGames] = useState([
     {
       id: 1,
@@ -86,14 +86,14 @@ const RankingApproval = () => {
 
   return (
     <div className="bg-[#f7e8e8] p-6 rounded-lg min-h-screen">
-      <h1 className="text-2xl font-bold text-[#5C2D33] mb-6 font-['Press_Start_2P'] text-center">
+      <h1 className={`text-2xl font-bold mb-6 font-['Press_Start_2P'] text-center ${dark ? "text-[#69363F]" : "text-[#232122]"}`}>
         Admin Approval Panel
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {games.map((game) => (
           <div
             key={game.id}
-            className="bg-[#5C2D33] shadow-md rounded-lg p-4 border border-gray-300"
+            className={`shadow-md rounded-lg p-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}
           >
             <h2 className="text-lg font-bold text-[#B6A99A] mb-2">
               Game: {game.game || "N/A"}
@@ -162,9 +162,9 @@ const RankingApproval = () => {
       {/* Delete Confirmation Modal */}
       {gameToDelete && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm">
-            <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
-            <p className="text-sm mb-6">
+          <div className={`p-6 rounded-lg shadow-lg w-[90%] max-w-sm ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+            <h2 className="text-lg font-bold mb-4 text-white">Confirm Deletion</h2>
+            <p className="text-sm mb-6 text-white">
               Are you sure you want to delete this game?
             </p>
             <div className="flex justify-end gap-2">
@@ -176,7 +176,7 @@ const RankingApproval = () => {
               </button>
               <button
                 onClick={handleDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+                className={`text-white px-4 py-2 rounded-md transition ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"} `}
               >
                 Yes
               </button>
@@ -188,7 +188,7 @@ const RankingApproval = () => {
       {/* Edit Modal */}
       {editingGame && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#5C2D33] p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll sm:overflow-y-auto max-h-[80%] sm:max-h-[none]">
+          <div className={`p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll sm:overflow-y-auto max-h-[80%] sm:max-h-[none] ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
             <h2 className="text-lg font-bold mb-4 text-[#B6A99A]">Edit Game</h2>
             <div className="mb-4">
               <label className="block text-sm font-bold mb-2">Game Name</label>
@@ -248,7 +248,7 @@ const RankingApproval = () => {
               </button>
               <button
                 onClick={saveEdit}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+                className={`text-white px-4 py-2 rounded-md transition ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
               >
                 Save
               </button>

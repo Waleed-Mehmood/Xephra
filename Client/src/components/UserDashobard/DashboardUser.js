@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 
-const DashboardUser = () => {
+const DashboardUser = ({dark}) => {
   const rankings = [
     {
       id: 1,
@@ -142,8 +142,8 @@ const DashboardUser = () => {
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
-        <div className="col-span-12 lg:col-span-9 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+        <div className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
             Upcoming Events
           </h2>
           <Slider {...settings}>
@@ -164,7 +164,7 @@ const DashboardUser = () => {
             ))}
           </Slider>
 
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8">
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${dark ? "text-[#B7A692]" : "text-white"}`}>
             Registered Events
           </h2>
           <Slider {...settings}>
@@ -187,8 +187,8 @@ const DashboardUser = () => {
         </div>
 
         {/* Rankings Section */}
-        <div className="col-span-12 lg:col-span-3 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+        <div className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
             User Rankings
           </h2>
           <ul>
@@ -200,14 +200,14 @@ const DashboardUser = () => {
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div className="flex-1">
-                  <p className="font-bold lg:text-lg sm:text-base">
+                  <p className={`font-bold lg:text-lg sm:text-base ${dark ? "text-[#B7A692]" : "text-white"}`}>
                     {user.name}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <p className="text-sm text-gray-600">Rank: {user.rank}</p>
+                    <p className={`text-sm ${dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"} `}>Rank: {user.rank}</p>
                     <div className="w-full bg-gray-200 h-2 rounded">
                       <div
-                        className="bg-green-500 h-2 rounded"
+                        className={`h-2 rounded ${dark ? "bg-[#A15D66]" : "bg-[#A15D66]"}`}
                         style={{ width: `${user.rank}%` }}
                       ></div>
                     </div>
@@ -218,7 +218,7 @@ const DashboardUser = () => {
           </ul>
           <Link
             to="/user-rankings"
-            className="bg-[#854951] text-white font-semibold py-2 px-4 rounded hover:bg-[#A15D66] mt-4 block text-center"
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${dark ? "bg-[#302B27] hover:bg-[#8b796b]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
           >
             See All
           </Link>

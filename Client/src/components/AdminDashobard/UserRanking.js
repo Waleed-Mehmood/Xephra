@@ -21,7 +21,7 @@ ChartJS.register(
   BarElement
 );
 
-const UserRanking = () => {
+const UserRanking = ({dark}) => {
   const users = [
     { name: "Player1", rank: 1, score: 920, progress: 85 },
     { name: "Player2", rank: 2, score: 870, progress: 75 },
@@ -76,8 +76,8 @@ const UserRanking = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F7E8E8] p-8">
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-gray-800">
+    <div className={`min-h-screen p-8 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-[#b6a99a]">
         User Rankings
       </h1>
 
