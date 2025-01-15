@@ -26,7 +26,7 @@ const Navbar = () => {
           <Link
           to="/signup"
             type="button"
-            className="text-white bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
+            className="text-white font-montserrat bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
           >
             Get started
           </Link>
@@ -66,7 +66,7 @@ const Navbar = () => {
               <Link
                 to="#"
                 onClick={()=> setIsMenuOpen(!isMenuOpen)}
-                className="block py-2 px-3 md:p-0 text-white  rounded md:bg-transparent md:text-white md:dark:text-white md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b]"
+                className="block font-montserrat py-2 px-3 md:p-0 text-white  rounded md:bg-transparent md:text-white md:dark:text-white md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b]"
                 aria-current="page"
               >
                 Home
@@ -76,7 +76,7 @@ const Navbar = () => {
               <Link
                 to="#games"
                 onClick={()=> setIsMenuOpen(!isMenuOpen)}
-                className="block py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Games
               </Link>
@@ -85,7 +85,7 @@ const Navbar = () => {
               <Link
                 to="#"
                 onClick={()=> setIsMenuOpen(!isMenuOpen)}
-                className="block py-2 px-3 md:p-0 text-white rounded   md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block font-montserrat py-2 px-3 md:p-0 text-white rounded   md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Tournaments
               </Link>
@@ -94,7 +94,7 @@ const Navbar = () => {
               <Link
                 to="#"
                 onClick={()=> setIsMenuOpen(!isMenuOpen)}
-                className="block py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Prices
               </Link>

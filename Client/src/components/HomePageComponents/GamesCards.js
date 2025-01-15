@@ -81,11 +81,11 @@ export default function GamesCards() {
     >
       {/* Title Section */}
       <div className="text-center py-6">
-        <h1 className="text-4xl font-bold mb-4 text-[#b9a694]">GAMES</h1>
-        <p className="text-2xl text-[#69363f] font-bold">
+        <h1 className="text-4xl font-bold mb-4 text-[#b9a694] font-montserrat">GAMES</h1>
+        <p className="text-2xl text-[#69363f] font-bold font-playfair">
           EXPLORE THE MOST POPULAR GAMES AND THEIR AMAZING FEATURES
         </p>
-        <button className="bg-[#69363f] rounded-full py-3 px-7 my-3 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
+        <button className="bg-[#69363f] font-montserrat rounded-full py-3 px-7 my-3 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
           Get Started
         </button>
       </div>
@@ -103,8 +103,8 @@ export default function GamesCards() {
               className="w-full h-52 object-cover"
             />
             <div className="p-4">
-              <h2 className="text-xl font-bold">{game.title}</h2>
-              <p className="text-sm text-gray-400 mt-2">{game.description}</p>
+              <h2 className="text-xl font-bold font-playfair">{game.title}</h2>
+              <p className="text-sm text-gray-400 mt-2 font-montserrat">{game.description}</p>
             </div>
           </div>
         ))}
