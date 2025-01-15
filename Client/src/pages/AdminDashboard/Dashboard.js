@@ -7,13 +7,14 @@ import UserRanking from "../../components/AdminDashobard/UserRanking";
 import RankingApproval from "../../components/AdminDashobard/RankingApproval";
 import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
 import logo from "../../assets/logo.png";
+import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
 
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
       <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
-        <img src={logo} className="h-10 w-20 " alt="Flowbite Logo" />
+        <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
         {menuItems.map((item, index) => (
@@ -72,17 +73,19 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeMenu) {
       case "dashboard":
-        return <Dashboardadmin />;
+        return <Dashboardadmin setActiveMenu={setActiveMenu} />;
       case "postedEvents":
         return <PostedEvents setActiveMenu={setActiveMenu} />;
       case "newEvents":
         return <NewEvents />;
       case "userRanking":
         return <UserRanking />;
+      case "tournamentsLeague":
+        return <TournamentsLeague />;
       case "rankingApproval":
         return <RankingApproval />;
       default:
-        return <Dashboardadmin />;
+        return <Dashboardadmin setActiveMenu={setActiveMenu} />;
     }
   };
 
@@ -128,7 +131,7 @@ function Dashboard() {
           toggleTheme={toggleTheme}
         />
 
-        <main className="flex-1 p-6 min-h-screen">{renderContent()}</main>
+        <main className="flex-1 p-0 md:p-6 min-h-screen">{renderContent()}</main>
       </div>
     </div>
   );

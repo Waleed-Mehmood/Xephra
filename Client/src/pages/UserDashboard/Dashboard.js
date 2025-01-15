@@ -9,6 +9,7 @@ import UpcomingEvents from "../../components/UserDashobard/UpcomingEvents";
 import RegisteredEvents from "../../components/UserDashobard/RegisteredEvents";
 import RankingBoard from "../../components/UserDashobard/RankingBoard";
 import RankingApproval from "../../components/UserDashobard/RankingApproval";
+import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
 
 
 // Sidebar component
@@ -75,19 +76,21 @@ function Dashboard() {
   const renderContent = () => {
     switch (activeMenu) {
       case "dashboard":
-        return <DashboardUser />;
+        return <DashboardUser setActiveMenu={setActiveMenu} />;
       case "upcomingEvents":
         return <UpcomingEvents />;
       case "registeredEvents":
         return <RegisteredEvents />;
       case "rankingBoard":
         return <RankingBoard />;
+      case "tournamentsLeague":
+        return <TournamentsLeague />;
       case "rankingApproval":
         return <RankingApproval />;
       case "userProfile":
         return <UserProfile />;
       default:
-        return <DashboardUser />;
+        return <DashboardUser setActiveMenu={setActiveMenu} />;
     }
   };
 
@@ -134,7 +137,7 @@ function Dashboard() {
           onMenuClick={setActiveMenu}
         />
 
-        <main className="flex-1 p-6 min-h-screen">{renderContent()}</main>
+        <main className="flex-1 p-0 md:p-6 min-h-screen">{renderContent()}</main>
       </div>
     </div>
   );
