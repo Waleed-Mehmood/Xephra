@@ -23,8 +23,13 @@ const Login = () => {
     e.preventDefault();
     dispatch(LoginUser(formData)).then((action) => {
       if (LoginUser.fulfilled.match(action)) {
-        navigate("/dashboard"); 
-      }
+          if(action?.payload?.user?.role === "admin"){
+            navigate("/dashboard");
+          }
+          else{
+            navigate("/userdashboard");
+          }
+        }
     });
   };
 
