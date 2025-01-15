@@ -6,10 +6,10 @@ export default function Prices() {
       <div className=" w-full  bg-gradient-to-r from-[#69363f] to-[#57242d] -z-10" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
-          <h2 className="font-manrope text-5xl text-center font-bold text-[#b9a68f] mb-4">
+          <h2 className="font-manrope text-5xl text-center font-bold text-[#b9a68f] mb-4 font-montserrat">
           CHOOSE YOUR PLAN
           </h2>
-          <p className="text-[#b9a68f] text-xl text-center leading-6">
+          <p className="text-[#b9a68f] text-xl text-center leading-6 font-playfair">
           Get Ready for the Ultimate Gaming Tournament!
           </p>
         </div>
@@ -32,7 +32,7 @@ export default function Prices() {
                   />
                 </svg>
               </div>
-              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white">
+              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white font-playfair">
               Basic Plan
               </h3>
               <div className="flex items-center justify-center">
@@ -67,7 +67,7 @@ export default function Prices() {
             </ul>
             <a
               href="javascript:;"
-              className="py-2.5 px-5 bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
+              className="py-2.5 font-montserrat px-5 bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
             >
               Purchase Plan
             </a>
@@ -89,7 +89,7 @@ export default function Prices() {
                   />
                 </svg>
               </div>
-              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white">
+              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white font-playfair">
               Pro Plan
               </h3>
               <div className="flex items-center justify-center">
@@ -126,7 +126,7 @@ export default function Prices() {
             </ul>
             <a
               href="javascript:;"
-              className="py-2.5 px-5 bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
+              className="py-2.5 px-5 font-montserrat bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
             >
               Purchase Plan
             </a>
@@ -148,7 +148,7 @@ export default function Prices() {
                   />
                 </svg>
               </div>
-              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white">
+              <h3 className="font-manrope text-2xl font-bold my-7 text-center text-white font-playfair">
               Elite Plan
               </h3>
               <div className="flex items-center justify-center">
@@ -183,7 +183,7 @@ export default function Prices() {
             </ul>
             <a
               href="javascript:;"
-              className="py-2.5 px-5 bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
+              className="py-2.5 px-5 font-montserrat bg-[#b7a78c] shadow-sm rounded-full transition-all duration-500 text-base text-[#5d2a33] font-bold text-center w-fit mx-auto group-hover:bg-[#5d2a33] group-hover:text-white "
             >
               Purchase Plan
             </a>

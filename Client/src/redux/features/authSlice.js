@@ -1,26 +1,34 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-// Async action to handle signup using fetch
-export const signupUser = createAsyncThunk(
-  "auth/signupUser",
-  async (formData, { rejectWithValue }) => {
+// thunk for sign up user
+export const signUpUser = createAsyncThunk(
+  "auth/signUpUser",
+  async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("https://api.example.com/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
-
-      return await response.json();
+      const response = await axios.post(
+        "http://localhost:5000/auth/signup",
+        userData
+      );
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+// thunk for login user
+export const LoginUser = createAsyncThunk(
+  "auth/LoginUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/auth/login",
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
     }
   }
 );
@@ -29,21 +37,40 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: null,
+    token: null,
     loading: false,
     error: null,
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(signupUser.pending, (state) => {
+      .addCase(signUpUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
+
+      .addCase(signUpUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        localStorage.setItem("token", action.payload.token);
       })
-      .addCase(signupUser.rejected, (state, action) => {
+      .addCase(signUpUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(LoginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(LoginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
+      })
+      .addCase(LoginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

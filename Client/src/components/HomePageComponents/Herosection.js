@@ -9,23 +9,23 @@ export default function Herosection() {
             <div className="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap32">
               <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0">
                 <div className="flex items-center text-sm font-medium text-white justify-center lg:justify-start">
-                  <span className="bg-[#69363f] py-1 px-3 rounded-2xl text-xs font-medium text-white mr-3 ">
+                  <span className="bg-[#69363f] font-montserrat py-1 px-3 rounded-2xl text-xs font-medium text-white mr-3 font-montserrat">
                     #1
                   </span>
                   Gaming Tournament Platform
                 </div>
-                <h1 className="py-8 text-center text-[#b7a692] font-bold font-manrope text-3xl md:text-5xl text-center lg:text-left leading-[70px]">
+                <h1 className="font-playfair  py-8 text-center text-[#b7a692] font-bold font-manrope text-3xl md:text-5xl text-center lg:text-left leading-[70px]">
                   WHERE GAMERS COMPETE FOR GLORY
                   <span className="text-[#69363f]">
                     {" "}
                     ENTER THE TOURNAMENT ARENA!
                   </span>
                 </h1>
-                <p className=" text-[#b7a692] text-lg text-center lg:text-left">
+                <p className=" text-[#b7a692] text-lg text-center lg:text-left font-montserrat">
                   Compete, rank up, and win amazing rewards in epic tournaments!
                 </p>
                 <div className="flex mt-3 justify-start">
-                <button className="bg-[#69363f] rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
+                <button className="bg-[#69363f] font-montserrat rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
                   Get Started
                 </button>
                 </div>

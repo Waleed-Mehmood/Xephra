@@ -1,13 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import bgImage from "../assets/signupbg.png";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpUser } from "../redux/features/authSlice";
+import Loading from "../utils/Loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const dispatach = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, token } = useSelector((state) => state.auth);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const HandleFormSubmit = (e) => {
+    e.preventDefault();
+    dispatach(signUpUser(formData));
+  };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/login");
+    }
+  }, [token, navigate]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div
@@ -17,18 +50,20 @@ const Signup = () => {
       }}
     >
       <div className="w-full max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg mx-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center font-playfair">Sign Up</h1>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={HandleFormSubmit}>
           <div>
-            <label htmlFor="username" className="block text-sm font-medium">
-              Username
+            <label htmlFor="name" className="block text-sm font-medium">
+              Name
             </label>
             <input
+              onChange={handleChange}
               type="text"
-              id="username"
-              placeholder="Enter your username"
-              className="mt-1 w-full px-4 py-2 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              className="mt-1 w-full px-4 py-2 placeholder:text-gray-700 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
             />
           </div>
 
@@ -39,20 +74,27 @@ const Signup = () => {
             <input
               type="email"
               id="email"
+              name="email"
+              onChange={handleChange}
               placeholder="Enter your email"
-              className="mt-1 w-full px-4 py-2 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
+              className="mt-1 w-full px-4 py-2 placeholder:text-gray-700 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
             />
           </div>
 
           <div className="relative">
+          <label htmlFor="password" className="block text-sm font-medium">
+              Password
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
+              name="password"
               placeholder="Enter your password"
-              className="mt-1 w-full px-4 py-2 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692] pr-10"
+              onChange={handleChange}
+              className="mt-1 w-full px-4 placeholder:text-gray-700 py-2 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692] pr-10"
             />
             <div
-              className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+              className="absolute inset-y-0 top-5 right-0 flex items-center pr-3 cursor-pointer"
               onClick={togglePasswordVisibility}
             >
               {showPassword ? (
@@ -65,11 +107,12 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#e1a257b8] hover:bg-[#b58954b8] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
+            className="w-full font-montserrat py-2 px-4 bg-[#e1a257b8] hover:bg-[#b58954b8] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
           >
             Sign Up
           </button>
         </form>
+        {error && <p style={{ color: "red", marginTop: 2 }}>{error?.error}</p>}
 
         <div className="flex items-center justify-center my-4">
           <span className="border-t border-gray-700 w-1/4"></span>
@@ -77,7 +120,7 @@ const Signup = () => {
           <span className="border-t border-gray-700 w-1/4"></span>
         </div>
 
-        <button className="w-full py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
+        <button className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
           <svg
             className="w-5 h-5 mr-2"
             xmlns="http://www.w3.org/2000/svg"

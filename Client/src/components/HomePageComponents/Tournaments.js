@@ -5,13 +5,13 @@ const TournamentCard = ({ title, game, date, description, image, prizePool }) =>
     <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
       <img className="w-full h-56 object-cover" src={image} alt={title} />
       <div className="p-4">
-        <h3 className="text-xl font-bold text-[#b8a896]">{title}</h3>
+        <h3 className="text-xl font-bold text-[#b8a896] font-playfair">{title}</h3>
         <p className="text-[#69363f] font-bold mt-1">{game}</p>
         <p className="text-sm text-gray-400">{date}</p>
-        <p className="text-gray-300 mt-2">{description}</p>
+        <p className="text-gray-300 mt-2 font-montserrat">{description}</p>
         <div className="mt-4 flex justify-between items-center">
           <span className="text-xl font-bold text-white">{prizePool}</span>
-          <button className="bg-[#69363f] text-white px-4 py-2 rounded-md hover:bg-[#8f404f] transition">
+          <button className="bg-[#69363f] text-white px-4 py-2 rounded-md hover:bg-[#8f404f] transition font-montserrat">
             Join Now
           </button>
         </div>
@@ -76,7 +76,7 @@ const Tournaments = () => {
 
   return (
     <div className=" mx-auto py-16 px-4 bg-[#232122]">
-      <h2 className="text-3xl font-bold text-center mb-8 text-[#b6a99a] py-6">UPCOMING TOURNAMENTS</h2>
+      <h2 className="text-3xl font-bold text-center mb-8 text-[#b6a99a] py-6 font-montserrat" >UPCOMING TOURNAMENTS</h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {tournaments.map((tournament, index) => (
           <TournamentCard key={index} {...tournament} />

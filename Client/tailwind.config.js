@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -11,10 +12,19 @@ module.exports = {
       width: {
         '22': '6rem',
       },
+
       colors: {
         'scrollbar-thumb': '#854951',
         'scrollbar-track': '#f1f1f1',
       },
+
+      fontFamily: {
+        kanit: ['Kanit', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        oldStandard: ['Old Standard TT', 'serif'],
+        playfair: ['Playfair Display', 'serif'],
+      },
+
     },
   },
   plugins: [
