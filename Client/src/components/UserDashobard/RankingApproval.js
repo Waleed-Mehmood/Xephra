@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const RankingApproval = () => {
+const RankingApproval = ({dark}) => {
   const [games, setGames] = useState([]);
 
   // Add a new game row
@@ -53,12 +53,12 @@ const RankingApproval = () => {
 
   return (
     <div className="bg-[#f7e8e8] border border-gray-300 rounded-lg p-6 mx-auto text-center">
-      <h1 className="text-2xl font-bold text-[#5C2D33] mb-6 font-['Press_Start_2P']">
+      <h1 className={`text-2xl font-bold mb-6 font-['Press_Start_2P'] ${dark ? "text-[#69363F]" : "text-[#232122]"}`}>
         User Game Entry
       </h1>
       <button
         onClick={handleAddGame}
-        className="bg-[#5C2D33] text-white px-4 py-2 rounded-md hover:bg-[#854951] transition mb-6"
+        className={`text-white px-4 py-2 rounded-md transition mb-6 ${dark ? "bg-[#854951] hover:bg-[#A15D66]" : "bg-[#302B27] hover:bg-[#49413C]"}`}
       >
         Add New Game
       </button>
@@ -66,22 +66,22 @@ const RankingApproval = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Game Name
               </th>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Rank
               </th>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Score
               </th>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Screenshot
               </th>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Status
               </th>
-              <th className="bg-[#5C2D33] text-white py-3 px-4 border border-gray-300">
+              <th className={`text-white py-3 px-4 border border-gray-300 ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
                 Actions
               </th>
             </tr>

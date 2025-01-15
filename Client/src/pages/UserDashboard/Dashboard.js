@@ -68,7 +68,7 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
 function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen);
   const toggleTheme = () => setDark(!dark);
