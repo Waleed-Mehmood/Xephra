@@ -1,27 +1,96 @@
-import React from 'react';
-import Slider from 'react-slick';
+import React from "react";
+import { Link } from "react-router-dom";
+import Slider from "react-slick";
 
 const DashboardUser = () => {
   const rankings = [
-    { id: 1, name: 'Player 1', rank: 90, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQklBSe2monSAS1cBms7tDarsAdheQa0J-9Ow&s' },
-    { id: 2, name: 'Player 2', rank: 80, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH9aDM4CsWt5f1we4gCSHvQQzDKcs924yZ8IhkCVldVQI3Lt6vAWDDOlerW3SswqIBrI&usqp=CAU' },
-    { id: 3, name: 'Player 3', rank: 70, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvXcLBAnNaG9u_juSWT6vyOeW1Q3N3xh0QWA&s' },
-    { id: 4, name: 'Player 4', rank: 65, image: 'https://static.vecteezy.com/system/resources/thumbnails/005/076/598/small/cool-boy-mask-mascot-esports-logo-illustration-free-vector.jpg' },
-    { id: 5, name: 'Player 5', rank: 60, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s' },
+    {
+      id: 1,
+      name: "Player 1",
+      rank: 90,
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQklBSe2monSAS1cBms7tDarsAdheQa0J-9Ow&s",
+    },
+    {
+      id: 2,
+      name: "Player 2",
+      rank: 80,
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH9aDM4CsWt5f1we4gCSHvQQzDKcs924yZ8IhkCVldVQI3Lt6vAWDDOlerW3SswqIBrI&usqp=CAU",
+    },
+    {
+      id: 3,
+      name: "Player 3",
+      rank: 70,
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvXcLBAnNaG9u_juSWT6vyOeW1Q3N3xh0QWA&s",
+    },
+    {
+      id: 4,
+      name: "Player 4",
+      rank: 65,
+      image:
+        "https://static.vecteezy.com/system/resources/thumbnails/005/076/598/small/cool-boy-mask-mascot-esports-logo-illustration-free-vector.jpg",
+    },
+    {
+      id: 5,
+      name: "Player 5",
+      rank: 60,
+      image:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s",
+    },
   ];
 
   const events = [
-    { id: 1, title: 'Fortnite Battle Royale Championship', image: 'https://images8.alphacoders.com/877/thumb-1920-877849.jpg' },
-    { id: 2, title: 'Call of Duty: Warzone Tournament Finals', image: 'https://i.ytimg.com/vi/TidXGyzxT8c/maxresdefault.jpg' },
-    { id: 3, title: 'Apex Legends Championship Series', image: 'https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg' },
-    { id: 4, title: 'PUBG Mobile Global Championship 2024', image: 'https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg' },
+    {
+      id: 1,
+      title: "Fortnite Battle Royale Championship",
+      image: "https://images8.alphacoders.com/877/thumb-1920-877849.jpg",
+    },
+    {
+      id: 2,
+      title: "Call of Duty: Warzone Tournament Finals",
+      image: "https://i.ytimg.com/vi/TidXGyzxT8c/maxresdefault.jpg",
+    },
+    {
+      id: 3,
+      title: "Apex Legends Championship Series",
+      image:
+        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
+    },
+    {
+      id: 4,
+      title: "PUBG Mobile Global Championship 2024",
+      image:
+        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
+    },
   ];
 
   const RegisteredEvents = [
-    { id: 1, title: 'League of Legends World Cup', image: 'https://cdn.wccftech.com/wp-content/uploads/2019/05/LoL-1030x579.jpg' },
-    { id: 2, title: 'Minecraft Building Championship', image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a' },
-    { id: 3, title: 'Apex Legends Championship Series', image: 'https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg' },
-    { id: 4, title: 'PUBG Mobile Global Championship 2024', image: 'https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg' },
+    {
+      id: 1,
+      title: "League of Legends World Cup",
+      image:
+        "https://cdn.wccftech.com/wp-content/uploads/2019/05/LoL-1030x579.jpg",
+    },
+    {
+      id: 2,
+      title: "Minecraft Building Championship",
+      image:
+        "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a",
+    },
+    {
+      id: 3,
+      title: "Apex Legends Championship Series",
+      image:
+        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
+    },
+    {
+      id: 4,
+      title: "PUBG Mobile Global Championship 2024",
+      image:
+        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
+    },
   ];
 
   const settings = {
@@ -56,12 +125,17 @@ const DashboardUser = () => {
       <div
         className="relative bg-cover bg-center h-64"
         style={{
-          backgroundImage: "url('https://www.amd.com/content/dam/amd/en/images/photography/lifestyle/1536834-female-gamer.jpg')",
+          backgroundImage:
+            "url('https://www.amd.com/content/dam/amd/en/images/photography/lifestyle/1536834-female-gamer.jpg')",
         }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center text-white">
-          <h1 className="text-2xl lg:text-4xl md:text-3xl sm:text-2xl font-bold">Welcome to the Gaming Dashboard</h1>
-          <p className="mt-2 md:text-lg sm:text-base">Stay updated with upcoming events and your ranking progress.</p>
+          <h1 className="text-2xl lg:text-4xl md:text-3xl sm:text-2xl font-bold">
+            Welcome to the Gaming Dashboard
+          </h1>
+          <p className="mt-2 md:text-lg sm:text-base">
+            Stay updated with upcoming events and your ranking progress.
+          </p>
         </div>
       </div>
 
@@ -69,30 +143,44 @@ const DashboardUser = () => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div className="col-span-12 lg:col-span-9 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">Upcoming Events</h2>
+          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+            Upcoming Events
+          </h2>
           <Slider {...settings}>
             {events.map((event) => (
-              <div key={event.id} className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+              <div
+                key={event.id}
+                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
+              >
                 <img
                   src={event.image}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">{event.title}</h3>
+                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                  {event.title}
+                </h3>
               </div>
             ))}
           </Slider>
 
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8">Registered Events</h2>
+          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8">
+            Registered Events
+          </h2>
           <Slider {...settings}>
             {RegisteredEvents.map((event) => (
-              <div key={event.id} className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+              <div
+                key={event.id}
+                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
+              >
                 <img
                   src={event.image}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">{event.title}</h3>
+                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                  {event.title}
+                </h3>
               </div>
             ))}
           </Slider>
@@ -100,13 +188,21 @@ const DashboardUser = () => {
 
         {/* Rankings Section */}
         <div className="col-span-12 lg:col-span-3 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">User Rankings</h2>
+          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+            User Rankings
+          </h2>
           <ul>
-            {rankings.map((user) => (
+            {rankings.slice(0, 5).map((user) => (
               <li key={user.id} className="flex items-center mb-4">
-                <img src={user.image} alt={user.name} className="w-12 h-12 rounded-full mr-4" />
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="w-12 h-12 rounded-full mr-4"
+                />
                 <div className="flex-1">
-                  <p className="font-bold lg:text-lg sm:text-base">{user.name}</p>
+                  <p className="font-bold lg:text-lg sm:text-base">
+                    {user.name}
+                  </p>
                   <div className="flex items-center space-x-2">
                     <p className="text-sm text-gray-600">Rank: {user.rank}</p>
                     <div className="w-full bg-gray-200 h-2 rounded">
@@ -120,6 +216,12 @@ const DashboardUser = () => {
               </li>
             ))}
           </ul>
+          <Link
+            to="/user-rankings"
+            className="bg-[#854951] text-white font-semibold py-2 px-4 rounded hover:bg-[#A15D66] mt-4 block text-center"
+          >
+            See All
+          </Link>
         </div>
       </div>
     </div>
@@ -127,4 +229,3 @@ const DashboardUser = () => {
 };
 
 export default DashboardUser;
-

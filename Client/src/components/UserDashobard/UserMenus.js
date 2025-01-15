@@ -1,4 +1,4 @@
-import { MdEventAvailable } from "react-icons/md";
+import { MdEventAvailable, MdSportsEsports } from "react-icons/md";
 import { MdEventNote } from "react-icons/md";
 import { PiRankingBold } from "react-icons/pi";
 import { MdLibraryAddCheck } from "react-icons/md";
@@ -38,6 +38,11 @@ export const menuItems = [
     name: "Ranking Board",
     key: "rankingBoard",
     icon: <PiRankingBold className="w-5 h-5" />,
+  },
+  {
+      name: "Tournaments League",
+      key: "tournamentsLeague",
+      icon: <MdSportsEsports className="w-5 h-5" />,
   },
   {
     name: "Ranking Approval",

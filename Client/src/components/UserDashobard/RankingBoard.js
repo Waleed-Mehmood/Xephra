@@ -33,6 +33,29 @@ const RankingBoard = () => {
   // Extract top 10 users or fewer
   const topUsers = users.slice(0, 10);
 
+  // const barChartData = {
+  //   labels: topUsers.map((user) => user.name),
+  //   datasets: [
+  //     {
+  //       label: "Scores",
+  //       data: topUsers.map((user) => user.score),
+  //       backgroundColor: [
+  //         "#4ade80",
+  //         "#60a5fa",
+  //         "#f87171",
+  //         "#facc15",
+  //         "#a78bfa",
+  //         "#fb923c",
+  //         "#6ee7b7",
+  //         "#93c5fd",
+  //         "#fcd34d",
+  //         "#d1d5db",
+  //       ],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
+
   const barChartData = {
     labels: topUsers.map((user) => user.name),
     datasets: [
@@ -40,16 +63,16 @@ const RankingBoard = () => {
         label: "Scores",
         data: topUsers.map((user) => user.score),
         backgroundColor: [
-          "#4ade80",
-          "#60a5fa",
-          "#f87171",
-          "#facc15",
-          "#a78bfa",
-          "#fb923c",
-          "#6ee7b7",
-          "#93c5fd",
-          "#fcd34d",
-          "#d1d5db",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
+          "#854951",
         ],
         borderWidth: 1,
       },

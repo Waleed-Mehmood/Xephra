@@ -78,7 +78,7 @@ const UserRanking = () => {
   return (
     <div className="min-h-screen bg-[#F7E8E8] p-8">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-gray-800">
-        User Ranking
+        User Rankings
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
