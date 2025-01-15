@@ -23,18 +23,17 @@ const Login = () => {
     e.preventDefault();
     dispatch(LoginUser(formData)).then((action) => {
       if (LoginUser.fulfilled.match(action)) {
-          if(action?.payload?.user?.role === "admin"){
-            navigate("/dashboard");
-          }
-          else{
-            navigate("/userdashboard");
-          }
+        if (action?.payload?.user?.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/userdashboard");
         }
+      }
     });
   };
 
-  if(loading){
-   return <Loading />;
+  if (loading) {
+    return <Loading />;
   }
   return (
     <div
@@ -44,7 +43,7 @@ const Login = () => {
       }}
     >
       <div className="w-full max-w-sm p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 font-playfair">Login</h2>
         <form className="space-y-4" onSubmit={HandleFormSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-1">
@@ -55,7 +54,6 @@ const Login = () => {
               id="email"
               name="email"
               onChange={handleChange}
-              
               placeholder="Enter your email"
               className="w-full p-2 text-gray-900 placeholder:text-gray-700 rounded-lg border border-gray-700 focus:ring focus:ring-[#B7A692] focus:outline-none"
               required
@@ -80,7 +78,7 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-[#e1a257b8] hover:bg-[#b58954b8] text-white font-bold py-2 rounded-lg transition-colors"
+            className="w-full font-montserrat bg-[#e1a257b8] hover:bg-[#b58954b8] text-white font-bold py-2 rounded-lg transition-colors"
           >
             Login
           </button>
@@ -91,7 +89,7 @@ const Login = () => {
           <span className="px-3 text-gray-400 text-sm">OR</span>
           <div className="border-t border-gray-700 flex-grow"></div>
         </div>
-        <button className="w-full bg-white text-gray-900 font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
+        <button className="w-full font-montserrat bg-white text-gray-900 font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"

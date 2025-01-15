@@ -50,7 +50,7 @@ const Signup = () => {
       }}
     >
       <div className="w-full max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg mx-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Sign Up</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center font-playfair">Sign Up</h1>
 
         <form className="space-y-4" onSubmit={HandleFormSubmit}>
           <div>
@@ -82,6 +82,9 @@ const Signup = () => {
           </div>
 
           <div className="relative">
+          <label htmlFor="password" className="block text-sm font-medium">
+              Password
+            </label>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -91,7 +94,7 @@ const Signup = () => {
               className="mt-1 w-full px-4 placeholder:text-gray-700 py-2 text-black border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-[#B7A692] pr-10"
             />
             <div
-              className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+              className="absolute inset-y-0 top-5 right-0 flex items-center pr-3 cursor-pointer"
               onClick={togglePasswordVisibility}
             >
               {showPassword ? (
@@ -104,7 +107,7 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#e1a257b8] hover:bg-[#b58954b8] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
+            className="w-full font-montserrat py-2 px-4 bg-[#e1a257b8] hover:bg-[#b58954b8] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]"
           >
             Sign Up
           </button>
@@ -117,7 +120,7 @@ const Signup = () => {
           <span className="border-t border-gray-700 w-1/4"></span>
         </div>
 
-        <button className="w-full py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
+        <button className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
           <svg
             className="w-5 h-5 mr-2"
             xmlns="http://www.w3.org/2000/svg"
