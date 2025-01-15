@@ -5,6 +5,8 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 dotenv.config(); // Load environment variables
+const authRoutes = require("./routes/auth");
+
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -19,11 +21,10 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Import the router files
-const authRoutes = require('./routes/authRoutes');
+
 
 // Routes
-app.use('/user', authRoutes);
+app.use("/auth", authRoutes);
 
 // Connect to MongoDB
 connectDB();
