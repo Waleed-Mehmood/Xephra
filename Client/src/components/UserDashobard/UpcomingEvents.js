@@ -21,7 +21,7 @@ const TournamentCard = ({ id, title, game, date, time, description, image, prize
   );
 };
 
-const UpcomingEvents = () => {
+const UpcomingEvents = ({dark}) => {
   const tournaments = [
     {
       id: 1,
@@ -86,7 +86,7 @@ const UpcomingEvents = () => {
   ];
 
   return (
-    <div className="mx-auto py-16 px-4 bg-[#232122] rounded-lg">
+    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
       <h2 className="text-3xl font-bold text-center mb-8 text-[#b6a99a] py-6">UPCOMING EVENTS</h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {tournaments.map((tournament, index) => (

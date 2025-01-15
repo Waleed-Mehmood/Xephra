@@ -21,7 +21,7 @@ ChartJS.register(
   BarElement
 );
 
-const RankingBoard = () => {
+const RankingBoard = ({dark}) => {
   const users = [
     { name: "Player1", rank: 1, score: 920, progress: 85 },
     { name: "Player2", rank: 2, score: 870, progress: 75 },
@@ -32,29 +32,6 @@ const RankingBoard = () => {
 
   // Extract top 10 users or fewer
   const topUsers = users.slice(0, 10);
-
-  // const barChartData = {
-  //   labels: topUsers.map((user) => user.name),
-  //   datasets: [
-  //     {
-  //       label: "Scores",
-  //       data: topUsers.map((user) => user.score),
-  //       backgroundColor: [
-  //         "#4ade80",
-  //         "#60a5fa",
-  //         "#f87171",
-  //         "#facc15",
-  //         "#a78bfa",
-  //         "#fb923c",
-  //         "#6ee7b7",
-  //         "#93c5fd",
-  //         "#fcd34d",
-  //         "#d1d5db",
-  //       ],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
 
   const barChartData = {
     labels: topUsers.map((user) => user.name),
@@ -99,8 +76,8 @@ const RankingBoard = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F7E8E8] p-8">
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-gray-800">
+    <div className={`min-h-screen p-8 ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-[#b6a99a]">
         Ranking Board
       </h1>
 
