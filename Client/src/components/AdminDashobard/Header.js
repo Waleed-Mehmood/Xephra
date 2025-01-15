@@ -13,7 +13,7 @@ export default function Header({
 }) {
   return (
     <header
-      className={`z-10 py-4 shadow-md ${dark ? "bg-[#5c2d33]" : "bg-white"}`}
+      className={`z-10 py-4 shadow-md ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}
     >
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
         {/* Menu Button */}
@@ -30,7 +30,7 @@ export default function Header({
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 text-gray-500 rounded-full focus:outline-none hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="p-2 text-white rounded-full focus:outline-none hover:bg-gray-400 dark:text-gray-300 dark:hover:bg-gray-700"
             aria-label="Toggle Dark Mode"
           >
             {dark ? <ImBrightnessContrast /> : <IoMoonSharp />}
@@ -38,7 +38,7 @@ export default function Header({
 
           {/* Notifications Icon */}
           <button
-            className="p-2 text-gray-500 rounded-full focus:outline-none hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700"
+            className="p-2 text-white rounded-full focus:outline-none hover:bg-gray-400 dark:text-gray-300 dark:hover:bg-gray-700"
             aria-label="Notifications"
           >
             <FiBell />

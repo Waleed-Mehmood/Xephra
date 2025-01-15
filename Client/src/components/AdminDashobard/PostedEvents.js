@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa"; // Import icons
 
-const PostedEvents = ({ setActiveMenu }) => {
+const PostedEvents = ({ setActiveMenu,dark }) => {
   const isAdmin = true; // Replace this with actual admin-check logic
 
   const [tournaments, setTournaments] = useState([
@@ -132,12 +132,12 @@ const PostedEvents = ({ setActiveMenu }) => {
   };
 
   return (
-    <div className="mx-auto py-16 px-4 bg-[#232122] rounded-lg">
+    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#b6a99a]">POSTED EVENTS</h2>
         {isAdmin && (
           <Link onClick={changeMenu}>
-            <button className="flex items-center bg-[#69363f] text-white px-2 sm:px-6 py-2 rounded-md hover:bg-[#8f404f] transition text-sm sm:text-base">
+            <button className={`flex items-center text-white px-2 sm:px-6 py-2 rounded-md transition text-sm sm:text-base ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"} `}>
               <FaPlus className="mr-2" /> New Event
             </button>
           </Link>
@@ -156,9 +156,9 @@ const PostedEvents = ({ setActiveMenu }) => {
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
-            <p>Are you sure you want to delete "{selectedTournament.title}"?</p>
+          <div className={`p-6 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+            <h2 className="text-lg font-bold mb-4 text-white">Confirm Deletion</h2>
+            <p className="text-white">Are you sure you want to delete "{selectedTournament.title}"?</p>
             <div className="mt-4 flex justify-end space-x-2">
               <button
                 onClick={() => setShowDeleteModal(false)}
@@ -168,7 +168,7 @@ const PostedEvents = ({ setActiveMenu }) => {
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                className={`px-4 py-2 text-white rounded ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
               >
                 Delete
               </button>
@@ -179,7 +179,7 @@ const PostedEvents = ({ setActiveMenu }) => {
 
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-[#5C2D33] p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll sm:overflow-y-auto max-h-[80%] sm:max-h-[none]">
+          <div className={`p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll sm:overflow-y-auto max-h-[80%] sm:max-h-[none] ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
             <h2 className="text-lg font-bold mb-4 text-[#B6A99A]">Edit Tournament</h2>
             <form
               onSubmit={(e) => {
@@ -250,7 +250,7 @@ const PostedEvents = ({ setActiveMenu }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  className={`px-4 py-2 text-white rounded ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"} `}
                 >
                   Save
                 </button>

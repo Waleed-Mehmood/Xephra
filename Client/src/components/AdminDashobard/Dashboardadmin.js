@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const DashboardAdmin = ({ setActiveMenu }) => {
+const DashboardAdmin = ({ setActiveMenu,dark }) => {
   const rankings = [
     {
       id: 1,
@@ -163,15 +163,15 @@ const DashboardAdmin = ({ setActiveMenu }) => {
       {
         label: "Total Events",
         data: [5, 7, 8, 9, 10, 11],
-        borderColor: "rgba(75,192,192,1)",
-        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "#A15D66",
+        backgroundColor: "#bfad9f",
         fill: true,
       },
       {
         label: "Active Users",
         data: [50, 55, 60, 65, 70, 75],
-        borderColor: "rgba(255,99,132,1)",
-        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "#69363F",
+        backgroundColor: "#c39ea5",
         fill: true,
       },
     ],
@@ -179,34 +179,6 @@ const DashboardAdmin = ({ setActiveMenu }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <style>
-        {`
-          html, body {
-            height: 100%;
-          }
-
-          ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-          }
-
-          ::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background-color: #854951;
-            background-image: -webkit-linear-gradient(90deg,
-                                                      transparent,
-                                                      rgba(0, 0, 0, 0.4) 50%,
-                                                      transparent,
-                                                      transparent);
-          }
-
-          ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-          }
-        `}
-      </style>
-      
       {/* Hero Section for Admin */}
       <div
         className="relative bg-cover bg-center h-64"
@@ -226,8 +198,8 @@ const DashboardAdmin = ({ setActiveMenu }) => {
       </div>
 
       {/* Analytics & Stats Dashboard Section */}
-      <div className="bg-[#F7E8E8] p-4 mt-8 rounded shadow">
-        <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+      <div className={`${dark ? "bg-[#69363F]" : "bg-[#232122]"} p-4 mt-8 rounded shadow`}>
+        <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
           Analytics & Stats
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,8 +217,8 @@ const DashboardAdmin = ({ setActiveMenu }) => {
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
-        <div className="col-span-12 lg:col-span-9 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+        <div className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
             Posted Events
           </h2>
           <Slider {...settings}>
@@ -267,7 +239,7 @@ const DashboardAdmin = ({ setActiveMenu }) => {
             ))}
           </Slider>
 
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8">
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${dark ? "text-[#B7A692]" : "text-white"} `}>
             Registered Events
           </h2>
           <Slider {...settings}>
@@ -291,8 +263,8 @@ const DashboardAdmin = ({ setActiveMenu }) => {
 
 
         {/* Rankings Section */}
-        <div className="col-span-12 lg:col-span-3 bg-[#F7E8E8] p-4 rounded shadow">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold mb-4">
+        <div className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
             User Rankings
           </h2>
           <ul>
@@ -304,14 +276,14 @@ const DashboardAdmin = ({ setActiveMenu }) => {
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div className="flex-1">
-                  <p className="font-bold lg:text-lg sm:text-base">
+                  <p className={`font-bold lg:text-lg sm:text-base ${dark ? "text-[#B7A692]" : "text-white"} `}>
                     {user.name}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <p className="text-sm text-gray-600">Rank: {user.rank}</p>
+                    <p className={`text-sm ${dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"} `}>Rank: {user.rank}</p>
                     <div className="w-full bg-gray-200 h-2 rounded">
                       <div
-                        className="bg-green-500 h-2 rounded"
+                        className={`h-2 rounded ${dark ? "bg-[#A15D66]" : "bg-[#A15D66]"} `}
                         style={{ width: `${user.rank}%` }}
                       ></div>
                     </div>
@@ -322,7 +294,7 @@ const DashboardAdmin = ({ setActiveMenu }) => {
           </ul>
           <Link
             onClick={changeMenu}
-            className="bg-[#854951] text-white font-semibold py-2 px-4 rounded hover:bg-[#A15D66] mt-4 block text-center"
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${dark ? "bg-[#302B27] hover:bg-[#8b796b]" : "bg-[#854951] hover:bg-[#A15D66]"}  `}
           >
             See All
           </Link>
@@ -330,12 +302,12 @@ const DashboardAdmin = ({ setActiveMenu }) => {
       </div>
 
       {/* User Management Section */}
-      <div className="bg-[#F7E8E8] p-4 mt-8 rounded shadow">
+      <div className={`p-4 mt-8 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="lg:text-2xl md:text-xl sm:text-lg font-bold">
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${dark ? "text-[#B7A692]" : "text-white"}`}>
             Manage Users
           </h2>
-          <a href="/users" className="text-black hover:underline text-sm">
+          <a href="/users" className={`hover:underline text-sm ${dark ? "text-[#B7A692]" : "text-white"}`}>
             See All
           </a>
         </div>
@@ -363,7 +335,7 @@ const DashboardAdmin = ({ setActiveMenu }) => {
                       Suspend
                     </button>
                     <button
-                      className="bg-red-500 text-white py-1 px-4 rounded"
+                      className="bg-[#302B27] text-white py-1 px-4 rounded"
                       onClick={() => handleAction("delete", user.id)}
                     >
                       Delete

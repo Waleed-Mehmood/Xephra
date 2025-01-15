@@ -19,43 +19,13 @@ const Users = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-r from-gray-100 to-gray-200">
-      {/* Inject the custom scrollbar styles internally */}
-      <style>
-        {`
-          html, body {
-            height: 100%;
-            overflow-y: scroll;
-          }
-
-          ::-webkit-scrollbar {
-            width: 12px;
-            height: 12px;
-          }
-
-          ::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background-color: #854951;
-            background-image: -webkit-linear-gradient(90deg,
-                                                      transparent,
-                                                      rgba(0, 0, 0, 0.4) 50%,
-                                                      transparent,
-                                                      transparent);
-          }
-
-          ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-          }
-        `}
-      </style>
-
+    <div className="min-h-screen p-6 bg-[#B7AB95]">
       {/* Header Section */}
-      <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h1 className="text-3xl lg:text-4xl font-extrabold text-[#854951] text-center mb-4">
+      <div className="bg-[#854951] rounded-lg shadow-lg p-8 mb-8">
+        <h1 className="text-3xl lg:text-4xl font-extrabold text-white text-center mb-4">
           User Management
         </h1>
-        <p className="text-gray-600 text-center text-sm lg:text-base">
+        <p className="text-white text-center text-sm lg:text-base">
           Easily manage and oversee all registered users within the system.
         </p>
       </div>
@@ -104,7 +74,7 @@ const Users = () => {
                     Suspend
                   </button>
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-xs lg:text-sm font-semibold transition duration-300"
+                    className="bg-[#302B27] hover:bg-[#8B796B] text-white py-2 px-4 rounded-lg text-xs lg:text-sm font-semibold transition duration-300"
                     onClick={() => handleAction("delete", user.id)}
                   >
                     Delete
