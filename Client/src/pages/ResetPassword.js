@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { resetPassword } from "../redux/features/authSlice";
+import Loading from "../utils/Loading/Loading";
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const { token } = useParams();
+  const dispatch = useDispatch();
+  const { message, error, loading } = useSelector((state) => state.auth);
+
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -21,22 +28,18 @@ const ResetPassword = () => {
       });
       return;
     }
+    dispatch(resetPassword({ token, newPassword }));
 
-    // Show success toast
-    toast.success("Password reset successfully!", {
-      position: "top-center",
-      autoClose: 5000,
-    });
-
-    // Reset form fields
-    setNewPassword("");
-    setConfirmPassword("");
-    setAcceptTerms(false);
-    navigate("/dashboard");
+    if (message) {
+      navigate("/dashboard");
+    }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
-    <section className="bg-[#69363f] dark:bg-[#69363f] ">
+    <section className="bg-[#69363f] dark:bg-[#69363f] h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  lg:py-0">
         <a
           href="#"
@@ -127,8 +130,8 @@ const ResetPassword = () => {
             >
               Reset Password
             </button>
-            <ToastContainer />
           </form>
+          {error && <p className="text-red-400">{error}</p>}
         </div>
       </div>
     </section>

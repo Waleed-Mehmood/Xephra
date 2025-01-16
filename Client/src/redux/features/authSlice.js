@@ -34,7 +34,7 @@ export const LoginUser = createAsyncThunk(
 );
 
 //forgot password
- export const forgotPassword = createAsyncThunk(
+export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (email, { rejectWithValue }) => {
     try {
@@ -49,7 +49,21 @@ export const LoginUser = createAsyncThunk(
   }
 );
 
-
+// reset password
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ token, newPassword }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/auth/reset/${token}`,
+        { newPassword }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -57,8 +71,19 @@ const authSlice = createSlice({
     user: null,
     token: null,
     message: null,
+    isAuthenticated: false,
     loading: false,
     error: null,
+  },
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("isAuthenticated");
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -86,7 +111,9 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.isAuthenticated = true;
         localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("isAuthenticated", state.isAuthenticated);
         localStorage.setItem("user", JSON.stringify(action.payload.user));
       })
       .addCase(LoginUser.rejected, (state, action) => {
@@ -104,8 +131,21 @@ const authSlice = createSlice({
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.error;
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.error;
       });
   },
 });
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

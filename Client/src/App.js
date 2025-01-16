@@ -1,7 +1,7 @@
 import React from "react";
-import './App.css'
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import ForgetPassword from "./pages/ForgetPassword";
@@ -13,23 +13,32 @@ import UserProfile from "./components/UserDashobard/UserProfile";
 import EventDetail from "./components/UserDashobard/EventDetail";
 import Users from "./components/AdminDashobard/Users";
 import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
-
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 export default function App() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const ProtectedRoute = ({children}) => {
+    return isAuthenticated ? children : <Navigate to="/login" />;
+  };
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="*" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         {/* <Route path="*" element={<Home />} /> */}
-        <Route path="/forget" element={<ForgetPassword  />} />
-        <Route path="/reset/:token" element={<ResetPassword  />} />
-        <Route path="/dashboard" element={<Dashboard  />} />
-        <Route path="/userdashboard" element={<UserDashboard  />} />
+        <Route path="/forget" element={<ForgetPassword />} />
+        <Route path="/reset/:token" element={<ResetPassword />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/userdashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
         <Route path="/event/:eventId" element={<EventDetail />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/tournamentrankings/:eventId" element={<TournamentRanking />} />
+        <Route
+          path="/tournamentrankings/:eventId"
+          element={<TournamentRanking />}
+        />
       </Routes>
     </BrowserRouter>
   );
