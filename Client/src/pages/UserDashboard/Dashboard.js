@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Header from "../../components/UserDashobard/Header";
 import { menuItems } from "../../components/UserDashobard/UserMenus";
@@ -10,13 +9,25 @@ import RegisteredEvents from "../../components/UserDashobard/RegisteredEvents";
 import RankingBoard from "../../components/UserDashobard/RankingBoard";
 import RankingApproval from "../../components/UserDashobard/RankingApproval";
 import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
-
-
+import { TbLogout2 } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/features/authSlice";
+import { useNavigate } from "react-router-dom";
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logoutSubmit = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
+      <a
+        className="flex items-center space-x-3 rtl:space-x-reverse ms-5"
+      >
         <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
@@ -31,7 +42,11 @@ function Sidebar({ onMenuClick, dark }) {
               }`}
               aria-hidden="true"
             />
-            <a className={`inline-flex items-center w-full text-sm font-semibold ${dark ? "text-white" : "text-white"} transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100`}>
+            <a
+              className={`inline-flex items-center w-full text-sm font-semibold ${
+                dark ? "text-white" : "text-white"
+              } transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100`}
+            >
               {item.icon}
               <span className="ml-4">{item.name}</span>
             </a>
@@ -39,8 +54,31 @@ function Sidebar({ onMenuClick, dark }) {
         ))}
       </ul>
       <div className="px-6 my-6">
-        <button className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${dark ? "bg-[#302B27] hover:bg-[#8b796b] active:bg-[#A15D66]" : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"}`}>
+        <button
+          className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+            dark
+              ? "bg-[#302B27] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+          }`}
+        >
           Chat System
+          <span className="ml-2" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div className="px-6 my-6">
+        <button
+          onClick={logoutSubmit}
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+            dark
+              ? "bg-[#c76f7e] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+          }`}
+        >
+          <TbLogout2
+            className="ms-2"
+            style={{ fontSize: 18, marginRight: 4 }}
+          />
+          Log out
           <span className="ml-2" aria-hidden="true"></span>
         </button>
       </div>
@@ -56,10 +94,13 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
         isSideMenuOpen ? "translate-x-0" : "-translate-x-full"
       } ${dark ? "bg-[#69363F]" : "bg-[#232122]"} md:hidden`}
     >
-      <Sidebar dark={dark} onMenuClick={(key) => { 
-        onMenuClick(key); 
-        toggleSideMenu(); // Close sidebar after clicking an item
-      }} />
+      <Sidebar
+        dark={dark}
+        onMenuClick={(key) => {
+          onMenuClick(key);
+          toggleSideMenu(); // Close sidebar after clicking an item
+        }}
+      />
     </div>
   );
 }
@@ -106,10 +147,7 @@ function Dashboard() {
           dark ? "bg-[#69363F]" : "bg-[#232122]"
         } hidden md:block flex-shrink-0`}
       >
-        <Sidebar
-          dark={dark}
-          onMenuClick={setActiveMenu}
-        />
+        <Sidebar dark={dark} onMenuClick={setActiveMenu} />
       </aside>
 
       {/* Backdrop for mobile sidebar */}
@@ -137,7 +175,9 @@ function Dashboard() {
           onMenuClick={setActiveMenu}
         />
 
-        <main className="flex-1 p-0 md:p-6 min-h-screen">{renderContent()}</main>
+        <main className="flex-1 p-0 md:p-6 min-h-screen">
+          {renderContent()}
+        </main>
       </div>
     </div>
   );
