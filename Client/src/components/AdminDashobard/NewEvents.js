@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { createEvent } from "../../redux/features/eventsSlice";
+import Loading from "../../utils/Loading/Loading";
 
-const NewEvents = ({ setActiveMenu,dark }) => {
+const NewEvents = ({ setActiveMenu, dark }) => {
+  const dispatch = useDispatch();
+  const {loading, error} = useSelector((state) => state.events);
   const [formData, setFormData] = useState({
     title: "",
     game: "",
     date: "",
     time: "",
     description: "",
-    image: null, // Changed to null for image file storage
+    image: null,
     prizePool: "",
+    rules: "",
   });
 
   const handleChange = (e) => {
@@ -23,7 +29,7 @@ const NewEvents = ({ setActiveMenu,dark }) => {
     const file = e.target.files[0];
     setFormData({
       ...formData,
-      image: file, // Store the file object instead of URL
+      image: file,
     });
   };
 
@@ -36,20 +42,36 @@ const NewEvents = ({ setActiveMenu,dark }) => {
     formDataToSubmit.append("time", formData.time);
     formDataToSubmit.append("description", formData.description);
     formDataToSubmit.append("prizePool", formData.prizePool);
-    formDataToSubmit.append("image", formData.image); // Add image file to form data
+    formDataToSubmit.append("rules", formData.rules);
+    formDataToSubmit.append("image", formData.image);
 
-    // Call your backend API to save the tournament data (use axios or fetch)
-    // Example: axios.post('/api/upload-event', formDataToSubmit);
-    
-    console.log(formData); // For debugging purpose
-    
-    // After successful submission, redirect or reset form as needed
-    setActiveMenu("postedEvents"); // Example of going back to posted events menu after submission
+    dispatch(createEvent(formDataToSubmit));
+    setFormData({
+      title: "",
+      game: "",
+      date: "",
+      time: "",
+      description: "",
+      image: null,
+      prizePool: "",
+      rules: "",
+    })
+
+    // setActiveMenu("postedEvents");
   };
+  if(loading){
+    return <Loading/>
+  }
 
   return (
-    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
-      <h2 className="text-2xl font-bold text-[#b6a99a] mb-6">Create New Tournament</h2>
+    <div
+      className={`mx-auto py-16 px-4 rounded-lg ${
+        dark ? "bg-[#69363F]" : "bg-[#232122]"
+      } `}
+    >
+      <h2 className="text-2xl font-bold text-[#b6a99a] mb-6">
+        Create New Tournament
+      </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="flex flex-col">
           <label className="text-[#b6a99a]">Tournament Title</label>
@@ -110,6 +132,17 @@ const NewEvents = ({ setActiveMenu,dark }) => {
             required
           />
         </div>
+        <div className="flex flex-col">
+          <label className="text-[#b6a99a]">Rules</label>
+          <textarea
+            name="rules"
+            value={formData.rules}
+            onChange={handleChange}
+            className="p-2 rounded-md"
+            rows="2"
+            required
+          />
+        </div>
 
         <div className="flex flex-col">
           <label className="text-[#b6a99a]">Image Upload</label>
@@ -136,10 +169,15 @@ const NewEvents = ({ setActiveMenu,dark }) => {
 
         <button
           type="submit"
-          className={`text-white px-6 py-2 rounded-md transition ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
+          className={`text-white px-6 py-2 rounded-md transition ${
+            dark
+              ? "bg-[#302B27] hover:bg-[#49413C]"
+              : "bg-[#854951] hover:bg-[#A15D66]"
+          }`}
         >
           Create Event
         </button>
+        {error && <p className="text-red-500">{error?.error}</p>}
       </form>
     </div>
   );
