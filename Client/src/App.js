@@ -13,14 +13,8 @@ import UserProfile from "./components/UserDashobard/UserProfile";
 import EventDetail from "./components/UserDashobard/EventDetail";
 import Users from "./components/AdminDashobard/Users";
 import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 
 export default function App() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const ProtectedRoute = ({children}) => {
-    return isAuthenticated ? children : <Navigate to="/login" />;
-  };
   return (
     <BrowserRouter>
       <Routes>
@@ -31,8 +25,8 @@ export default function App() {
         {/* <Route path="*" element={<Home />} /> */}
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/reset/:token" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/userdashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/event/:eventId" element={<EventDetail />} />
         <Route path="/users" element={<Users />} />
         <Route
