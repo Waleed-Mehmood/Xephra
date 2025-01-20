@@ -175,34 +175,6 @@ const RankingApproval = ({dark}) => {
           </tbody>
         </table>
       </div>
-      <style>{`
-        input[type="file"] {
-          display: block !important;
-          border: 1px solid #5C2D33; /* Match border color */
-          background-color: #f7e8e8; /* Match background color */
-          width: 100%;
-        }
-
-        input::placeholder {
-          color: #5C2D33;
-        }
-
-        @media (max-width: 768px) {
-          table {
-            display: block;
-            overflow-x: auto;
-            white-space: nowrap;
-          }
-          
-          th, td {
-            padding: 8px;
-          }
-
-          th {
-            white-space: nowrap;
-          }
-        }
-      `}</style>
     </div>
   );
 };

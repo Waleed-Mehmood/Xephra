@@ -1,0 +1,104 @@
+// src/features/profile/profileSlice.js
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const createProfile = createAsyncThunk(
+  "profile/create",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("http://localhost:5000/admin/createProfile", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// GET profile action
+export const getProfile = createAsyncThunk(
+  "profile/getProfile",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/admin/profile/${userId}`);
+      return response.data; // Profile data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Failed to fetch profile");
+    }
+  }
+);
+
+
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async ({ userId, formData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(`http://localhost:5000/admin/profile/${userId}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log("Update Response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("Error:", error.response?.data || error);
+      return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
+
+const profileSlice = createSlice({
+  name: "profile",
+  initialState: {
+    profile: null,
+    loading: false, 
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(createProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(getProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+  },
+});
+
+
+export const selectProfile = (state) => state.profile.profile;
+export const selectProfileStatus = (state) => state.profile.loading;
+export const selectProfileError = (state) => state.profile.error;
+
+export default profileSlice.reducer;
