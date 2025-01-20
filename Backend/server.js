@@ -6,9 +6,8 @@ const connectDB = require("./config/db");
 dotenv.config(); // Load environment variables
 const path = require("path");
 const authRoutes = require("./routes/auth");
-const adminRoutes = require("./routes/adminRoutes");
+const adminRoutes = require("./routes/admin");
 const upload = require("./config/multerConfig");
-const path = require("path");
 
 
 const app = express();

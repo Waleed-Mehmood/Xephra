@@ -5,8 +5,9 @@ import eventsReducer from "./features/eventsSlice";
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    profile: profileSlice ,
-    events: eventsReducer
+    profile: profileSlice,
+    events: eventsReducer,
+}
 });
 
 export default store;
