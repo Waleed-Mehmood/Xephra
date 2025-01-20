@@ -4,13 +4,17 @@ import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import { IoMoonSharp } from "react-icons/io5";
 import { ImBrightnessContrast } from "react-icons/im";
 import { FiBell } from "react-icons/fi"; // For Notifications Icon
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header({
   dark,
   toggleSideMenu,
   toggleTheme,
   profileImage,
+  onMenuClick
 }) {
+
+  const { profile } = useSelector((state) => state.profile);
   return (
     <header
       className={`z-10 py-4 shadow-md ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}
@@ -45,13 +49,14 @@ export default function Header({
           </button>
 
           {/* Profile Image */}
-          <Link to="/profile">
+          <Link>
             <img
               src={
-                profileImage ||
+                `http://localhost:5000/${profile?.profileImage}` ||
                 "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               } // Fallback to placeholder if n o profile image
               alt="Profile"
+              onClick={() => onMenuClick("adminProfile")}
               className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover"
             />
           </Link>

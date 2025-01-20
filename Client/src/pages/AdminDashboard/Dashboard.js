@@ -8,10 +8,12 @@ import RankingApproval from "../../components/AdminDashobard/RankingApproval";
 import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
 import logo from "../../assets/logo.png";
 import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
+import AdminProfile from "../../components/AdminDashobard/AdminProfile";
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
+
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
    const navigate = useNavigate();
@@ -113,6 +115,8 @@ function Dashboard() {
         return <TournamentsLeague dark={dark} />;
       case "rankingApproval":
         return <RankingApproval dark={dark} />;
+      case "adminProfile":
+        return <AdminProfile dark={dark} />;
       default:
         return <Dashboardadmin setActiveMenu={setActiveMenu} dark={dark} />;
     }
@@ -158,6 +162,7 @@ function Dashboard() {
           dark={dark}
           toggleSideMenu={toggleSideMenu}
           toggleTheme={toggleTheme}
+          onMenuClick={setActiveMenu}
         />
 
         <main className="flex-1 p-0 md:p-6 min-h-screen">{renderContent()}</main>

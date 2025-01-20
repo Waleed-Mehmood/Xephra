@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaCamera, FaUser, FaEnvelope, FaCalendarAlt, FaCity, FaGamepad } from "react-icons/fa";
 import styles from "./UserProfile.module.css"; 
 
-const UserProfile = () => {
+const UserProfile = ({dark}) => {
   const [profile, setProfile] = useState({
     profileImage: "",
     username: "",
@@ -59,7 +59,9 @@ const UserProfile = () => {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className={styles.userProfile}>
+    <div className={`${styles.userProfile} ${
+      dark ? "bg-[#69363F]" : "bg-[#232122]"
+    }`}>
       <h1>User Profile</h1>
       <div className={styles.profileImageContainer}>
         <div className={styles.profileImageWrapper}>
@@ -156,7 +158,7 @@ const UserProfile = () => {
           onChange={handleChange}
         />
 
-        <button className={styles.uploadBtn} onClick={handleUpdate} disabled={isUpdating}>
+        <button className={`${styles.uploadBtn}  ${dark ? "bg-[#302B27] hover:bg-[#49413C]" : "bg-[#854951] hover:bg-[#A15D66]"}`} onClick={handleUpdate} disabled={isUpdating}>
           {isUpdating ? "Updating..." : "Update Profile"}
         </button>
       </div>
