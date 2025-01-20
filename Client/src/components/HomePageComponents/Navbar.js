@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from '../../assets/logo.png';
+import logo from "../../assets/logo.png";
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -11,25 +14,38 @@ const Navbar = () => {
   return (
     <nav className="bg-[#69363f] border-gray-200 dark:bg-[#69363f]">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a
-          href="/"
-          className="flex items-center space-x-3 rtl:space-x-reverse"
-        >
-          <img
-            src={logo}
-            className="h-12 w-24 "
-            alt="Flowbite Logo"
-          />
-        
+        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <img src={logo} className="h-12 w-24 " alt="Flowbite Logo" />
         </a>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <Link
-          to="/signup"
-            type="button"
-            className="text-white font-montserrat bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
-          >
-            Get started
-          </Link>
+          {isAuthenticated ? (
+            user && user.role === "admin" ? (
+              <Link
+                to="/dashboard"
+                type="button"
+                className="text-white font-montserrat bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                to="/userdashboard"
+                type="button"
+                className="text-white font-montserrat bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
+              >
+                Dashboard
+              </Link>
+            )
+          ) : (
+            <Link
+              to="/signup"
+              type="button"
+              className="text-white font-montserrat bg-[#b7a692] hover:bg-[#b9ac9b]  focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-[#b7a692] dark:bg-[#b7a692]-700 dark:focus:bg-[#b7a692]"
+            >
+              Get started
+            </Link>
+          )}
+
           <button
             onClick={toggleMenu}
             type="button"
@@ -65,7 +81,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={()=> setIsMenuOpen(!isMenuOpen)}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white  rounded md:bg-transparent md:text-white md:dark:text-white md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b]"
                 aria-current="page"
               >
@@ -75,7 +91,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#games"
-                onClick={()=> setIsMenuOpen(!isMenuOpen)}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Games
@@ -84,7 +100,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={()=> setIsMenuOpen(!isMenuOpen)}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded   md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Tournaments
@@ -93,13 +109,12 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={()=> setIsMenuOpen(!isMenuOpen)}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Prices
               </Link>
             </li>
-            
           </ul>
         </div>
       </div>

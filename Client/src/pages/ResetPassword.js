@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { resetPassword } from "../redux/features/authSlice";
+import Loading from "../utils/Loading/Loading";
 
 const ResetPassword = () => {
-  const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
- const navigate = useNavigate();
+  const { token } = useParams();
+  const dispatch = useDispatch();
+  const { message, error, loading } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,23 +28,18 @@ const ResetPassword = () => {
       });
       return;
     }
+    dispatch(resetPassword({ token, newPassword }));
 
-    // Show success toast
-    toast.success("Password reset successfully!", {
-      position: "top-center",
-      autoClose: 5000,
-    });
-
-    // Reset form fields
-    setEmail("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setAcceptTerms(false);
-    navigate('/dashboard')
+    if (message) {
+      navigate("/dashboard");
+    }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
-    <section className="bg-[#69363f] dark:bg-[#69363f] ">
+    <section className="bg-[#69363f] dark:bg-[#69363f] h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto  lg:py-0">
         <a
           href="#"
@@ -52,31 +52,12 @@ const ResetPassword = () => {
             Reset Your Password
           </h1>
           <p className="font-light text-gray-500 dark:text-gray-400">
-            Enter your email and new password to reset your password.
+            Enter your new password to reset your password.
           </p>
           <form
             className="mt-2 space-y-4 lg:mt-3 md:space-y-5"
             onSubmit={handleSubmit}
           >
-            <div>
-              <label
-                htmlFor="email"
-                className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Your email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
             <div>
               <label
                 htmlFor="newPassword"
@@ -106,7 +87,7 @@ const ResetPassword = () => {
               <input
                 type="password"
                 name="confirmPassword"
-                 placeholder="password"
+                placeholder="password"
                 id="confirmPassword"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 value={confirmPassword}
@@ -149,8 +130,8 @@ const ResetPassword = () => {
             >
               Reset Password
             </button>
-            <ToastContainer />
           </form>
+          {error && <p className="text-red-400">{error}</p>}
         </div>
       </div>
     </section>

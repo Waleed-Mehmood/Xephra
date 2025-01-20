@@ -1,6 +1,5 @@
 // server.js
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -8,6 +7,8 @@ dotenv.config(); // Load environment variables
 const path = require("path");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/adminRoutes");
+const upload = require("./config/multerConfig");
+const path = require("path");
 
 
 const app = express();
@@ -22,7 +23,10 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(express.urlencoded({ extended: true }));
+
 
 
 // Routes

@@ -1,26 +1,29 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
-import {ToastContainer , toast} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { forgotPassword } from "../redux/features/authSlice";
+import Loading from "../utils/Loading/Loading";
 const ForgetPassword = () => {
+  const dispatch = useDispatch();
+  const { message, error, loading } = useSelector((state) => state.auth);
+
   const [email, setEmail] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(forgotPassword({ email }));
   
-      // Show success toast
-      toast.success('Check your email for password reset instructions.', {
-        position: "top-center",
-        autoClose: 5000,
-      });
-      setEmail(" ");
-      setAcceptTerms(" ")
-      navigate('/reset')
-  
+    setEmail(" ");
+    setAcceptTerms(" ");
   };
-
+  if (loading) {
+    return <Loading />;
+  }
+  console.log("message", message);
   return (
     <section className="bg-[#69363f] dark:bg-[#69363f] h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -87,6 +90,8 @@ const ForgetPassword = () => {
                 </label>
               </div>
             </div>
+            {error && (<p className="text-red-400">{error}</p>)}
+            {message && (<p className="text-green-400">{message}</p>)}
             <button
               type="submit"
               className="w-full text-white bg-[#843e4b] hover:bg-[#69363f] focus:ring-1 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#843e4b] dark:hover:bg-[#843e4b] dark:focus:ring-[#843e4b]"
