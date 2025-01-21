@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 const corsOptions = {
   // origin: "http://localhost:3000", 
-  origin: "https://xephra.vercel.app/", 
+  origin: "https://xephra.vercel.app", 
   methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
   allowedHeaders: "Content-Type,Authorization", // Allowed headers
 };
