@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Herosection() {
   return (
@@ -25,9 +26,9 @@ export default function Herosection() {
                   Compete, rank up, and win amazing rewards in epic tournaments!
                 </p>
                 <div className="flex mt-3 justify-start">
-                <button className="bg-[#69363f] font-montserrat rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
+                <Link to="/signup" className="bg-[#69363f] font-montserrat rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
                   Get Started
-                </button>
+                </Link>
                 </div>
               </div>
               <div className="w-full xl:col-span-7  lg:col-span-6 block">

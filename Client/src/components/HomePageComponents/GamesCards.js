@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function GamesCards() {
   const games = [
@@ -85,9 +86,12 @@ export default function GamesCards() {
         <p className="text-2xl text-[#69363f] font-bold font-playfair">
           EXPLORE THE MOST POPULAR GAMES AND THEIR AMAZING FEATURES
         </p>
+        <Link to="/signup">
         <button className="bg-[#69363f] font-montserrat rounded-full py-3 px-7 my-3 text-base font-semibold text-white hover:bg-[#b9ac9b] cursor-pointer transition-all duration-500 md:w-fit w-full">
+          
           Get Started
         </button>
+          </Link>
       </div>
 
       {/* Grid Section */}
