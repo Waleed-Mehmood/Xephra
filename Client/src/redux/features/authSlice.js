@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_BACKEND;
+
 // thunk for sign up user
 export const signUpUser = createAsyncThunk(
   "auth/signUpUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/signup",
+         `${apiUrl}/auth/signup`,
         userData
       );
       return response.data;
@@ -23,7 +25,7 @@ export const LoginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/login",
+        `${apiUrl}/auth/login`,
         userData
       );
       return response.data;
@@ -39,7 +41,7 @@ export const forgotPassword = createAsyncThunk(
   async (email, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/forgot",
+        `${apiUrl}/auth/forgot`,
         email
       );
       return response.data;
@@ -55,7 +57,7 @@ export const resetPassword = createAsyncThunk(
   async ({ token, newPassword }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/auth/reset/${token}`,
+        `${apiUrl}/auth/reset/${token}`,
         { newPassword }
       );
       return response.data;

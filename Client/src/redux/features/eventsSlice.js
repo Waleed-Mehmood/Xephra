@@ -2,12 +2,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+const apiUrl = process.env.REACT_APP_BACKEND;
+
 // Thunk for creating a new event
 export const createEvent = createAsyncThunk(
   'events/createEvent',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/admin/newevent', formData, {
+      const response = await axios.post(`${apiUrl}/admin/newevent`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -25,7 +27,7 @@ export const getEvents = createAsyncThunk(
   "events/getEvents",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:5000/admin/postedevents");
+      const response = await axios.get(`${apiUrl}/admin/postedevents`);
       return response.data.events;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -38,7 +40,7 @@ export const deleteEventById = createAsyncThunk(
   'events/deleteEventById',
   async (id, {rejectWithValue}) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/admin/delete/${id}`);
+      const response = await axios.delete(`${apiUrl}/admin/delete/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");

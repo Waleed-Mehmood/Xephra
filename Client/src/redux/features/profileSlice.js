@@ -1,14 +1,19 @@
 // src/features/profile/profileSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const apiUrl = process.env.REACT_APP_BACKEND;
 
 export const createProfile = createAsyncThunk(
   "profile/create",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:5000/admin/createProfile", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${apiUrl}/admin/createProfile`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -21,7 +26,9 @@ export const getProfile = createAsyncThunk(
   "profile/getProfile",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:5000/admin/profile/${userId}`);
+      const response = await axios.get(
+        `${apiUrl}/admin/profile/${userId}`,
+      );
       return response.data; // Profile data
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch profile");
@@ -29,14 +36,17 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ userId, formData }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`http://localhost:5000/admin/profile/${userId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.patch(
+        `${apiUrl}/admin/profile/${userId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       console.log("Update Response:", response.data);
       return response.data;
     } catch (error) {
@@ -46,12 +56,11 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
-
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
     profile: null,
-    loading: false, 
+    loading: false,
     error: null,
   },
   reducers: {},
@@ -95,7 +104,6 @@ const profileSlice = createSlice({
       });
   },
 });
-
 
 export const selectProfile = (state) => state.profile.profile;
 export const selectProfileStatus = (state) => state.profile.loading;
