@@ -115,7 +115,6 @@ function Dashboard() {
       dispatch(getProfile(userId)); // Fetch the profile if userId exists
     }
   }, [dispatch, userId]);
-  console.log("profile", profile);
 
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
