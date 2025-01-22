@@ -9,8 +9,8 @@ import {
 } from "../../redux/features/profileSlice";
 import Loading from "../../utils/Loading/Loading";
 
-const AdminProfile = ({ dark }) => {
-  const { loading, profile } = useSelector((state) => state.profile);
+const AdminProfile = ({ dark , profile}) => {
+  const { loading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -18,7 +18,7 @@ const AdminProfile = ({ dark }) => {
 
   const [profileData, setProfileData] = useState({
     userId: userId,
-    profileImage: "",
+    profileImage: null,
     username: "",
     fullName: "",
     bio: "",
@@ -132,7 +132,7 @@ const AdminProfile = ({ dark }) => {
   };
 
   if (loading) return <Loading />;
-  console.log("profileData", profileData?.profileImage);
+  console.log("profileData", profileData);
   return (
     <div
       className={`${styles.userProfile} ${
@@ -141,14 +141,14 @@ const AdminProfile = ({ dark }) => {
     >
       <h1>Admin Profile</h1>
       <div className={styles.profileImageContainer}>
-        <div className={styles.profileImageWrapper}>
+        <div className={styles.profileImageWrapper}>         
           <img
             src={
               profileImageView
                 ? profileImageView
                 : profileData?.profileImage
-                ? `http://localhost:5000/${profileData.profileImage}`
-                : "https://via.placeholder.com/150"
+                ? `http://localhost:5000/${profile?.profileImage}`
+                :  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
             }
             alt="Profile"
             className={styles.avatar}

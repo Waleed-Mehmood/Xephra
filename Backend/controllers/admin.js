@@ -89,7 +89,7 @@ exports.deleteEvent = async (req, res) => {
      address,
    } = req.body;
  
-   const profileImage = req.file ? req.file.path : null;
+   const profileImage = req.file ? `uploads/${req.file.filename}` : null;
  
    try {
      // Validate required fields
@@ -167,8 +167,8 @@ exports.deleteEvent = async (req, res) => {
  exports.updateProfile = async (req, res) => {
    const { userId } = req.params;
    const { username, fullName, bio, email, locationCity, locationCountry, phoneNumber, address } = req.body;
-   const profileImage = req.file ? req.file.path : null;
- 
+  //  const profileImage = req.file ? req.file.path : null;
+   const profileImage = req.file ? `uploads/${req.file.filename}` : null;
    try {
      // Find the profile by userId
      const profile = await Profile.findOne({ userId });

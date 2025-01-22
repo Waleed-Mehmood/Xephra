@@ -11,10 +11,11 @@ export default function Header({
   toggleSideMenu,
   toggleTheme,
   profileImage,
-  onMenuClick
+  onMenuClick, 
+  profile
 }) {
 
-  const { profile } = useSelector((state) => state.profile);
+
   return (
     <header
       className={`z-10 py-4 shadow-md ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}
@@ -52,8 +53,12 @@ export default function Header({
           <Link>
             <img
               src={
-                `http://localhost:5000/${profile?.profileImage}` ||
-                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                profile?.profileImage
+                ? `http://localhost:5000/${profile?.profileImage}`
+                :  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
+
+                // `http://localhost:5000/${profile?.profileImage}` ||
+                // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
               } // Fallback to placeholder if n o profile image
               alt="Profile"
               onClick={() => onMenuClick("adminProfile")}
