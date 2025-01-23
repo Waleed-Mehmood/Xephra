@@ -10,7 +10,8 @@ export default function Header({
   toggleSideMenu,
   toggleTheme,
   profileImage,
-  onMenuClick
+  onMenuClick,
+  profile
 }) {
   return (
     <header
@@ -49,9 +50,10 @@ export default function Header({
           <Link>
             <img
               src={
-                profileImage ||
-                "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              } // Fallback to placeholder if n o profile image
+                profile?.profileImage
+                ? `http://localhost:5000/${profile?.profileImage}`
+                :  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
+              } 
               alt="Profile"
               onClick={() => onMenuClick("userProfile")}
               className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover"

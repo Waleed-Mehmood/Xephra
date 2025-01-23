@@ -56,10 +56,7 @@ export default function Header({
                 profile?.profileImage
                 ? `http://localhost:5000/${profile?.profileImage}`
                 :  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
-
-                // `http://localhost:5000/${profile?.profileImage}` ||
-                // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
-              } // Fallback to placeholder if n o profile image
+              } 
               alt="Profile"
               onClick={() => onMenuClick("adminProfile")}
               className="w-8 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 object-cover"
