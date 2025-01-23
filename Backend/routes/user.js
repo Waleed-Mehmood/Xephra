@@ -1,8 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const {getUsers} = require('../controllers/user.js');
+const { createProfile, getProfile ,updateProfile, getUsers} = require("../controllers/user");
+const upload = require("../config/multerConfig");
 
 
+router.post('/createProfile', upload.single('profileImage'), createProfile);  
+router.get("/profile/:userId", getProfile);
+router.patch('/profile/:userId', upload.single('profileImage'), updateProfile);
 router.get('/getusers', getUsers);
 
 module.exports = router;
+
+
+
+
+

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/UserDashobard/Header";
 import { menuItems } from "../../components/UserDashobard/UserMenus";
 import logo from "../../assets/logo.png";
@@ -10,9 +10,11 @@ import RankingBoard from "../../components/UserDashobard/RankingBoard";
 import RankingApproval from "../../components/UserDashobard/RankingApproval";
 import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
 import { TbLogout2 } from "react-icons/tb";
-import { useDispatch } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfile } from "../../redux/features/userSlice";
+
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
   const navigate = useNavigate();
@@ -107,6 +109,16 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
 
 // Main Dashboard component
 function Dashboard() {
+  const dispatch = useDispatch();
+    const { profile } = useSelector((state) => state.profile);
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const userId = userData?.UserId;
+    useEffect(() => {
+      if (userId) {
+        dispatch(getProfile(userId)); // Fetch the profile if userId exists
+      }
+    }, [dispatch, userId]);
+
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [dark, setDark] = useState(true);
@@ -129,7 +141,7 @@ function Dashboard() {
       case "rankingApproval":
         return <RankingApproval dark={dark} />;
       case "userProfile":
-        return <UserProfile dark={dark} />;
+        return <UserProfile dark={dark} profile={profile} />;
       default:
         return <DashboardUser setActiveMenu={setActiveMenu} dark={dark} />;
     }
@@ -173,6 +185,7 @@ function Dashboard() {
           toggleSideMenu={toggleSideMenu}
           toggleTheme={toggleTheme}
           onMenuClick={setActiveMenu}
+          profile={profile}
         />
 
         <main className="flex-1 p-0 md:p-6 min-h-screen">

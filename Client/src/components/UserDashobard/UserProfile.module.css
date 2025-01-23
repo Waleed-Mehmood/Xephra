@@ -113,3 +113,21 @@
     text-align: center;
     margin-bottom: 30px;
   }
+
+    /* Error message styling */
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: -8px;
+  margin-bottom: 10px;
+}
+
+/* Highlight the input field with an error */
+.input-error {
+  border: 2px solid red;
+}
+
+
+.message {
+  color: #B6A99A;
+}
