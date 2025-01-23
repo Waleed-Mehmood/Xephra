@@ -10,10 +10,10 @@ import Dashboard from "./pages/AdminDashboard/Dashboard";
 import UserDashboard from "./pages/UserDashboard/Dashboard";
 import Login from "./pages/Login";
 import UserProfile from "./components/UserDashobard/UserProfile";
-import EventDetail from "./components/UserDashobard/EventDetail";
 import Users from "./components/AdminDashobard/Users";
 import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
 import EventDetailAdmin from "./components/AdminDashobard/EventDetailAdmin";
+import EventDetailUser from "./components/UserDashobard/EventDetailUser";
 
 export default function App() {
   return (
@@ -29,7 +29,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/eventadmin/:eventId" element={<EventDetailAdmin />} />
-        <Route path="/event/:eventId" element={<EventDetail />} />
+        <Route path="/eventuser/:eventId" element={<EventDetailUser />} />
         <Route path="/users" element={<Users />} />
         <Route
           path="/tournamentrankings/:eventId"
