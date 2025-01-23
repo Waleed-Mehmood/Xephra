@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
+import { getAllUsers } from "../../redux/features/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 // Register necessary Chart.js components
@@ -29,8 +30,11 @@ ChartJS.register(
 const DashboardAdmin = ({ setActiveMenu,dark }) => {
     const dispatch = useDispatch();
     const { events} = useSelector((state) => state.events);
+    const { users} = useSelector((state) => state.profile);
+
     useEffect(() => {
       dispatch(getEvents());
+      dispatch(getAllUsers());
     }, [])
     
 
@@ -98,12 +102,13 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
         "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
     },
   ];
+  console.log("users", users)
 
-  const users = [
-    { id: 1, name: "User 1", email: "user1@example.com", role: "User" },
-    { id: 2, name: "User 2", email: "user2@example.com", role: "Admin" },
-    { id: 3, name: "User 3", email: "user3@example.com", role: "User" },
-  ];
+  // const users = [
+  //   { id: 1, name: "wajid", email: "user1@example.com", role: "User" },
+  //   { id: 2, name: "User 2", email: "user2@example.com", role: "Admin" },
+  //   { id: 3, name: "User 3", email: "user3@example.com", role: "User" },
+  // ];
 
   const settings = {
     dots: false,

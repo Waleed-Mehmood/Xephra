@@ -7,6 +7,7 @@ dotenv.config(); // Load environment variables
 const path = require("path");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");
 const upload = require("./config/multerConfig");
 
 
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 
 // Connect to MongoDB
 connectDB();
