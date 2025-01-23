@@ -1,28 +1,27 @@
 // src/features/events/eventsSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_BACKEND;
 
 // Thunk for creating a new event
 export const createEvent = createAsyncThunk(
-  'events/createEvent',
+  "events/createEvent",
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${apiUrl}/admin/newevent`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Something went wrong');
+      return rejectWithValue(error.response?.data || "Something went wrong");
     }
   }
 );
 
-
-// slice for getting all the events 
+// slice for getting all the events
 export const getEvents = createAsyncThunk(
   "events/getEvents",
   async (_, { rejectWithValue }) => {
@@ -37,8 +36,8 @@ export const getEvents = createAsyncThunk(
 
 // slice for delete an event
 export const deleteEventById = createAsyncThunk(
-  'events/deleteEventById',
-  async (id, {rejectWithValue}) => {
+  "events/deleteEventById",
+  async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(`${apiUrl}/admin/delete/${id}`);
       return response.data;
@@ -48,13 +47,40 @@ export const deleteEventById = createAsyncThunk(
   }
 );
 
+export const editEvent = createAsyncThunk(
+  "events/editEvent",
+  async ({ id, updatedData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${apiUrl}/admin/eventedit/${id}`,
+        updatedData
+      );
+      return response.data.event;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export const getEventById = createAsyncThunk(
+  "events/getEventById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/event/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 const eventsSlice = createSlice({
-  name: 'events',
+  name: "events",
   initialState: {
     event: null,
     events: [],
     message: "",
-    loading: false, 
+    loading: false,
     error: null,
   },
   reducers: {},
@@ -91,11 +117,38 @@ const eventsSlice = createSlice({
       .addCase(deleteEventById.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message;
-        state.events = state.events.filter((event) => event._id !== action.payload.event._id);
+        state.events = state.events.filter(
+          (event) => event._id !== action.payload.event._id
+        );
       })
       .addCase(deleteEventById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(editEvent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.event = action.payload;
+      })
+      .addCase(editEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getEventById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getEventById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.event = action.payload.event;
+        state.message = action.payload.message;
+      })
+      .addCase(getEventById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || action.error.message;
       });
   },
 });

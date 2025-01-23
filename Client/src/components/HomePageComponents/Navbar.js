@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
-const Navbar = () => {
+const Navbar = ({ scrollToSection, refs }) => {
+  const { homeRef, gameRef, tournamentsRef, priceRef } = refs;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isAuthenticated = localStorage.getItem("isAuthenticated");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -11,8 +12,13 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleClicked = (ref) => {
+    setIsMenuOpen(!isMenuOpen);
+    scrollToSection(ref);
+  };
+
   return (
-    <nav className="bg-[#69363f] border-gray-200 dark:bg-[#69363f]">
+    <nav className="bg-[#69363f] border-gray-200 dark:bg-[#69363f] sticky top-0 z-50">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src={logo} className="h-12 w-24 " alt="Flowbite Logo" />
@@ -81,7 +87,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={() => handleClicked(homeRef)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white  rounded md:bg-transparent md:text-white md:dark:text-white md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b]"
                 aria-current="page"
               >
@@ -91,7 +97,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#games"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={() => handleClicked(gameRef)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Games
@@ -100,7 +106,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={() => handleClicked(tournamentsRef)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded   md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Tournaments
@@ -109,7 +115,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="#"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                onClick={() => handleClicked(priceRef)}
                 className="block font-montserrat py-2 px-3 md:p-0 text-white rounded  md:hover:text-[#b9ac9b] md:dark:hover:text-[#b9ac9b] focus:text-[#b9ac9b] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 Prices

@@ -2,21 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa"; // Import icons
 import { useSelector, useDispatch } from "react-redux";
-import { getEvents, deleteEventById } from "../../redux/features/eventsSlice";
+import { getEvents, deleteEventById , editEvent} from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 
 const PostedEvents = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
-  const { loading, error, events, message } = useSelector(
+  const { loading, error, events, message, event } = useSelector(
     (state) => state.events
   );
   const isAdmin = true;
 
   useEffect(() => {
     dispatch(getEvents());
-  }, [dispatch]);
+  }, [dispatch , event]);
 
-  console.log("events", events);
 
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -26,11 +25,9 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     setActiveMenu("newEvents");
   };
 
-  const DeleteEvent = (id)=>{
+  const DeleteEvent = (id) => {
     dispatch(deleteEventById(id));
-  }
-
- 
+  };
 
   const onEdit = (tournament) => {
     setSelectedTournament(tournament);
@@ -38,6 +35,9 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
   };
 
   const saveEdit = (updatedTournament) => {
+    const id = updatedTournament._id;
+    dispatch(editEvent({id, updatedData :updatedTournament}));
+    console.log("here edit", updatedTournament);
     setShowEditModal(false);
     setSelectedTournament(null);
   };
@@ -58,6 +58,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     description,
     image,
     prizePool,
+    rules,
     // onDelete,
     onEdit,
   }) => {
@@ -65,7 +66,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
 
     return (
       <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
-        <Link to={`/event/${_id}`}>
+        <Link to={`/eventadmin/${_id}`}>
           <img
             className="w-full h-56 object-cover"
             src={imageUrl}
@@ -73,7 +74,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
           />
         </Link>
         <div className="p-4">
-          <Link to={`/event/${_id}`}>
+          <Link to={`/eventadmin/${_id}`}>
             <h3 className="text-xl font-bold text-[#b8a896]">{title}</h3>
           </Link>
           <p className="text-[#69363f] font-bold mt-1">{game}</p>
@@ -96,6 +97,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
                       description,
                       image,
                       prizePool,
+                      rules,
                     })
                   }
                   className="text-[#b8a896] hover:text-[#8f404f]"
@@ -103,7 +105,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
                   <FaEdit />
                 </button>
                 <button
-                  onClick={()=>DeleteEvent(_id)}
+                  onClick={() => DeleteEvent(_id)}
                   className="text-[#b8a896] hover:text-[#8f404f]"
                 >
                   <FaTrash />
@@ -116,8 +118,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     );
   };
 
-  
-
+  console.log("message", event);
   return (
     <div
       className={`mx-auto py-16 px-4 rounded-lg ${
@@ -191,121 +192,137 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
       )} */}
 
       {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            className={`p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll sm:overflow-y-auto max-h-[80%] sm:max-h-[none] ${
-              dark ? "bg-[#69363F]" : "bg-[#232122]"
-            } `}
-          >
-            <h2 className="text-lg font-bold mb-4 text-[#B6A99A]">
-              Edit Tournament
-            </h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                saveEdit(selectedTournament);
-              }}
-            >
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#B6A99A]">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={selectedTournament.title}
-                  onChange={(e) =>
-                    setSelectedTournament((prev) => ({
-                      ...prev,
-                      title: e.target.value,
-                    }))
-                  }
-                  className="w-full px-3 py-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#B6A99A]">
-                  Game
-                </label>
-                <input
-                  type="text"
-                  value={selectedTournament.game}
-                  onChange={(e) =>
-                    setSelectedTournament((prev) => ({
-                      ...prev,
-                      game: e.target.value,
-                    }))
-                  }
-                  className="w-full px-3 py-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#B6A99A]">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  value={selectedTournament.date}
-                  onChange={(e) =>
-                    setSelectedTournament((prev) => ({
-                      ...prev,
-                      date: e.target.value,
-                    }))
-                  }
-                  className="w-full px-3 py-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#B6A99A]">
-                  Time
-                </label>
-                <input
-                  type="time"
-                  value={selectedTournament.time}
-                  onChange={(e) =>
-                    setSelectedTournament((prev) => ({
-                      ...prev,
-                      time: e.target.value,
-                    }))
-                  }
-                  className="w-full px-3 py-2 border rounded-lg"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-[#B6A99A]">
-                  Description
-                </label>
-                <textarea
-                  value={selectedTournament.description}
-                  onChange={(e) =>
-                    setSelectedTournament((prev) => ({
-                      ...prev,
-                      description: e.target.value,
-                    }))
-                  }
-                  className="w-full px-3 py-2 border rounded-lg"
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button
-                  onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`px-4 py-2 text-white rounded ${
-                    dark
-                      ? "bg-[#302B27] hover:bg-[#49413C]"
-                      : "bg-[#854951] hover:bg-[#A15D66]"
-                  } `}
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+       <div
+         className={`p-6 rounded-lg shadow-lg w-[90%] max-w-lg overflow-y-scroll h-[90vh] sm:max-h-[none] ${
+           dark ? "bg-[#69363F]" : "bg-[#232122]"
+         }`}
+       >
+         <h2 className="text-lg font-bold mb-4 text-[#B6A99A]">Edit Tournament</h2>
+         <form
+           onSubmit={() => {
+             saveEdit(selectedTournament);
+           }}
+         >
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Title</label>
+             <input
+               type="text"
+               value={selectedTournament.title}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   title: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Game</label>
+             <input
+               type="text"
+               value={selectedTournament.game}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   game: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Date</label>
+             <input
+               type="date"
+               value={selectedTournament.date}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   date: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Time</label>
+             <input
+               type="time"
+               value={selectedTournament.time}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   time: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Prize Pool</label>
+             <input
+               type="text"
+               value={selectedTournament.prizePool}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   prizePool: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Description</label>
+             <textarea
+               value={selectedTournament.description}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   description: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="mb-4">
+             <label className="block text-sm font-medium text-[#B6A99A]">Rules</label>
+             <textarea
+               value={selectedTournament.rules}
+               onChange={(e) =>
+                 setSelectedTournament((prev) => ({
+                   ...prev,
+                   rules: e.target.value,
+                 }))
+               }
+               className="w-full px-3 py-2 border rounded-lg"
+             />
+           </div>
+           <div className="flex justify-end space-x-2">
+             <button
+               onClick={() => setShowEditModal(false)}
+               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+             >
+               Cancel
+             </button>
+             <button
+               type="submit"
+               className={`px-4 py-2 text-white rounded ${
+                 dark
+                   ? "bg-[#302B27] hover:bg-[#49413C]"
+                   : "bg-[#854951] hover:bg-[#A15D66]"
+               } `}
+             >
+               Save
+             </button>
+           </div>
+         </form>
+       </div>
+     </div>
+     
+      
       )}
     </div>
   );

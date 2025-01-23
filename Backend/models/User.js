@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   userId: { type: String, unique: true, default: () => `user_${Date.now()}` },
   role: { type: String, enum: ["user", "admin"], default: "user" },
-}, {strict: false});
+}, {strict: false, timestamps: true});
 
 // Pre-save middleware to hash password before saving
 userSchema.pre("save", async function (next) {

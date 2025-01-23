@@ -56,10 +56,25 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+// get all users 
+export const getAllUsers = createAsyncThunk(
+  'profile/getAllUsers', 
+  async (_, {rejectWithValue})=>{
+    try {
+      const response = await axios(`${apiUrl}/user/getusers`);
+      return response.data.users;
+      
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
     profile: null,
+    users: [],
     loading: false,
     error: null,
   },
@@ -99,6 +114,18 @@ const profileSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(getProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getAllUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(getAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

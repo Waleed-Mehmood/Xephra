@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useEffect} from "react";
 import Slider from "react-slick";
 import { Line } from "react-chartjs-2";
 import {
@@ -12,6 +12,9 @@ import {
   Legend,
 } from "chart.js";
 import { Link } from "react-router-dom";
+import { getEvents } from "../../redux/features/eventsSlice";
+import { getAllUsers } from "../../redux/features/profileSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -25,6 +28,16 @@ ChartJS.register(
 );
 
 const DashboardAdmin = ({ setActiveMenu,dark }) => {
+    const dispatch = useDispatch();
+    const { events} = useSelector((state) => state.events);
+    const { users} = useSelector((state) => state.profile);
+
+    useEffect(() => {
+      dispatch(getEvents());
+      dispatch(getAllUsers());
+    }, [])
+    
+
   const rankings = [
     {
       id: 1,
@@ -63,31 +76,6 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
     },
   ];
 
-  const events = [
-    {
-      id: 1,
-      title: "Fortnite Battle Royale Championship",
-      image: "https://images8.alphacoders.com/877/thumb-1920-877849.jpg",
-    },
-    {
-      id: 2,
-      title: "Call of Duty: Warzone Tournament Finals",
-      image: "https://i.ytimg.com/vi/TidXGyzxT8c/maxresdefault.jpg",
-    },
-    {
-      id: 3,
-      title: "Apex Legends Championship Series",
-      image:
-        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
-    },
-    {
-      id: 4,
-      title: "PUBG Mobile Global Championship 2024",
-      image:
-        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
-    },
-  ];
-
   const RegisteredEvents = [
     {
       id: 1,
@@ -114,12 +102,13 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
         "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
     },
   ];
+  console.log("users", users)
 
-  const users = [
-    { id: 1, name: "User 1", email: "user1@example.com", role: "User" },
-    { id: 2, name: "User 2", email: "user2@example.com", role: "Admin" },
-    { id: 3, name: "User 3", email: "user3@example.com", role: "User" },
-  ];
+  // const users = [
+  //   { id: 1, name: "wajid", email: "user1@example.com", role: "User" },
+  //   { id: 2, name: "User 2", email: "user2@example.com", role: "Admin" },
+  //   { id: 3, name: "User 3", email: "user3@example.com", role: "User" },
+  // ];
 
   const settings = {
     dots: false,
@@ -176,7 +165,7 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
       },
     ],
   };
-
+console.log("events", events);
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section for Admin */}
@@ -223,40 +212,45 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
           </h2>
           <Slider {...settings}>
             {events.map((event) => (
-              <div
-                key={event.id}
-                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
+              <Link
+              to={`/eventadmin/${event?._id}`}
+                key={event._id}
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <img
-                  src={event.image}
+               <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]" >
+               <img
+                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
                 <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
                   {event.title}
                 </h3>
-              </div>
+               </div>
+              </Link>
             ))}
           </Slider>
-
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${dark ? "text-[#B7A692]" : "text-white"} `}>
-            Registered Events
+          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
+            Posted Events
           </h2>
           <Slider {...settings}>
-            {RegisteredEvents.map((event) => (
-              <div
-                key={event.id}
-                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
+            {events.map((event) => (
+              <Link
+              to={`/eventadmin/${event?._id}`}
+                key={event._id}
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <img
-                  src={event.image}
+               <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]" >
+               <img
+                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
                 <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
                   {event.title}
                 </h3>
-              </div>
+               </div>
+              </Link>
             ))}
           </Slider>
         </div>

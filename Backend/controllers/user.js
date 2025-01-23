@@ -138,5 +138,20 @@ exports.updateProfile = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error updating profile' });
+
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find({ role: "user" }).select(
+      "-password -resetPasswordExpires -resetPasswordToken"
+    ).sort({createdAt: -1});
+
+    res.status(200).json({
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+
   }
 };

@@ -13,6 +13,7 @@ import UserProfile from "./components/UserDashobard/UserProfile";
 import EventDetail from "./components/UserDashobard/EventDetail";
 import Users from "./components/AdminDashobard/Users";
 import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
+import EventDetailAdmin from "./components/AdminDashobard/EventDetailAdmin";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/userdashboard" element={<UserDashboard />} />
+        <Route path="/eventadmin/:eventId" element={<EventDetailAdmin />} />
         <Route path="/event/:eventId" element={<EventDetail />} />
         <Route path="/users" element={<Users />} />
         <Route
