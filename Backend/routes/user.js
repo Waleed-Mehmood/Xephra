@@ -1,17 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const { createProfile, getProfile ,updateProfile, getUsers} = require("../controllers/user");
+const {
+  createProfile,
+  getProfile,
+  updateProfile,
+  getUsers,
+  deleteUser,
+  suspendUser,
+  getUser,
+} = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
-
-router.post('/createProfile', upload.single('profileImage'), createProfile);  
+router.post("/createProfile", upload.single("profileImage"), createProfile);
 router.get("/profile/:userId", getProfile);
-router.patch('/profile/:userId', upload.single('profileImage'), updateProfile);
-router.get('/getusers', getUsers);
+router.patch("/profile/:userId", upload.single("profileImage"), updateProfile);
+router.get("/getusers", getUsers);
+router.get("/user/:userId", getUser);
+router.delete("/user/:userId", deleteUser);
+router.patch("/usersuspend/:userId", suspendUser);
 
 module.exports = router;
-
-
-
-
-

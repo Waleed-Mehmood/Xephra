@@ -26,9 +26,7 @@ export const getProfile = createAsyncThunk(
   "profile/getProfile",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${apiUrl}/admin/profile/${userId}`,
-      );
+      const response = await axios.get(`${apiUrl}/admin/profile/${userId}`);
       return response.data; // Profile data
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch profile");
@@ -56,16 +54,62 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
-// get all users 
+// get all users
 export const getAllUsers = createAsyncThunk(
-  'profile/getAllUsers', 
-  async (_, {rejectWithValue})=>{
+  "profile/getAllUsers",
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axios(`${apiUrl}/user/getusers`);
       return response.data.users;
-      
     } catch (error) {
       return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
+// delete a user by passing userId
+export const deleteUser = createAsyncThunk(
+  "profile/deleteUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/user/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete user"
+      );
+    }
+  }
+);
+
+// / Async thunk to suspend/unsuspend a user
+export const suspendUser = createAsyncThunk(
+  "profile/suspendUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${apiUrl}/user/usersuspend/${userId}`
+      );
+      return { userId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(
+        error.response && error.response.data
+          ? error.response.data
+          : { message: "An error occurred" }
+      );
+    }
+  }
+);
+
+// thunk for a getuser
+export const getUser = createAsyncThunk(
+  "profile/getUser",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      return error.response?.data?.message || "Failed to get user profile";
     }
   }
 );
@@ -75,6 +119,7 @@ const profileSlice = createSlice({
   initialState: {
     profile: null,
     users: [],
+    successMessage: null,
     loading: false,
     error: null,
   },
@@ -126,6 +171,52 @@ const profileSlice = createSlice({
         state.users = action.payload;
       })
       .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.successMessage = action.payload;
+        state.users = state.users.filter(
+          (user) => user.userId !== action.meta.arg
+        );
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(suspendUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(suspendUser.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update the specific user's `isSuspended` status in the `users` array
+        const { userId, isSuspended } = action.payload;
+        const userIndex = state.users.findIndex(
+          (user) => user.userId === userId
+        );
+        if (userIndex !== -1) {
+          state.users[userIndex].isSuspended = isSuspended;
+        }
+      })
+      .addCase(suspendUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.profile = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
