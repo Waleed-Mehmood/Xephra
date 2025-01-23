@@ -110,7 +110,7 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
 // Main Dashboard component
 function Dashboard() {
   const dispatch = useDispatch();
-    const { profile } = useSelector((state) => state.profile);
+    const { profile } = useSelector((state) => state.user);
     const userData = JSON.parse(localStorage.getItem("user"));
     const userId = userData?.UserId;
     useEffect(() => {

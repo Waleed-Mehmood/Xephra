@@ -4,7 +4,7 @@ import axios from "axios";
 const apiUrl = process.env.REACT_APP_BACKEND;
 
 export const createProfile = createAsyncThunk(
-  "profile/create",
+  "user/create",
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
@@ -23,7 +23,7 @@ export const createProfile = createAsyncThunk(
 
 // GET profile action
 export const getProfile = createAsyncThunk(
-  "profile/getProfile",
+  "user/getProfile",
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
@@ -37,7 +37,7 @@ export const getProfile = createAsyncThunk(
 );
 
 export const updateProfile = createAsyncThunk(
-  "profile/updateProfile",
+  "user/updateProfile",
   async ({ userId, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
@@ -57,7 +57,7 @@ export const updateProfile = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: "profile",
+  name: "user",
   initialState: {
     profile: null,
     loading: false,
