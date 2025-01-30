@@ -2,22 +2,31 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { useSelector, useDispatch } from "react-redux";
-import { getEvents } from "../../redux/features/eventsSlice";
+import { getEvents,getEventsByUserId } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 
 const DashboardUser = ({ dark }) => {
   const dispatch = useDispatch();
-  const { loading,events, event } = useSelector((state) => state.events);
+  const { loading,events, event,participants } = useSelector((state) => state.events);
+  const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
 
   useEffect(() => {
     dispatch(getEvents());
+    if (userId) {
+      dispatch(getEventsByUserId(userId)); 
+    }
   }, [dispatch, event]);
-
-  
 
   const sortedUpcomingEvents = [...events].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
+
+  const sortedRegisteredEvents = [...participants].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+  
+  console.log("Participants", participants);
+
   const rankings = [
     {
       id: 1,
@@ -56,58 +65,58 @@ const DashboardUser = ({ dark }) => {
     },
   ];
 
-  const RegisteredEvents = [
-    {
-      id: 1,
-      title: "League of Legends World Cup",
-      image:
-        "https://cdn.wccftech.com/wp-content/uploads/2019/05/LoL-1030x579.jpg",
-    },
-    {
-      id: 2,
-      title: "Minecraft Building Championship",
-      image:
-        "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a",
-    },
-    {
-      id: 3,
-      title: "Apex Legends Championship Series",
-      image:
-        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
-    },
-    {
-      id: 4,
-      title: "PUBG Mobile Global Championship 2024",
-      image:
-        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
-    },
-  ];
-
-  const settings = {
+  const settings1 = {
     dots: false,
-    infinite: true,
+    infinite: sortedRegisteredEvents.length >= 3, // Jab 3 ya zyada events hon to infinite true hoga
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: sortedRegisteredEvents.length >= 3, // Jab 3 ya zyada events hon to autoplay on hoga
     autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(2, sortedRegisteredEvents.length), // Jab 2 events ho to max 2 dikhayega
           slidesToScroll: 1,
         },
       },
       {
         breakpoint: 450,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 1, // Mobile screens pe ek ek slide dikhayega
           slidesToScroll: 1,
         },
       },
     ],
   };
+
+  const settings2 = {
+    dots: false,
+    infinite: sortedRegisteredEvents.length >= 3, // Jab 3 ya zyada events hon to infinite true hoga
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: sortedRegisteredEvents.length >= 3, // Jab 3 ya zyada events hon to autoplay on hoga
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: Math.min(2, sortedRegisteredEvents.length), // Jab 2 events ho to max 2 dikhayega
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 450,
+        settings: {
+          slidesToShow: 1, // Mobile screens pe ek ek slide dikhayega
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -144,8 +153,9 @@ const DashboardUser = ({ dark }) => {
           >
             Upcoming Events
           </h2>
-          <Slider {...settings}>
-            {sortedUpcomingEvents?.map((event) => (
+          <Slider {...settings1}>
+          {sortedUpcomingEvents.length ===0 ? <p className="text-red-500 text-xl lg:text-2xl">No Registered Events! </p> :
+            sortedUpcomingEvents?.map((event) => (
               <Link
                 to={`/eventuser/${event?._id}`}
                 key={event._id}
@@ -172,24 +182,25 @@ const DashboardUser = ({ dark }) => {
           >
             Registered Events
           </h2>
-          <Slider {...settings}>
-            {sortedUpcomingEvents.map((event) => (
+          <Slider {...settings2}>
+          {sortedRegisteredEvents.length ===0 ? <p className="text-red-500 text-lg lg:text-xl">No Registered Events! </p> :
+            sortedRegisteredEvents.map((event) => (
               <Link
-              to={`/eventuser/${event?._id}`}
-              key={event._id}
+              to={`/eventuser/${event?.eventId?._id}`}
+              key={event?.eventId?._id}
               className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
             >
               <div
-                key={event.id}
+                key={event?.eventId?.id}
                 className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
               >
                 <img
-                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                  src={`${process.env.REACT_APP_BACKEND}/${event?.eventId?.image}`}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
                 <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                  {event.title}
+                  {event?.eventId?.title}
                 </h3>
               </div>
               </Link>
