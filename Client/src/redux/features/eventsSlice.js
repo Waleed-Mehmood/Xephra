@@ -74,24 +74,6 @@ export const getEventById = createAsyncThunk(
   }
 );
 
-// Async thunk to register a user for an event
-export const registerForEvent = createAsyncThunk(
-  "events/registerForEvent",
-  async ({ eventId, user }, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        `${apiUrl}/user/events/register/${eventId}`,
-        user
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to join the event"
-      );
-    }
-  }
-);
-
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
@@ -167,19 +149,6 @@ const eventsSlice = createSlice({
       .addCase(getEventById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || action.error.message;
-      })
-      .addCase(registerForEvent.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.message = null;
-      })
-      .addCase(registerForEvent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.message = action.payload.message;
-      })
-      .addCase(registerForEvent.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
       });
   },
 });

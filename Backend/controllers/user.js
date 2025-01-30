@@ -170,32 +170,3 @@ exports.upcomingEvents = async (req, res) => {
   }
 };
 
-
-// Register a user for an event
-exports.registerUserForEvent = async (req, res) => {
-  try {
-    const { eventId } = req.params;
-    const { userId, name, email } = req.body;
-
-    const event = await Events.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    // Check if the user is already registered
-    const alreadyRegistered = event.registeredUsers.some(
-      (user) => user.userId === userId
-    );
-    if (alreadyRegistered) {
-      return res.status(400).json({ message: "User already registered" });
-    }
-
-    // Add user to the registeredUsers array
-    event.registeredUsers.push({ userId, name, email });
-    await event.save();
-
-    res.status(200).json({ message: "User registered successfully", event });
-  } catch (error) {
-    res.status(500).json({ message: "Error registering user", error });
-  }
-};

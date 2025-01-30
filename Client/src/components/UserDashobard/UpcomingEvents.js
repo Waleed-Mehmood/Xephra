@@ -8,10 +8,6 @@ const TournamentCard = ({ _id, title, game, date, time, description, image, priz
   const { loading, error, message } = useSelector((state) => state.events);
   const dispatch = useDispatch();
 
-  const handleJoinNow = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    dispatch(registerForEvent({ eventId: _id, user }));
-  };
   const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
   return (
     <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
@@ -23,7 +19,7 @@ const TournamentCard = ({ _id, title, game, date, time, description, image, priz
         <p className="text-gray-300 mt-2">{description}</p>
         <div className="mt-4 flex justify-between items-center">
           <span className="text-xl font-bold text-white">{prizePool}</span>
-          <button onClick={handleJoinNow}
+          <button
             disabled={loading} className="bg-[#69363f] text-white px-4 py-2 rounded-md hover:bg-[#8f404f] transition">
             {loading ? "Joining..." : "Join Now"}
           </button>
