@@ -240,7 +240,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           <Slider {...settings}>
             {events.map((event) => (
               <Link
-                to={`/eventuser/${event?._id}`}
+                to={`/eventadmin/${event?._id}`}
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >

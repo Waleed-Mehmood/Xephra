@@ -118,10 +118,10 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     );
   };
 
-  console.log("message", event);
+
   return (
     <div
-      className={`mx-auto py-16 px-4 rounded-lg ${
+      className={`mx-auto py-16 px-4 rounded-lg min-h-full ${
         dark ? "bg-[#69363F]" : "bg-[#232122]"
       } `}
     >
