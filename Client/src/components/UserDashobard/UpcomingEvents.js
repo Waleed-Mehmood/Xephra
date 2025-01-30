@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getEvents,registerForEvent } from "../../redux/features/eventsSlice";
+import { getEvents } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 
 const TournamentCard = ({ _id, title, game, date, time, description, image, prizePool }) => {

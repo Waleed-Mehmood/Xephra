@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import { useSelector, useDispatch } from "react-redux";
+import { getEvents } from "../../redux/features/eventsSlice";
+import Loading from "../../utils/Loading/Loading";
 
-const DashboardUser = ({dark}) => {
+const DashboardUser = ({ dark }) => {
+  const dispatch = useDispatch();
+  const { loading,events, event } = useSelector((state) => state.events);
+
+  useEffect(() => {
+    dispatch(getEvents());
+  }, [dispatch, event]);
+
+  
+
+  const sortedUpcomingEvents = [...events].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
   const rankings = [
     {
       id: 1,
@@ -38,31 +53,6 @@ const DashboardUser = ({dark}) => {
       rank: 60,
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s",
-    },
-  ];
-
-  const events = [
-    {
-      id: 1,
-      title: "Fortnite Battle Royale Championship",
-      image: "https://images8.alphacoders.com/877/thumb-1920-877849.jpg",
-    },
-    {
-      id: 2,
-      title: "Call of Duty: Warzone Tournament Finals",
-      image: "https://i.ytimg.com/vi/TidXGyzxT8c/maxresdefault.jpg",
-    },
-    {
-      id: 3,
-      title: "Apex Legends Championship Series",
-      image:
-        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
-    },
-    {
-      id: 4,
-      title: "PUBG Mobile Global Championship 2024",
-      image:
-        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
     },
   ];
 
@@ -142,39 +132,59 @@ const DashboardUser = ({dark}) => {
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
-        <div className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
+        <div
+          className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${
+            dark ? "bg-[#69363F]" : "bg-[#232122]"
+          }`}
+        >
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            }`}
+          >
             Upcoming Events
           </h2>
           <Slider {...settings}>
-            {events.map((event) => (
-              <div
-                key={event.id}
-                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
+            {sortedUpcomingEvents?.map((event) => (
+              <Link
+                to={`/eventuser/${event?._id}`}
+                key={event._id}
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="h-32 w-full object-cover rounded"
-                />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                  {event.title}
-                </h3>
-              </div>
+                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+                  <img
+                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                    alt={event.title}
+                    className="h-32 w-full object-cover rounded"
+                  />
+                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                    {event.title}
+                  </h3>
+                </div>
+              </Link>
             ))}
           </Slider>
 
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${dark ? "text-[#B7A692]" : "text-white"}`}>
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            }`}
+          >
             Registered Events
           </h2>
           <Slider {...settings}>
-            {RegisteredEvents.map((event) => (
+            {sortedUpcomingEvents.map((event) => (
+              <Link
+              to={`/eventuser/${event?._id}`}
+              key={event._id}
+              className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+            >
               <div
                 key={event.id}
                 className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
               >
                 <img
-                  src={event.image}
+                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                   alt={event.title}
                   className="h-32 w-full object-cover rounded"
                 />
@@ -182,13 +192,22 @@ const DashboardUser = ({dark}) => {
                   {event.title}
                 </h3>
               </div>
+              </Link>
             ))}
           </Slider>
         </div>
 
         {/* Rankings Section */}
-        <div className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
+        <div
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${
+            dark ? "bg-[#69363F]" : "bg-[#232122]"
+          }`}
+        >
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            }`}
+          >
             User Rankings
           </h2>
           <ul>
@@ -200,14 +219,26 @@ const DashboardUser = ({dark}) => {
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div className="flex-1">
-                  <p className={`font-bold lg:text-lg sm:text-base ${dark ? "text-[#B7A692]" : "text-white"}`}>
+                  <p
+                    className={`font-bold lg:text-lg sm:text-base ${
+                      dark ? "text-[#B7A692]" : "text-white"
+                    }`}
+                  >
                     {user.name}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <p className={`text-sm ${dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"} `}>Rank: {user.rank}</p>
+                    <p
+                      className={`text-sm ${
+                        dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"
+                      } `}
+                    >
+                      Rank: {user.rank}
+                    </p>
                     <div className="w-full bg-gray-200 h-2 rounded">
                       <div
-                        className={`h-2 rounded ${dark ? "bg-[#A15D66]" : "bg-[#A15D66]"}`}
+                        className={`h-2 rounded ${
+                          dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                        }`}
                         style={{ width: `${user.rank}%` }}
                       ></div>
                     </div>
@@ -218,7 +249,11 @@ const DashboardUser = ({dark}) => {
           </ul>
           <Link
             to="/user-rankings"
-            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${dark ? "bg-[#302B27] hover:bg-[#8b796b]" : "bg-[#854951] hover:bg-[#A15D66]"}`}
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
+              dark
+                ? "bg-[#302B27] hover:bg-[#8b796b]"
+                : "bg-[#854951] hover:bg-[#A15D66]"
+            }`}
           >
             See All
           </Link>
