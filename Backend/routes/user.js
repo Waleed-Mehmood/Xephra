@@ -8,6 +8,7 @@ const {
   deleteUser,
   suspendUser,
   getUser,
+   upcomingEvents
 } = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
@@ -18,5 +19,6 @@ router.get("/getusers", getUsers);
 router.get("/user/:userId", getUser);
 router.delete("/user/:userId", deleteUser);
 router.patch("/usersuspend/:userId", suspendUser);
+router.get("/upcomingevents", upcomingEvents);
 
 module.exports = router;
