@@ -1,4 +1,4 @@
-import {React, useEffect} from "react";
+import { React, useEffect, useState } from "react";
 import Slider from "react-slick";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,8 +13,14 @@ import {
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
-import { getAllUsers } from "../../redux/features/profileSlice";
+import {
+  getAllUsers,
+  deleteUser,
+  suspendUser,
+  getUser
+} from "../../redux/features/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Modal from './Modal';
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -27,16 +33,16 @@ ChartJS.register(
   Legend
 );
 
-const DashboardAdmin = ({ setActiveMenu,dark }) => {
-    const dispatch = useDispatch();
-    const { events} = useSelector((state) => state.events);
-    const { users} = useSelector((state) => state.profile);
-
-    useEffect(() => {
-      dispatch(getEvents());
-      dispatch(getAllUsers());
-    }, [])
-    
+const DashboardAdmin = ({ setActiveMenu, dark }) => {
+  const dispatch = useDispatch();
+  const { events } = useSelector((state) => state.events);
+  const { users, profile } = useSelector((state) => state.profile);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  useEffect(() => {
+    dispatch(getEvents());
+    dispatch(getAllUsers());
+  }, []);
 
   const rankings = [
     {
@@ -102,13 +108,6 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
         "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
     },
   ];
-  console.log("users", users)
-
-  // const users = [
-  //   { id: 1, name: "wajid", email: "user1@example.com", role: "User" },
-  //   { id: 2, name: "User 2", email: "user2@example.com", role: "Admin" },
-  //   { id: 3, name: "User 3", email: "user3@example.com", role: "User" },
-  // ];
 
   const settings = {
     dots: false,
@@ -140,10 +139,21 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
     setActiveMenu("userRanking");
   };
 
-  const handleAction = (action, userId) => {
-    console.log(action, userId);
-    // Implement actions such as suspend, delete, promote here
+  const handleDelete = (userId) => {
+    dispatch(deleteUser(userId));
   };
+  const handleSuspend = (userId) => {
+    dispatch(suspendUser(userId));
+  };
+ const handleProfileView = (userId) => {
+       dispatch(getUser(userId));
+       setIsModalOpen(true);
+     };
+     const closeModal = () => {
+       setIsModalOpen(false);
+     };
+   
+
 
   // Chart data for Analytics & Stats
   const analyticsData = {
@@ -165,7 +175,8 @@ const DashboardAdmin = ({ setActiveMenu,dark }) => {
       },
     ],
   };
-console.log("events", events);
+
+  console.log("profile", profile);
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section for Admin */}
@@ -187,8 +198,16 @@ console.log("events", events);
       </div>
 
       {/* Analytics & Stats Dashboard Section */}
-      <div className={`${dark ? "bg-[#69363F]" : "bg-[#232122]"} p-4 mt-8 rounded shadow`}>
-        <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"}`}>
+      <div
+        className={`${
+          dark ? "bg-[#69363F]" : "bg-[#232122]"
+        } p-4 mt-8 rounded shadow`}
+      >
+        <h2
+          className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+            dark ? "text-[#B7A692]" : "text-white"
+          }`}
+        >
           Analytics & Stats
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -206,59 +225,78 @@ console.log("events", events);
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
-        <div className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
+        <div
+          className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${
+            dark ? "bg-[#69363F]" : "bg-[#232122]"
+          } `}
+        >
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            } `}
+          >
             Posted Events
           </h2>
           <Slider {...settings}>
             {events.map((event) => (
               <Link
-              to={`/eventadmin/${event?._id}`}
+                to={`/eventadmin/${event?._id}`}
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-               <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]" >
-               <img
-                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
-                  alt={event.title}
-                  className="h-32 w-full object-cover rounded"
-                />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                  {event.title}
-                </h3>
-               </div>
+                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+                  <img
+                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                    alt={event.title}
+                    className="h-32 w-full object-cover rounded"
+                  />
+                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                    {event.title}
+                  </h3>
+                </div>
               </Link>
             ))}
           </Slider>
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            } `}
+          >
             Posted Events
           </h2>
           <Slider {...settings}>
             {events.map((event) => (
               <Link
-              to={`/eventadmin/${event?._id}`}
+                to={`/eventadmin/${event?._id}`}
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-               <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]" >
-               <img
-                  src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
-                  alt={event.title}
-                  className="h-32 w-full object-cover rounded"
-                />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                  {event.title}
-                </h3>
-               </div>
+                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+                  <img
+                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                    alt={event.title}
+                    className="h-32 w-full object-cover rounded"
+                  />
+                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                    {event.title}
+                  </h3>
+                </div>
               </Link>
             ))}
           </Slider>
         </div>
 
-
         {/* Rankings Section */}
-        <div className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${dark ? "text-[#B7A692]" : "text-white"} `}>
+        <div
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${
+            dark ? "bg-[#69363F]" : "bg-[#232122]"
+          } `}
+        >
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark ? "text-[#B7A692]" : "text-white"
+            } `}
+          >
             User Rankings
           </h2>
           <ul>
@@ -270,14 +308,26 @@ console.log("events", events);
                   className="w-12 h-12 rounded-full mr-4"
                 />
                 <div className="flex-1">
-                  <p className={`font-bold lg:text-lg sm:text-base ${dark ? "text-[#B7A692]" : "text-white"} `}>
+                  <p
+                    className={`font-bold lg:text-lg sm:text-base ${
+                      dark ? "text-[#B7A692]" : "text-white"
+                    } `}
+                  >
                     {user.name}
                   </p>
                   <div className="flex items-center space-x-2">
-                    <p className={`text-sm ${dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"} `}>Rank: {user.rank}</p>
+                    <p
+                      className={`text-sm ${
+                        dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"
+                      } `}
+                    >
+                      Rank: {user.rank}
+                    </p>
                     <div className="w-full bg-gray-200 h-2 rounded">
                       <div
-                        className={`h-2 rounded ${dark ? "bg-[#A15D66]" : "bg-[#A15D66]"} `}
+                        className={`h-2 rounded ${
+                          dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                        } `}
                         style={{ width: `${user.rank}%` }}
                       ></div>
                     </div>
@@ -288,7 +338,11 @@ console.log("events", events);
           </ul>
           <Link
             onClick={changeMenu}
-            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${dark ? "bg-[#302B27] hover:bg-[#8b796b]" : "bg-[#854951] hover:bg-[#A15D66]"}  `}
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
+              dark
+                ? "bg-[#302B27] hover:bg-[#8b796b]"
+                : "bg-[#854951] hover:bg-[#A15D66]"
+            }  `}
           >
             See All
           </Link>
@@ -296,14 +350,27 @@ console.log("events", events);
       </div>
 
       {/* User Management Section */}
-      <div className={`p-4 mt-8 rounded shadow ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
+      <div
+        className={`p-4 mt-8 rounded shadow ${
+          dark ? "bg-[#69363F]" : "bg-[#232122]"
+        } `}
+      >
         <div className="flex justify-between items-center mb-4">
-          <h2 className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${dark ? "text-[#B7A692]" : "text-white"}`}>
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${
+              dark ? "text-[#B7A692]" : "text-white"
+            }`}
+          >
             Manage Users
           </h2>
-          <a href="/users" className={`hover:underline text-sm ${dark ? "text-[#B7A692]" : "text-white"}`}>
+          <Link
+            to="/dashboard/users"
+            className={`hover:underline text-sm ${
+              dark ? "text-[#B7A692]" : "text-white"
+            }`}
+          >
             See All
-          </a>
+          </Link>
         </div>
         <div className="overflow-x-auto sm:overflow-x-hidden">
           <table className="min-w-full bg-white rounded shadow">
@@ -312,25 +379,45 @@ console.log("events", events);
                 <th className="p-2 text-left">Name</th>
                 <th className="p-2 text-left">Email</th>
                 <th className="p-2 text-left">Role</th>
+                <th className="p-2 text-left">Created At</th>
+                <th className="p-2 text-left">Profile</th>
+                <th className="p-2 text-left">Suspension Status</th>
                 <th className="p-2 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="p-2">{user.name}</td>
-                  <td className="p-2">{user.email}</td>
-                  <td className="p-2">{user.role}</td>
+              {users.slice(0, 3).map((user) => (
+                <tr key={user?._id}>
+                  <td className="p-2">{user?.name}</td>
+                  <td className="p-2">{user?.email}</td>
+                  <td className="p-2">{user?.role}</td>
+                  <td className="p-2">
+                    {new Date(user?.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="p-2">
+                    <button
+                    onClick={()=>handleProfileView(user?.userId)}
+                      className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
+                     
+                    >
+                     View Profile
+                    </button>
+                   
+                  </td>
                   <td className="p-2">
                     <button
                       className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
-                      onClick={() => handleAction("suspend", user.id)}
+                      onClick={() => handleSuspend(user?.userId)}
                     >
-                      Suspend
+                      {user.isSuspended ? "Unsuspend" : "Suspend"}
                     </button>
+                  
+                  </td>
+                  <td className="p-2">
+                    
                     <button
                       className="bg-[#302B27] text-white py-1 px-4 rounded"
-                      onClick={() => handleAction("delete", user.id)}
+                      onClick={() => handleDelete(user?.userId)}
                     >
                       Delete
                     </button>
@@ -341,6 +428,7 @@ console.log("events", events);
           </table>
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal} profile={profile} />
 
     </div>
   );

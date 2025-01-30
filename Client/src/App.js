@@ -30,7 +30,7 @@ export default function App() {
         <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/eventadmin/:eventId" element={<EventDetailAdmin />} />
         <Route path="/eventuser/:eventId" element={<EventDetailUser />} />
-        <Route path="/users" element={<Users />} />
+        <Route path="/dashboard/users" element={<Users />} />
         <Route
           path="/tournamentrankings/:eventId"
           element={<TournamentRanking />}
