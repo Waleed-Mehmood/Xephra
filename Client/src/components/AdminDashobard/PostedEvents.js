@@ -62,7 +62,7 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     // onDelete,
     onEdit,
   }) => {
-    const imageUrl = `http://localhost:5000/${image}`;
+    const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
 
     return (
       <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">

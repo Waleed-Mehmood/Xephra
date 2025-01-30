@@ -1,7 +1,9 @@
-const UserProfile = require("../models/UserProfile");
-const User = require("../models/User");
+ const UserProfile = require("../models/UserProfile");
+ const User = require("../models/User");
+ const Events = require("../models/Events");
 const { default: mongoose } = require("mongoose");
 const Participant = require("../models/Participant");
+
 
 // POST: Create a new user profile
 exports.createProfile = async (req, res) => {
@@ -250,6 +252,17 @@ exports.getUser = async (req, res) => {
     });
   }
 };
+
+exports.upcomingEvents = async (req, res) => {
+  try {
+    const events = await Events.find();
+    res.status(200).json({ events });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 
 exports.joinEvent = async (req, res) => {
   try {
