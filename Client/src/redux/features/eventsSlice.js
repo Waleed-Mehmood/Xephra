@@ -74,11 +74,27 @@ export const getEventById = createAsyncThunk(
   }
 );
 
+// joining an event thunk
+export const joinEvent = createAsyncThunk(
+  "events/joinEvent",
+  async ({ userId, eventId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${apiUrl}/user/event-join`, {
+        userId,
+        eventId,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
     event: null,
     events: [],
+    participants: [],
     message: "",
     loading: false,
     error: null,
@@ -147,6 +163,19 @@ const eventsSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(getEventById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || action.error.message;
+      })
+      .addCase(joinEvent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(joinEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.participants.push(action.payload.participant);
+        state.message = action.payload.message;
+      })
+      .addCase(joinEvent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || action.error.message;
       });
