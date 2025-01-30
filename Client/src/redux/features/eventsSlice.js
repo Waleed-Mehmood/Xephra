@@ -89,6 +89,20 @@ export const joinEvent = createAsyncThunk(
     }
   }
 );
+
+// Create async thunk for fetching events
+export const getEventsByUserId = createAsyncThunk(
+  'events/getEventsByUserId',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${apiUrl}/user/registered-events`, { userId }); // Assuming '/api/events' is the endpoint
+      return response.data.events;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error);
+    }
+  }
+);
+
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
@@ -178,6 +192,17 @@ const eventsSlice = createSlice({
       .addCase(joinEvent.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || action.error.message;
+      })
+      .addCase(getEventsByUserId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getEventsByUserId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.participants = action.payload; 
+      })
+      .addCase(getEventsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

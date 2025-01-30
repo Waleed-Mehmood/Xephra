@@ -24,6 +24,6 @@ router.patch("/usersuspend/:userId", suspendUser);
 router.get("/upcomingevents", upcomingEvents);
 
 router.post("/event-join", joinEvent);
-router.get("/registered-events", getEvents);
+router.post("/registered-events", getEvents);
 
 module.exports = router;
