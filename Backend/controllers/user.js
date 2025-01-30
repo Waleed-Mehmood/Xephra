@@ -1,6 +1,8 @@
  const UserProfile = require("../models/UserProfile");
  const User = require("../models/User");
  const Events = require("../models/Events");
+const { default: mongoose } = require("mongoose");
+const Participant = require("../models/Participant");
 
 
 // POST: Create a new user profile
@@ -251,7 +253,6 @@ exports.getUser = async (req, res) => {
   }
 };
 
-
 exports.upcomingEvents = async (req, res) => {
   try {
     const events = await Events.find();
@@ -262,3 +263,49 @@ exports.upcomingEvents = async (req, res) => {
   }
 };
 
+
+exports.joinEvent = async (req, res) => {
+  try {
+    const { userId, eventId } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(eventId)) {
+      return res.status(400).json({
+        message: "Invalid eventId format",
+      });
+    }
+
+    const existingParticipant = await Participant.findOne({
+      userId,
+      eventId,
+    });
+
+    if (existingParticipant) {
+      return res.status(400).json({
+        message: "User already registered for this event!",
+      });
+    }
+
+    const participant = new Participant({ userId, eventId });
+    await participant.save();
+
+    res.status(201).json({
+      message: "User registered successfully",
+      participant,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+exports.getEvents = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const events = await Participant.find({ userId }).populate("eventId");
+    res.status(200).json({
+      events,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
