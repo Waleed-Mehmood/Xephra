@@ -2,6 +2,7 @@ import React from 'react';
 
 const Modal = ({ isOpen, onClose, profile }) => {
     const baseUrl = process.env.REACT_APP_BACKEND;
+    console.log(profile);
 
   if (!isOpen) return null;
   return (

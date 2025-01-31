@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getEventById } from "../../redux/features/eventsSlice";
+import { getEventById,fetchEventUsers } from "../../redux/features/eventsSlice";
 import { getUser } from "../../redux/features/profileSlice";
 import Loading from "../../utils/Loading/Loading";
-import { FiArrowLeft } from "react-icons/fi";  // Importing a back arrow icon from react-icons
+import { FiArrowLeft } from "react-icons/fi";
 import Modal from "./Modal";
 
 const EventDetailAdmin = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { eventId } = useParams();
-  const { event, loading, error } = useSelector((state) => state.events);
-
+  const { event, loading, error, participants } = useSelector((state) => state.events);
+  const { profile } = useSelector(
+      (state) => state.profile
+    );
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -21,6 +24,7 @@ const EventDetailAdmin = () => {
   useEffect(() => {
     if (eventId) {
       dispatch(getEventById(eventId));
+      dispatch(fetchEventUsers(eventId));
     }
   }, [dispatch, eventId]);
 
@@ -32,14 +36,6 @@ const EventDetailAdmin = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-  // Dummy users array
-  const dummyUsers = [
-    { name: "John Doe" , userId: 0 },
-    { name: "Jane Smith", userId: 1 },
-    { name: "Sam Wilson", userId: 2 },
-    { name: "Lucy Brown", userId: 3 },
-  ];
 
   if (!event) {
     return (
@@ -110,10 +106,10 @@ const EventDetailAdmin = () => {
           <h2 className="text-4xl font-bold text-[#f1b500] mb-6">Participants</h2>
           <div className="bg-[#36474f] p-8 rounded-lg shadow-lg">
             <p className="text-[#a1a1a1] font-semibold mb-4">
-              Total Participants: {dummyUsers.length}
+              Total Participants: {participants.length}
             </p>
             <ul className="space-y-4">
-              {dummyUsers.map((user, index) => (
+              {participants.map((user, index) => (
                 <li
                   key={index}
                   className="flex justify-between items-center text-[#e0e0e0] text-lg"
@@ -135,7 +131,7 @@ const EventDetailAdmin = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal} profile={dummyUsers} />
+      <Modal isOpen={isModalOpen} onClose={closeModal} profile={profile} />
     </div>
   );
 };

@@ -103,6 +103,18 @@ export const getEventsByUserId = createAsyncThunk(
   }
 );
 
+export const fetchEventUsers = createAsyncThunk(
+  "eventUsers/fetchEventUsers",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/event-users/${eventId}`);
+      return response.data.participantsData;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
@@ -201,6 +213,18 @@ const eventsSlice = createSlice({
         state.participants = action.payload; 
       })
       .addCase(getEventsByUserId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchEventUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchEventUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.participants = action.payload;
+      })
+      .addCase(fetchEventUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
