@@ -3,6 +3,8 @@ const Events = require("../models/Events");
 const path = require("path");
 const Profile = require("../models/AdminProfile");
 const User = require("../models/User");
+const Participant = require("../models/Participant");
+const { default: mongoose } = require("mongoose");
 
 exports.newEvent = async (req, res) => {
   try {
@@ -273,6 +275,45 @@ exports.getEvent = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: error,
+    });
+  }
+};
+
+exports.getEventAndUsers = async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const participantsData = await Participant.aggregate([
+      {
+        $match: { eventId: new mongoose.Types.ObjectId(eventId) },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "userId",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails",
+      },
+      {
+        $project: {
+          _id: 0,
+          userId: 1,
+          registeredAt: 1,
+          name: "$userDetails.name",
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      participantsData,
+    });
+  } catch (error) {
+    console.error("Error fetching event participants:", error);
+    res.status(500).json({
+      error,
     });
   }
 };
