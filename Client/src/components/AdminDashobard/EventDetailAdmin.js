@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getEventById } from "../../redux/features/eventsSlice";
+import { getUser } from "../../redux/features/profileSlice";
 import Loading from "../../utils/Loading/Loading";
 import { FiArrowLeft } from "react-icons/fi";  // Importing a back arrow icon from react-icons
+import Modal from "./Modal";
 
 const EventDetailAdmin = () => {
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { eventId } = useParams();
   const { event, loading, error } = useSelector((state) => state.events);
 
@@ -21,12 +24,21 @@ const EventDetailAdmin = () => {
     }
   }, [dispatch, eventId]);
 
+  const handleProfileView = (userId) => {
+        dispatch(getUser(userId));
+        setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   // Dummy users array
   const dummyUsers = [
-    { name: "John Doe" },
-    { name: "Jane Smith" },
-    { name: "Sam Wilson" },
-    { name: "Lucy Brown" },
+    { name: "John Doe" , userId: 0 },
+    { name: "Jane Smith", userId: 1 },
+    { name: "Sam Wilson", userId: 2 },
+    { name: "Lucy Brown", userId: 3 },
   ];
 
   if (!event) {
@@ -111,7 +123,7 @@ const EventDetailAdmin = () => {
                   </span>
                   <div className="flex items-center">
                     <Link
-                      to={`/profile/${index}`}  // Assuming the link goes to a profile page (update as per actual route)
+                      onClick={()=>handleProfileView(user?.userId)}
                       className="bg-[#f1b500] text-[#232122] py-1 px-4 rounded-lg transition-all duration-300"
                     >
                       View Profile
@@ -123,6 +135,7 @@ const EventDetailAdmin = () => {
           </div>
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal} profile={dummyUsers} />
     </div>
   );
 };
