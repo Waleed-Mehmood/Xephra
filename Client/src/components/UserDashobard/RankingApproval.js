@@ -96,7 +96,7 @@ const RankingApproval = ({dark}) => {
                     onChange={(e) =>
                       handleInputChange(game.id, "game", e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
                     placeholder="Enter game name"
                     disabled={game.status !== "-"}
                   />
@@ -108,7 +108,7 @@ const RankingApproval = ({dark}) => {
                     onChange={(e) =>
                       handleInputChange(game.id, "rank", e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
                     placeholder="Enter rank"
                     disabled={game.status !== "-"}
                   />
@@ -120,7 +120,7 @@ const RankingApproval = ({dark}) => {
                     onChange={(e) =>
                       handleInputChange(game.id, "score", e.target.value)
                     }
-                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
                     placeholder="Enter score"
                     disabled={game.status !== "-"}
                   />
@@ -132,7 +132,7 @@ const RankingApproval = ({dark}) => {
                     onChange={(e) =>
                       handleScreenshotUpload(game.id, e.target.files[0])
                     }
-                    className="w-full border border-gray-300 rounded px-2 py-1"
+                    className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
                     disabled={game.status !== "-"}
                   />
                   {game.screenshot && (

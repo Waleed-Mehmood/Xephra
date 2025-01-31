@@ -67,8 +67,8 @@ const EventDetailAdmin = () => {
           {/* Left Side - Event Details */}
           <div className="lg:w-2/3 space-y-6">
             <h2 className="text-4xl font-bold text-[#f1b500]">Tournament: {event?.title}</h2>
-            <p className="text-xl text-[#a1a1a1]">Game : {event?.game}</p>
-            <p className="text-lg text-[#b0b0b0] mt-4">Description : {event?.description}</p>
+            <p className="text-xl text-[#f0f0f0]">Game : {event?.game}</p>
+            <p className="text-lg text-[#f0f0f0] mt-4">Description : {event?.description}</p>
             <p className="text-2xl text-[#f1b500] font-semibold mt-6">
               Prize Pool: {event?.prizePool}
             </p>
