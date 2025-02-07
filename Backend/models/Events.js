@@ -9,6 +9,7 @@ const EventSchema = new mongoose.Schema({
   image: { type: String, required: true }, // Store the file path or URL
   prizePool: { type: Number, required: true,min: 0 },
   rules: { type: String, required: true },
+  hosted: { type: Boolean, required: true,default: false },
 },{ timestamps: true, strict: false });
 
 module.exports = mongoose.model("Event", EventSchema);
