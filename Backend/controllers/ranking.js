@@ -33,8 +33,29 @@ exports.postRankingApproval = async (req, res) => {
       data: savedSubmission,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       error,
     });
+  }
+};
+
+
+
+exports.getUserSubmissions = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: "UserId is required!" });
+    }
+
+    const submissions = await UserSubmission.find({ userId });
+
+    res.status(200).json({
+      data: submissions,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

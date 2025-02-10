@@ -137,6 +137,8 @@ export const fetchHostedTournaments = createAsyncThunk(
   }
 );
 
+
+
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
