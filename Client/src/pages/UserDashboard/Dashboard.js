@@ -136,7 +136,7 @@ function Dashboard() {
         return <RegisteredEvents dark={dark} />;
       case "rankingBoard":
         return <RankingBoard dark={dark} />;
-      case "tournamentsLeague":
+      case "CompletedEvents":
         return <TournamentsLeague dark={dark} />;
       case "rankingApproval":
         return <RankingApproval dark={dark} />;

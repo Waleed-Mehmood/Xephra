@@ -309,3 +309,14 @@ exports.getEvents = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+// Get only hosted events
+exports.getHostedEvents = async (req, res) => {
+  try {
+    const hostedEvents = await Events.find({ hosted: true });
+    res.status(200).json(hostedEvents);
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};

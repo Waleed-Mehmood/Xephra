@@ -129,6 +129,14 @@ export const markEventAsHosted = createAsyncThunk(
   }
 );
 
+export const fetchHostedTournaments = createAsyncThunk(
+  "events/fetchHostedTournaments",
+  async () => {
+    const response = await axios.get(`${apiUrl}/user/events/hosted`);
+    return response.data;
+  }
+);
+
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
@@ -136,6 +144,7 @@ const eventsSlice = createSlice({
     events: [],
     participants: [],
     hostEvent: null,
+    hostedEvents: [],
     message: "",
     loading: false,
     error: null,
@@ -253,6 +262,17 @@ const eventsSlice = createSlice({
       .addCase(markEventAsHosted.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchHostedTournaments.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchHostedTournaments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.hostedEvents = action.payload;
+      })
+      .addCase(fetchHostedTournaments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

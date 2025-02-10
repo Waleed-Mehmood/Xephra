@@ -40,8 +40,8 @@ export const menuItems = [
     icon: <PiRankingBold className="w-5 h-5" />,
   },
   {
-    name: "Tournaments League",
-    key: "tournamentsLeague",
+    name: "Completed Events",
+    key: "CompletedEvents",
     icon: <MdSportsEsports className="w-5 h-5" />,
   },
   {

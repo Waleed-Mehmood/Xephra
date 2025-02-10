@@ -8,6 +8,7 @@ const path = require("path");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
+const rankingRoutes = require('./routes/rankingRoutes');
 const upload = require("./config/multerConfig");
 
 
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
+app.use('/rank', rankingRoutes);
 
 // Connect to MongoDB
 connectDB();
