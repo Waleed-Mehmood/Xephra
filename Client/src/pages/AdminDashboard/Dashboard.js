@@ -133,7 +133,7 @@ function Dashboard() {
         return <NewEvents setActiveMenu={setActiveMenu} dark={dark} />;
       case "userRanking":
         return <UserRanking dark={dark} />;
-      case "tournamentsLeague":
+      case "CompletedEvents":
         return <TournamentsLeague dark={dark} />;
       case "rankingApproval":
         return <RankingApproval dark={dark} />;
