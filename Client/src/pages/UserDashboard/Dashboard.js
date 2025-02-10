@@ -27,9 +27,7 @@ function Sidebar({ onMenuClick, dark }) {
 
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a
-        className="flex items-center space-x-3 rtl:space-x-reverse ms-5"
-      >
+      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
         <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
@@ -110,14 +108,14 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
 // Main Dashboard component
 function Dashboard() {
   const dispatch = useDispatch();
-    const { profile } = useSelector((state) => state.user);
-    const userData = JSON.parse(localStorage.getItem("user"));
-    const userId = userData?.UserId;
-    useEffect(() => {
-      if (userId) {
-        dispatch(getProfile(userId)); // Fetch the profile if userId exists
-      }
-    }, [dispatch, userId]);
+  const { profile } = useSelector((state) => state.user);
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const userId = userData?.UserId;
+  useEffect(() => {
+    if (userId) {
+      dispatch(getProfile(userId)); // Fetch the profile if userId exists
+    }
+  }, [dispatch, userId]);
 
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
@@ -149,11 +147,14 @@ function Dashboard() {
 
   return (
     <div
-      className={`flex h-full ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} ${
-        isSideMenuOpen ? "overflow-hidden" : ""
-      }`}
+      className={`flex h-full bg-[url('https://cdn2.unrealengine.com/card-shortcut-01-1920x1080-53c9796f8aa4.jpg')] 
+      ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
+      ${isSideMenuOpen ? "overflow-hidden" : ""} 
+      bg-cover bg-center relative`}
     >
-      {/* Sidebar for larger screens */}
+      <div className="absolute inset-x-0 bottom-0 h-[200%] bg-gradient-to-t from-gray-800 via-transparent to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
+    
       <aside
         className={`z-20 w-64 overflow-y-auto ${
           dark ? "bg-[#69363F]" : "bg-[#232122]"
@@ -161,7 +162,6 @@ function Dashboard() {
       >
         <Sidebar dark={dark} onMenuClick={setActiveMenu} />
       </aside>
-
       {/* Backdrop for mobile sidebar */}
       {isSideMenuOpen && (
         <div
@@ -169,7 +169,6 @@ function Dashboard() {
           className="fixed inset-0 z-10 bg-black bg-opacity-50 md:hidden"
         />
       )}
-
       {/* Mobile sidebar */}
       <MobileSidebar
         dark={dark}
@@ -177,9 +176,8 @@ function Dashboard() {
         toggleSideMenu={toggleSideMenu}
         onMenuClick={setActiveMenu}
       />
-
       {/* Main content */}
-      <div className="flex flex-col flex-1 w-full">
+      <div className="flex flex-col flex-1 w-full z-10">
         <Header
           dark={dark}
           toggleSideMenu={toggleSideMenu}
