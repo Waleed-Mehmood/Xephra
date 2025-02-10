@@ -176,7 +176,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     ],
   };
 
-  console.log("profile", profile);
+
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section for Admin */}
