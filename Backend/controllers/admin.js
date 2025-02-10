@@ -317,3 +317,25 @@ exports.getEventAndUsers = async (req, res) => {
     });
   }
 };
+
+
+// Controller to mark an event as hosted
+exports.markEventAsHosted = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const event = await Events.findByIdAndUpdate(
+      eventId,
+      { $set: { hosted: true } }, // Only update 'hosted' field
+      { new: true }
+    );
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event hosted successfully", event });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};

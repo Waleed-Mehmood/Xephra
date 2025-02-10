@@ -115,12 +115,27 @@ export const fetchEventUsers = createAsyncThunk(
   }
 );
 
+export const markEventAsHosted = createAsyncThunk(
+  "events/markEventAsHosted",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${apiUrl}/admin/events/${eventId}/host`
+      );
+      return response.data.event;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const eventsSlice = createSlice({
   name: "events",
   initialState: {
     event: null,
     events: [],
     participants: [],
+    hostEvent: null,
     message: "",
     loading: false,
     error: null,
@@ -225,6 +240,17 @@ const eventsSlice = createSlice({
         state.participants = action.payload;
       })
       .addCase(fetchEventUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(markEventAsHosted.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markEventAsHosted.fulfilled, (state, action) => {
+        state.loading = false;
+        state.hostEvent = action.payload;
+      })
+      .addCase(markEventAsHosted.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
