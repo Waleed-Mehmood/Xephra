@@ -11,6 +11,7 @@ export const postRankingApproval = createAsyncThunk(
       const formData = new FormData();
       formData.append("eventId", games.eventId);
       formData.append("userId", games.userId);
+      formData.append("gameName", games.gameName);
       formData.append("rank", games.rank);
       formData.append("score", games.score);
       formData.append("screenshot", games.screenshot); 
@@ -42,6 +43,21 @@ export const fetchUserSubmissions = createAsyncThunk(
   }
 );
 
+
+// delete user ranking approval by userId and eventIt
+  export const deleteUserSubmission = createAsyncThunk(
+    "ranking/deleteUserSubmission", 
+    async ({userId, eventId}, {rejectWithValue})=>{
+      try {
+        const response = await axios.delete(`${apiUrl}/rank/approvaldelete`, {
+          data: { userId, eventId } 
+        });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  )
 
 
 const rankingSlice = createSlice({
@@ -78,6 +94,20 @@ const rankingSlice = createSlice({
       .addCase(fetchUserSubmissions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(deleteUserSubmission.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteUserSubmission.fulfilled, (state, action) => {
+        state.loading = false;
+        state.submissions = state.submissions.filter(
+          (submission) => !(submission.userId === action.meta.arg.userId && submission.eventId === action.meta.arg.eventId)
+        );
+      })
+      .addCase(deleteUserSubmission.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to delete submission.';
       });
   },
 });

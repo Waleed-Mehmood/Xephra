@@ -3,6 +3,7 @@ import { fetchHostedTournaments } from "../../redux/features/eventsSlice";
 import {
   postRankingApproval,
   fetchUserSubmissions,
+  deleteUserSubmission,
 } from "../../redux/features/rankingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../utils/Loading/Loading";
@@ -24,11 +25,10 @@ const RankingApproval = ({ dark }) => {
     }
   }, [dispatch, userId, data]);
 
-  console.log("submissions", submissions);
-
   const [game, setGame] = useState({
     userId: userId,
     eventId: "",
+    gameName: "",
     rank: "",
     score: "",
     status: "-",
@@ -61,17 +61,21 @@ const RankingApproval = ({ dark }) => {
     setGame({
       userId: userId,
       eventId: "",
+      gameName: "",
       rank: "",
       score: "",
       status: "-",
       screenshot: null,
     });
   };
+  const handleDelete = (userId, eventId) => {
+    dispatch(deleteUserSubmission({ userId, eventId }));
+  };
 
   if (loading) {
     return <Loading />;
   }
-
+  console.log("game", game);
   return (
     <div className="bg-[#f7e8e8] border border-gray-300 rounded-lg p-6 mx-auto text-center min-h-full">
       <h1
@@ -137,7 +141,18 @@ const RankingApproval = ({ dark }) => {
               <td className="py-3 px-4 border border-gray-300">
                 <select
                   id="hostedEvents"
-                  onChange={(e) => handleInputChange("eventId", e.target.value)}
+                  onChange={(e) => {
+                    const selectedEvent = hostedEvents.find(
+                      (event) => event._id === e.target.value
+                    );
+                    if (selectedEvent) {
+                      setGame((prevGame) => ({
+                        ...prevGame,
+                        eventId: selectedEvent._id,
+                        gameName: selectedEvent.title,
+                      }));
+                    }
+                  }}
                   value={game.eventId}
                   defaultValue=""
                   className="py-3 px-4"
@@ -238,7 +253,7 @@ const RankingApproval = ({ dark }) => {
               {/* Details Section */}
               <div className="p-4 space-y-3">
                 <h3 className="text-sm font-semibold text-gray-800 mb-2">
-                  {submission.eventId}
+                  {submission.gameName}
                 </h3>
 
                 <div className="grid grid-cols-2 gap-2 text-gray-600 text-xs">
@@ -252,19 +267,32 @@ const RankingApproval = ({ dark }) => {
                   </p>
                 </div>
 
-                <div className="mt-2">
-                  <p className="font-medium text-gray-700 text-xs">Status:</p>
-                  <span
-                    className={`px-2 py-1 inline-block rounded-full text-xs font-semibold ${
-                      submission.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-600"
-                        : submission.status === "Approved"
-                        ? "bg-green-100 text-green-600"
-                        : "bg-red-100 text-red-600"
-                    }`}
-                  >
-                    {submission.status}
-                  </span>
+                <div className="mt-2 flex flex-row justify-around items-center">
+                  <div className="flex flex-row items-center">
+                    <p className="font-medium text-gray-700 text-xs">Status:</p>
+                    <span
+                      className={`px-2 ms-2 py-1 inline-block rounded-full text-xs font-semibold ${
+                        submission.status === "Pending"
+                          ? "bg-yellow-100 text-yellow-600"
+                          : submission.status === "Approved"
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
+                      {submission.status}
+                    </span>
+                  </div>
+
+                  <div>
+                    <button
+                    className="bg-red-300 px-3 py-1 rounded text-white"
+                      onClick={() =>
+                        handleDelete(submission.userId, submission.eventId)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
