@@ -123,18 +123,18 @@ const DashboardUser = ({ dark }) => {
       {/* Hero Section */}
       <div
         className="relative bg-cover bg-center h-64"
-        style={{
-          backgroundImage:
-            "url('https://www.amd.com/content/dam/amd/en/images/photography/lifestyle/1536834-female-gamer.jpg')",
-        }}
+        // style={{
+        //   backgroundImage:
+        //     "url('https://www.amd.com/content/dam/amd/en/images/photography/lifestyle/1536834-female-gamer.jpg')",
+        // }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center text-white">
-          <h1 className="text-2xl lg:text-4xl md:text-3xl sm:text-2xl font-bold">
-            Welcome to the Gaming Dashboard
+        <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white lg:mt-4">
+          <h1 className=" bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent  w-1/2 text-2xl lg:text-[3.6rem] md:text-5xl sm:text-6xl sm:w-full font-bold">
+            Welcome to the<br></br> Gaming <br/>Dashboard
           </h1>
-          <p className="mt-2 md:text-lg sm:text-base">
+          <h2 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
             Stay updated with upcoming events and your ranking progress.
-          </p>
+          </h2>
         </div>
       </div>
 

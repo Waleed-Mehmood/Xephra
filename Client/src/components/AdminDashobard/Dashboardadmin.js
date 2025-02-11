@@ -182,20 +182,18 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       {/* Hero Section for Admin */}
       <div
         className="relative bg-cover bg-center h-64"
-        style={{
-          backgroundImage:
-            "url('https://thumbs.dreamstime.com/b/teenage-girl-wearing-headset-gaming-home-using-dual-computer-screens-teenage-girl-wearing-headset-gaming-home-using-dual-166580706.jpg')",
-        }}
+       
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center text-white">
-          <h1 className="text-2xl lg:text-4xl md:text-3xl sm:text-2xl font-bold">
-            Welcome, Admin!
+        <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white mt-20 ">
+          <h1 className=" bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
+            Welcome Admin!
           </h1>
-          <p className="mt-2 md:text-lg sm:text-base">
-            Manage and monitor all the gaming events and rankings efficiently.
-          </p>
+          <h2 className="bg-gradient-to-l from-[#8a6e3b] via-[#d1a759] to-[#ffecb2] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
+            Manage and Monitor all the Gaming Events and Rankings Efficiently.
+          </h2>
         </div>
       </div>
+
 
       {/* Analytics & Stats Dashboard Section */}
       <div
