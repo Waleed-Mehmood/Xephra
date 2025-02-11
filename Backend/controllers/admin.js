@@ -47,7 +47,7 @@ exports.newEvent = async (req, res) => {
 
 exports.postedEvents = async (req, res) => {
   try {
-    const events = await Events.find();
+    const events = await Events.find({hosted: false});
     res.status(200).json({ events });
   } catch (error) {
     console.log(error);

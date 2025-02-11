@@ -8,12 +8,12 @@ import UpcomingEvents from "../../components/UserDashobard/UpcomingEvents";
 import RegisteredEvents from "../../components/UserDashobard/RegisteredEvents";
 import RankingBoard from "../../components/UserDashobard/RankingBoard";
 import RankingApproval from "../../components/UserDashobard/RankingApproval";
-import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
 import { TbLogout2 } from "react-icons/tb";
 import { logout } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../redux/features/userSlice";
+import CompletedEvents from "../../components/UserDashobard/CompletedEvents";
 
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
@@ -135,7 +135,7 @@ function Dashboard() {
       case "rankingBoard":
         return <RankingBoard dark={dark} />;
       case "CompletedEvents":
-        return <TournamentsLeague dark={dark} />;
+        return <CompletedEvents dark={dark} />;
       case "rankingApproval":
         return <RankingApproval dark={dark} />;
       case "userProfile":

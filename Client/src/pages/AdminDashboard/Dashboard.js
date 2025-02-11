@@ -7,13 +7,13 @@ import UserRanking from "../../components/AdminDashobard/UserRanking";
 import RankingApproval from "../../components/AdminDashobard/RankingApproval";
 import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
 import logo from "../../assets/logo.png";
-import TournamentsLeague from "../../components/AdminDashobard/TournamentsLeague";
 import AdminProfile from "../../components/AdminDashobard/AdminProfile";
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../redux/features/profileSlice";
+import CompletedEvents from "../../components/AdminDashobard/CompletedEvents";
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
   const navigate = useNavigate();
@@ -134,7 +134,7 @@ function Dashboard() {
       case "userRanking":
         return <UserRanking dark={dark} />;
       case "CompletedEvents":
-        return <TournamentsLeague dark={dark} />;
+        return <CompletedEvents dark={dark} />;
       case "rankingApproval":
         return <RankingApproval dark={dark} />;
       case "adminProfile":

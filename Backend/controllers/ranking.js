@@ -3,7 +3,7 @@ const UserSubmission = require("../models/UserSubmission");
 
 exports.postRankingApproval = async (req, res) => {
   try {
-    const { eventId, userId, rank, score } = req.body;
+    const { eventId, userId, rank, score, gameName } = req.body;
     const screenshot = req.file ? `uploads/${req.file.filename}` : null;
     if (!eventId || !userId) {
       return res.status(400).json({
@@ -20,6 +20,7 @@ exports.postRankingApproval = async (req, res) => {
     const newSubmission = new UserSubmission({
       eventId,
       userId,
+      gameName,
       rank: rank || null,
       score: score || null,
       screenshot,
@@ -59,3 +60,23 @@ exports.getUserSubmissions = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+exports.userApprovalDelete= async (req, res)=>{
+  const {userId, eventId} = req.body;
+  try {
+    const result = await UserSubmission.findOneAndDelete({userId, eventId});
+    if(!result){
+      return res.status(404).json({
+        message:"no submission found for the given user"
+      })
+    }
+    res.status(200).json({
+      message:"Submission deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({
+      error
+    })
+  }
+}

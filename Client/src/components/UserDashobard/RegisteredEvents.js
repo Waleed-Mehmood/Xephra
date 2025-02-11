@@ -2,6 +2,7 @@ import { React, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getEventsByUserId } from "../../redux/features/eventsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../utils/Loading/Loading";
 
 const TournamentCard = (tournament) => {
   const event = tournament?.tournament?.eventId;
@@ -44,7 +45,7 @@ const RegisteredEvents = ({ dark }) => {
 
   // Render the UI
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   
