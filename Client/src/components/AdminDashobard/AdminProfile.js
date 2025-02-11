@@ -9,7 +9,7 @@ import {
 } from "../../redux/features/profileSlice";
 import Loading from "../../utils/Loading/Loading";
 
-const AdminProfile = ({ dark , profile}) => {
+const AdminProfile = ({ dark, profile }) => {
   const { loading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
@@ -135,20 +135,20 @@ const AdminProfile = ({ dark , profile}) => {
   console.log("profileData", profileData);
   return (
     <div
-      className={`${styles.userProfile} ${
-        dark ? "bg-[#69363F]" : "bg-[#232122]"
-      }`}
+      // className={`${styles.userProfile} ${
+      //   dark ? "bg-[#69363F]" : "bg-[#232122]"
+      // }`}
     >
-      <h1>Admin Profile</h1>
-      <div className={styles.profileImageContainer}>
-        <div className={styles.profileImageWrapper}>         
+      <div className={dark ? "bg-[#69363F] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4" : "bg-[#232122] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4"} >
+      <div className={`${styles.profileImageContainer} mt-2 `}>
+        <div className={styles.profileImageWrapper}>
           <img
             src={
               profileImageView
                 ? profileImageView
                 : profileData?.profileImage
                 ? `http://localhost:5000/${profile?.profileImage}`
-                :  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
+                : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
             }
             alt="Profile"
             className={styles.avatar}
@@ -164,83 +164,121 @@ const AdminProfile = ({ dark , profile}) => {
             />
           </label>
         </div>
+        <div className="flex flex-col gap-4">
+              <label className="text-3xl ml-10">{profileData.username}</label>
+              <label className="text-xl ml-10">{profileData.bio}</label>
+            </div>
+      </div>
       </div>
 
       <div className={styles.profileForm}>
-        <label>
-          <FaUser /> Username
-        </label>
+        <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
+          {/* Username */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">
+              <FaUser /> Username
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={profileData?.username || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border flex-1`}
+            />
+          </div>
+
+          {/* Full Name */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">
+              <FaUser /> Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={profileData?.fullName || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border flex-1`}
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
+          {/* Email */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">
+              <FaEnvelope /> Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={profileData?.email || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border flex-1`}
+            />
+          </div>
+
+          {/* Phone Number */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">Phone Number</label>
+            <input
+              type="text"
+              name="phoneNumber"
+              value={profileData?.phoneNumber || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border flex-1`}
+            />
+          </div>
+        </div>
+
+        {/* Address Info */}
+
+        <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
+          {/* City */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">
+              <FaCity /> City
+            </label>
+            <input
+              type="text"
+              name="locationCity"
+              value={profileData?.locationCity || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border w-full`}
+            />
+          </div>
+
+          {/* Country */}
+          <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
+            <label className="flex items-center gap-2">
+              <FaCity /> Country
+            </label>
+            <input
+              type="text"
+              name="locationCountry"
+              value={profileData?.locationCountry || ""}
+              onChange={handleChange}
+              className={`${styles.userProfileInput} p-2 rounded border w-full`}
+            />
+          </div>
+        </div>
+
+        <label className="sm:ml-4">Address</label>
         <input
           type="text"
-          name="username"
-          value={profileData?.username || ""}
+          name="address"
+          value={profileData?.address || ""}
           onChange={handleChange}
+          className={`${styles.userProfileInput} p-2 rounded border w-90 ml-4 `}
         />
 
-        <label>
-          <FaUser /> Full Name
-        </label>
-        <input
-          type="text"
-          name="fullName"
-          value={profileData?.fullName || ""}
-          onChange={handleChange}
-        />
-
-        <label>
+        <label className="sm:ml-4">
           <FaEnvelope /> Bio/About
         </label>
         <textarea
           name="bio"
           value={profileData?.bio || ""}
           onChange={handleChange}
+          className={`${styles.userProfileInput} p-2 rounded border w-90 ml-4`}
         ></textarea>
-
-        <label>
-          <FaEnvelope /> Email
-        </label>
-        <input
-          type="email"
-          name="email"
-          value={profileData?.email || ""}
-          onChange={handleChange}
-        />
-
-        <label>Phone Number</label>
-        <input
-          type="text"
-          name="phoneNumber"
-          value={profileData?.phoneNumber || ""}
-          onChange={handleChange}
-        />
-
-        <label>Address</label>
-        <input
-          type="text"
-          name="address"
-          value={profileData?.address || ""}
-          onChange={handleChange}
-        />
-
-        <label>
-          <FaCity /> City
-        </label>
-        <input
-          type="text"
-          name="locationCity"
-          value={profileData?.locationCity || ""}
-          onChange={handleChange}
-        />
-
-        <label>
-          <FaCity /> Country
-        </label>
-        <input
-          type="text"
-          name="locationCountry"
-          value={profileData?.locationCountry || ""}
-          onChange={handleChange}
-        />
 
         {/* Show message if no changes are detected */}
         {message && <div className={styles.message}>{message}</div>}
@@ -248,7 +286,7 @@ const AdminProfile = ({ dark , profile}) => {
         {/* Conditionally render the button */}
         {profile ? (
           <button
-            className={`${styles.uploadBtn} ${
+            className={`ml-4 ${styles.uploadBtn} ${
               dark
                 ? "bg-[#302B27] hover:bg-[#49413C]"
                 : "bg-[#854951] hover:bg-[#A15D66]"

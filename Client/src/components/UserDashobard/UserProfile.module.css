@@ -60,16 +60,35 @@
     color: #ffffff;
   }
   
-  input,
-  textarea {
-    color: white;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #b3b3b3;
-    background-color: #1313138d;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
+  .userProfileInput,
+.userProfiletextarea {
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #b3b3b3;
+  background-color: #1313138d;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Ensure class-based styles take precedence over generic ones */
+.userProfileForm .userProfileInput,
+.userProfileForm .userProfiletextarea {
+  color: white !important;
+  background-color: #1313138d !important;
+  border: 1px solid #b3b3b3 !important;
+}
+
+/* Fallback for all inputs, lower specificity */
+input,
+textarea {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background-color: #B6A99A;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
   
   input:focus,
   textarea:focus {

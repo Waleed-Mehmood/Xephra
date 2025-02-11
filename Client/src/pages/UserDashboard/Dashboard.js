@@ -147,10 +147,10 @@ function Dashboard() {
 
   return (
     <div
-      className={`flex h-full bg-[url('https://cdn2.unrealengine.com/card-shortcut-01-1920x1080-53c9796f8aa4.jpg')] 
+      className={`flex h-full bg-[url('https://images.ctfassets.net/w5r1fvmogo3f/4UqXpuijA7dp2mMXP2vDtH/ccebdeee7f7853f2b4de8637d31c92cc/ghost_2f2b6b7fdfe84fc4b4778313255fb676.png')] 
       ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
-      bg-cover bg-center relative`}
+      bg-fixed bg-center relative`}
     >
       <div className="absolute inset-x-0 bottom-0 h-[200%] bg-gradient-to-t from-gray-800 via-transparent to-transparent z-10 pointer-events-none"></div>
       <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
