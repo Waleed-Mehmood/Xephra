@@ -1,5 +1,6 @@
 const express = require("express");
 const UserSubmission = require("../models/UserSubmission");
+const eventRankingBoard = require("../models/EventRankingBoard");
 
 exports.postRankingApproval = async (req, res) => {
   try {
@@ -41,8 +42,6 @@ exports.postRankingApproval = async (req, res) => {
   }
 };
 
-
-
 exports.getUserSubmissions = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -61,22 +60,53 @@ exports.getUserSubmissions = async (req, res) => {
   }
 };
 
-
-exports.userApprovalDelete= async (req, res)=>{
-  const {userId, eventId} = req.body;
+exports.userApprovalDelete = async (req, res) => {
+  const { userId, eventId } = req.body;
   try {
-    const result = await UserSubmission.findOneAndDelete({userId, eventId});
-    if(!result){
+    const result = await UserSubmission.findOneAndDelete({ userId, eventId });
+    if (!result) {
       return res.status(404).json({
-        message:"no submission found for the given user"
-      })
+        message: "no submission found for the given user",
+      });
     }
     res.status(200).json({
-      message:"Submission deleted successfully"
+      message: "Submission deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
-      error
-    })
+      error,
+    });
   }
-}
+};
+
+exports.assignEventRanking = async (req, res) => {
+  const { userId, eventId, newRank, score } = req.body;
+    
+  try {
+    let event = await eventRankingBoard.findOne({ eventId });
+
+    if(!event){
+      event = new eventRankingBoard({
+        eventId,
+        ranking: [],
+      });
+    };
+
+    const existingRank = event.rankings.find((r)=> r.rank === newRank);
+    if(existingRank){
+      return res.status(200).json({
+        message: "rank found same"
+      })
+    }
+
+    
+    res.status(200).json({
+      message:"event not found same"
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
