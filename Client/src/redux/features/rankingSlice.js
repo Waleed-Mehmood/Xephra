@@ -59,6 +59,7 @@ export const fetchUserSubmissions = createAsyncThunk(
     }
   )
 
+
   // thunk for event ranking approval and user stats updation
   const assignEventRanking = createAsyncThunk(
     'ranking/assignRank',
@@ -71,16 +72,40 @@ export const fetchUserSubmissions = createAsyncThunk(
       }
     }
   )
+
+
+  // Async Thunk for fetching event submissions
+export const fetchEventSubmissions = createAsyncThunk(
+  "ranking/fetchEventSubmissions",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${apiUrl}/admin/geteventssubmission/${eventId}`
+      );
+      return response.data; // Assuming API returns an array
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Failed to load rankings");
+    }
+  }
+);
+
+
+
 const rankingSlice = createSlice({
   name: "ranking",
   initialState: {
     loading: false,
     data: null,
+    rankings: { submissions: [], users: [] },
     submissions: [],
     userStats: null,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearRankings: (state) => {
+      state.rankings = { submissions: [], users: [] }; // Clear previous rankings
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(postRankingApproval.pending, (state) => {
@@ -121,6 +146,7 @@ const rankingSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to delete submission.';
       })
+
       .addCase(assignEventRanking.pending, (state) => {
         state.loading = true;
       })
@@ -129,11 +155,25 @@ const rankingSlice = createSlice({
         state.event = action.payload.data; 
         state.userStats = action.payload.userStats; 
       })
-      .addCase(assignEventRanking.rejected, (state, action) => {
+         .addCase(assignEventRanking.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(fetchEventSubmissions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchEventSubmissions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.rankings = action.payload;
+      })
+      .addCase(fetchEventSubmissions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
+export const { clearRankings } = rankingSlice.actions;
 export default rankingSlice.reducer;
