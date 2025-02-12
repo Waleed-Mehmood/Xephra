@@ -275,7 +275,7 @@ const DashboardUser = ({ dark }) => {
             to="/user-rankings"
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
-                ? "bg-[#302B27] hover:bg-[#8b796b]"
+                ? "bg-[#4f463f] hover:bg-[#8b796b]"
                 : "bg-[#854951] hover:bg-[#A15D66]"
             }`}
           >

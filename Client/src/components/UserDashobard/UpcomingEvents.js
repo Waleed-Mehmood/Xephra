@@ -24,30 +24,35 @@ const TournamentCard = ({
       return;
     }
     dispatch(joinEvent({ userId, eventId }));
-    alert("joined Successfully")
+    alert("joined Successfully");
   };
 
   const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
   return (
-    <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
-      <Link to={`/eventuser/${_id}`}>
-        <img className="w-full h-56 object-cover" src={imageUrl} alt={title} />
+    <div className="bg-[#000000] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-x border-slate-300 border-[0.2px] ">
+      <Link to={`/eventuser/${_id}`} className="relative block w-full">
+        <img className="w-full h-60 object-cover" src={imageUrl} alt={title} />
+        <h3 className="drop-shadow-2xl absolute bottom-0 left-0 w-[55%] text-2xl font-bold text-white [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)] px-4 py-2">
+          {title}
+        </h3>
       </Link>
+
       <div className="p-4">
         <Link to={`/eventuser/${_id}`}>
-          <h3 className="text-xl font-bold text-[#b8a896]">{title}</h3>
-        </Link>
-        <p className="text-[#69363f] font-bold mt-1">{game}</p>
-        <p className="text-sm text-gray-400">
-          {date} • {time}
+        <p className="text-[#C9B796] text-lg font-bold mt-1">{game}</p>
+         <p className="text-[#C9B796] mt-2  line-clamp-3">{description}</p>
+         <p className="text-lg text-[#C9B796] lg:w-[100%]">
+         <span className=" bg-[#302A27] px-5">{date}</span> • <span className=" bg-[#302A27] px-5">{time}</span>
         </p>
-        <p className="text-gray-300 mt-2">{description}</p>
-        <div className="mt-4 flex justify-between items-center">
-          <span className="text-xl font-bold text-white">{prizePool}</span>
-          <button
+        <div>
+          <span className="text-xl font-bold text-[#D4AD66]">PKR: {prizePool}</span>
+        </div>
+        </Link> 
+        <div className="flex justify-center">
+        <button
             disabled={loading}
             onClick={() => handleJoin(_id)}
-            className="bg-[#69363f] text-white px-4 py-2 rounded-md hover:bg-[#8f404f] transition"
+            className="bg-[#69363f] bottom-0 text-[#C9B796] mt-5 px-24 py-3 rounded-md hover:bg-[#8f404f] transition"
           >
             {loading ? "Joining..." : "Join Now"}
           </button>
@@ -77,14 +82,12 @@ const UpcomingEvents = ({ dark }) => {
 
   return (
     <div
-      className={`mx-auto py-16 px-4 rounded-lg min-h-full ${
-        dark ? "bg-[#69363F]" : "bg-[#232122]"
-      }`}
+      className={`mx-auto py-16 px-4 rounded-lg min-h-full bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)]`}
     >
-      <h2 className="text-3xl font-bold text-center mb-8 text-[#b6a99a] py-6">
+      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent py-6 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)]">
         UPCOMING EVENTS
       </h2>
-      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className=" container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {sortedEvents.length === 0
           ? "No events posted yet"
           : sortedEvents?.map((tournament, index) => (

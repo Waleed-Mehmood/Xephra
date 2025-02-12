@@ -3,7 +3,6 @@ import Header from "../../components/AdminDashobard/Header";
 import { menuItems } from "../../components/AdminDashobard/AdminMenus";
 import PostedEvents from "../../components/AdminDashobard/PostedEvents";
 import NewEvents from "../../components/AdminDashobard/NewEvents";
-import UserRanking from "../../components/AdminDashobard/UserRanking";
 import RankingApproval from "../../components/AdminDashobard/RankingApproval";
 import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
 import logo from "../../assets/logo.png";
@@ -14,6 +13,7 @@ import { logout } from "../../redux/features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../redux/features/profileSlice";
 import CompletedEvents from "../../components/AdminDashobard/CompletedEvents";
+import RankingBoard from "../../components/AdminDashobard/RankingBoard";
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
   const navigate = useNavigate();
@@ -131,8 +131,8 @@ function Dashboard() {
         return <PostedEvents setActiveMenu={setActiveMenu} dark={dark} />;
       case "newEvents":
         return <NewEvents setActiveMenu={setActiveMenu} dark={dark} />;
-      case "userRanking":
-        return <UserRanking dark={dark} />;
+      case "rankingBoard":
+        return <RankingBoard dark={dark} />;
       case "CompletedEvents":
         return <CompletedEvents dark={dark} />;
       case "rankingApproval":

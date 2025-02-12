@@ -7,26 +7,27 @@ import Loading from "../../utils/Loading/Loading";
 const TournamentCard = (tournament) => {
   const event = tournament?.tournament?.eventId;
   return (
-    <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
-      <Link to={`/eventuser/${event?._id}`}>
+    <div className="bg-[#000000] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl border-[0.2px] border-slate-300">
+      <Link to={`/eventuser/${event?._id}`} className="relative block w-full">
         <img
-          className="w-full h-56 object-cover"
+          className="w-full h-60 object-cover"
           src={`${process.env.REACT_APP_BACKEND}/${event?.image}`}
           alt={event?.title}
         />
+         
+          <h3 className="drop-shadow-2xl absolute bottom-0 left-0 w-[55%] text-2xl font-bold text-white [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)] px-4 py-2">{event?.title}</h3>
       </Link>
       <div className="p-4">
-        <Link to={`/eventuser/${event?._id}`}>
-          <h3 className="text-xl font-bold text-[#b8a896]">{event?.title}</h3>
-        </Link>
-        <p className="text-[#69363f] font-bold mt-1">{event?.game}</p>
-        <p className="text-sm text-gray-400">{event?.date}</p>
-        <p className="text-gray-300 mt-2">{event?.description}</p>
+      <Link to={`/eventuser/${event?._id}`}>
+        <p className="text-[#C9B796] text-lg font-bold mt-1">{event?.game}</p>
+        <p className="bg-[#302A27] font-bold px-2 w-1/2">{event?.date}</p>
+        <p className="text-[#C9B796] mt-2  line-clamp-3">{event?.description}</p>
         <div className="mt-4 flex justify-between items-center">
-          <span className="text-xl font-bold text-white">
-            {event?.prizePool}
+          <span className="text-xl font-bold text-[#D4AD66]">
+            PKR: {event?.prizePool}
           </span>
         </div>
+        </Link>  
       </div>
     </div>
   );
@@ -52,11 +53,9 @@ const RegisteredEvents = ({ dark }) => {
 
   return (
     <div
-      className={`mx-auto py-16 px-4 rounded-lg min-h-full ${
-        dark ? "bg-[#69363F]" : "bg-[#232122]"
-      }`}
+      className={`mx-auto py-16 px-4 rounded-lg min-h-full  bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)]`}
     >
-      <h2 className="text-3xl font-bold text-center mb-8 text-[#b6a99a] py-6">
+      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent py-6 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)]">
         REGISTERED EVENTS
       </h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
