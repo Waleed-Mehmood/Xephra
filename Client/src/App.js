@@ -37,7 +37,7 @@ export default function App() {
           element={<TournamentRanking />}
         />
         <Route
-          path="/dashboard/tournamentrankingapproval"
+          path="/dashboard/tournamentrankingapproval/:eventId"
           element={<TournamentUsersRankingApproval />}
         />
       </Routes>
