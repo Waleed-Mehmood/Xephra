@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchEventSubmissions,clearRankings  } from "../../redux/features/rankingSlice";
+import {
+  fetchEventSubmissions,
+  clearRankings,
+  assignEventRanking,
+  resetMessage,
+} from "../../redux/features/rankingSlice";
 import { getEventById } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TournamentUsersRankingApproval = () => {
   const dispatch = useDispatch();
-  const { rankings, loading, error } = useSelector((state) => state.ranking);
+  const { rankings, loading, error, data, userStats, message } = useSelector(
+    (state) => state.ranking
+  );
   const { event } = useSelector((state) => state.events);
   const { eventId } = useParams();
   const [editData, setEditData] = useState(null);
@@ -21,6 +30,13 @@ const TournamentUsersRankingApproval = () => {
     }
   }, [dispatch, eventId]);
 
+  useEffect(() => {
+    if (message) {
+      alert(message);
+      dispatch(resetMessage());
+    }
+  }, [message, dispatch]);
+
   if (loading) {
     return <Loading />;
   }
@@ -28,28 +44,41 @@ const TournamentUsersRankingApproval = () => {
   const handleEdit = (user) => {
     setEditData(user);
     setIsModalOpen(true);
+
   };
 
   const handleChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setEditData({ ...editData, screenshot: imageUrl });
-    }
-  };
 
-  const handleSave = () => {
+
+  const handleSave = (user) => {
     setIsModalOpen(false);
     setEditData(null);
+    const rankingData = {
+      userId: user.userId,
+      eventId: user.eventId,
+      newRank: Number(user.rank),
+      score: user.score,
+    };
+    console.log(rankingData);
+    dispatch(assignEventRanking(rankingData));
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditData(null);
+  };
+
+  const HandleApproveRanking = (submission) => {
+    const rankingData = {
+      userId: submission.userId,
+      eventId: submission.eventId,
+      newRank: submission.rank,
+      score: submission.score,
+    };
+    dispatch(assignEventRanking(rankingData));
   };
 
   return (
@@ -109,11 +138,11 @@ const TournamentUsersRankingApproval = () => {
                         {submission.status || "Pending"}
                       </td>
                       <td className="py-3 px-6 space-x-2">
-                        <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                        <button
+                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                          onClick={() => HandleApproveRanking(submission)}
+                        >
                           Approve
-                        </button>
-                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                          Decline
                         </button>
                         <button
                           className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
@@ -121,8 +150,8 @@ const TournamentUsersRankingApproval = () => {
                         >
                           Edit
                         </button>
-                        <button className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">
-                          Delete
+                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                          Decline
                         </button>
                       </td>
                     </tr>
@@ -137,6 +166,7 @@ const TournamentUsersRankingApproval = () => {
               )}
             </tbody>
           </table>
+          <ToastContainer />
         </div>
       </div>
 
@@ -172,36 +202,12 @@ const TournamentUsersRankingApproval = () => {
                   className="w-full p-2 border-none rounded-md bg-[#393939] text-white"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2 text-white">
-                  Screenshot
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="w-full p-2 border border-gray-300 rounded-md bg-[#393939] text-white"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2 text-white">
-                  Status
-                </label>
-                <select
-                  name="status"
-                  value={editData.status}
-                  onChange={handleChange}
-                  className="w-full p-2 border-none rounded-md bg-[#393939] text-white"
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Approved">Approved</option>
-                  <option value="Declined">Declined</option>
-                </select>
-              </div>
+            
+             
               <div className="flex justify-end space-x-4">
                 <button
                   type="button"
-                  onClick={handleSave}
+                  onClick={()=>handleSave(editData)}
                   className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
                 >
                   Save

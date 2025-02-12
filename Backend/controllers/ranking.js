@@ -89,16 +89,13 @@ exports.assignEventRanking = async (req, res) => {
     if (!event) {
       event = new eventRankingBoard({
         eventId,
-        ranking: [],
+        rankings: [],
       });
     }
 
-    let points = 0;
-    if (newRank === 1) points = 100;
-    else if (newRank === 2) points = 80;
-    else if (newRank === 3) points = 60;
-    else points = 40;
+    let points = calculatePoints(newRank);
 
+    // Auto-increment ranks for existing users if the new rank conflicts
     const existingRank = event.rankings.find((r) => r.rank === newRank);
     if (existingRank) {
       event.rankings = event.rankings.map((r) =>
@@ -106,25 +103,31 @@ exports.assignEventRanking = async (req, res) => {
       );
     }
 
-    const userIndex = event.rankings.findIndex(
-      (r) => r.userId.toString() === userId
-    );
-    if (userIndex >= 0) {
-      event.rankings[userIndex] = { userId, rank: newRank, score };
-    } else {
-      event.rankings.push({
-        userId,
-        rank: newRank,
-        score,
-      });
-    }
-    event.rankings.sort((a, b) => a.rank - b.rank);
+    // Check if the user already has a ranking
+    const existingUserRank = event.rankings.find((r) => r.userId.toString() === userId);
+    let oldPoints = 0;
 
+    if (existingUserRank) {
+      // Calculate old points before updating rank
+      oldPoints = calculatePoints(existingUserRank.rank);
+
+      // Update rank and score for the existing user
+      existingUserRank.rank = newRank;
+      existingUserRank.score = score;
+    } else {
+      // Add a new ranking entry for the user
+      event.rankings.push({ userId, rank: newRank, score });
+    }
+
+    // Sort the rankings based on the new ranks
+    event.rankings.sort((a, b) => a.rank - b.rank);
     await event.save();
 
+    // Fetch or create user stats
     let userStats = await UserEventStats.findOne({ userId });
 
     if (!userStats) {
+      // Create new stats record if none exists
       userStats = new UserEventStats({
         userId,
         totalPoints: points,
@@ -133,12 +136,10 @@ exports.assignEventRanking = async (req, res) => {
         weightedScore: points + 5 * 1,
       });
     } else {
-      userStats.totalPoints += points;
-      userStats.totalEvents += 1;
-      userStats.weightedScore = userStats.totalPoints + (5* userStats.totalEvents);
-      userStats.averagePoints = (
-        userStats.totalPoints / userStats.totalEvents
-      ).toFixed(2);
+      // Adjust user stats with new points and remove old points
+      userStats.totalPoints = userStats.totalPoints - oldPoints + points;
+      userStats.weightedScore = userStats.totalPoints + 5 * userStats.totalEvents;
+      userStats.averagePoints = (userStats.totalPoints / userStats.totalEvents).toFixed(2);
     }
 
     await userStats.save();
@@ -148,10 +149,20 @@ exports.assignEventRanking = async (req, res) => {
       data: event,
       userStats,
     });
+
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      error,
-    });
+    console.error(error);
+    res.status(500).json({ error });
   }
 };
+
+// Helper function to calculate points based on rank
+function calculatePoints(rank) {
+  switch (rank) {
+    case 1: return 100;
+    case 2: return 80;
+    case 3: return 60;
+    default: return 40;
+  }
+}
+

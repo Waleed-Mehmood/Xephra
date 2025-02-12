@@ -61,7 +61,7 @@ export const fetchUserSubmissions = createAsyncThunk(
 
 
   // thunk for event ranking approval and user stats updation
-  const assignEventRanking = createAsyncThunk(
+ export const assignEventRanking = createAsyncThunk(
     'ranking/assignRank',
     async (rankingData , {rejectWithValue})=>{
       try {
@@ -96,6 +96,7 @@ const rankingSlice = createSlice({
   initialState: {
     loading: false,
     data: null,
+    message: null,
     rankings: { submissions: [], users: [] },
     submissions: [],
     userStats: null,
@@ -105,6 +106,9 @@ const rankingSlice = createSlice({
     clearRankings: (state) => {
       state.rankings = { submissions: [], users: [] }; // Clear previous rankings
     },
+    resetMessage: (state) => {
+      state.message = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -152,8 +156,9 @@ const rankingSlice = createSlice({
       })
       .addCase(assignEventRanking.fulfilled, (state, action) => {
         state.loading = false;
-        state.event = action.payload.data; 
+        state.data = action.payload.data; 
         state.userStats = action.payload.userStats; 
+        state.message = action.payload.message;
       })
          .addCase(assignEventRanking.rejected, (state, action) => {
         state.loading = false;
@@ -175,5 +180,5 @@ const rankingSlice = createSlice({
   },
 });
 
-export const { clearRankings } = rankingSlice.actions;
+export const { clearRankings, resetMessage  } = rankingSlice.actions;
 export default rankingSlice.reducer;
