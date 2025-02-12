@@ -60,6 +60,20 @@ export const fetchUserSubmissions = createAsyncThunk(
   )
 
 
+  // thunk for event ranking approval and user stats updation
+  const assignEventRanking = createAsyncThunk(
+    'ranking/assignRank',
+    async (rankingData , {rejectWithValue})=>{
+      try {
+        const response = await axios.post(`${apiUrl}/rank/assign-rank`, rankingData);
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  )
+
+
   // Async Thunk for fetching event submissions
 export const fetchEventSubmissions = createAsyncThunk(
   "ranking/fetchEventSubmissions",
@@ -76,6 +90,7 @@ export const fetchEventSubmissions = createAsyncThunk(
 );
 
 
+
 const rankingSlice = createSlice({
   name: "ranking",
   initialState: {
@@ -83,6 +98,7 @@ const rankingSlice = createSlice({
     data: null,
     rankings: { submissions: [], users: [] },
     submissions: [],
+    userStats: null,
     error: null,
   },
   reducers: {
@@ -130,6 +146,20 @@ const rankingSlice = createSlice({
         state.loading = false;
         state.error = action.payload || 'Failed to delete submission.';
       })
+
+      .addCase(assignEventRanking.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(assignEventRanking.fulfilled, (state, action) => {
+        state.loading = false;
+        state.event = action.payload.data; 
+        state.userStats = action.payload.userStats; 
+      })
+         .addCase(assignEventRanking.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       .addCase(fetchEventSubmissions.pending, (state) => {
         state.loading = true;
         state.error = null;
