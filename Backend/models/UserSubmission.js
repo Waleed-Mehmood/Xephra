@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const userSubmissionSchema = mongoose.Schema({
   eventId: { type: String, required: true },
   userId: { type: String, required: true },
+  gameName: {
+    type: String , required: true
+  },
   rank: {
     type: Number,
     default: null,

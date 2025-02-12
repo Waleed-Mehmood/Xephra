@@ -10,7 +10,8 @@ const {
   editEvent,
   getEvent,
   getEventAndUsers,
-  markEventAsHosted
+  markEventAsHosted,
+  getEventSubmissions
 } = require("../controllers/admin");
 const upload = require("../config/multerConfig");
 
@@ -24,5 +25,6 @@ router.get("/profile/:userId", getProfile);
 router.patch("/profile/:userId", upload.single("profileImage"), updateProfile);
 router.get("/event-users/:eventId", getEventAndUsers);
 router.patch("/events/:eventId/host", markEventAsHosted);
+router.get("/geteventssubmission/:eventId", getEventSubmissions);
 
 module.exports = router;
