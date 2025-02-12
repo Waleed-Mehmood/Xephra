@@ -21,7 +21,7 @@ ChartJS.register(
   BarElement
 );
 
-const RankingBoard = ({dark}) => {
+const RankingBoard = ({ dark }) => {
   const users = [
     { name: "Player1", rank: 1, score: 920, progress: 85 },
     { name: "Player2", rank: 2, score: 870, progress: 75 },
@@ -39,18 +39,7 @@ const RankingBoard = ({dark}) => {
       {
         label: "Scores",
         data: topUsers.map((user) => user.score),
-        backgroundColor: [
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-          "#854951",
-        ],
+        backgroundColor: "#854951",
         borderWidth: 1,
       },
     ],
@@ -61,6 +50,18 @@ const RankingBoard = ({dark}) => {
     plugins: {
       legend: {
         display: false,
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#622D37", // Change X-axis label color
+        },
+      },
+      y: {
+        ticks: {
+          color: "#622D37", // Change Y-axis label color
+        },
       },
     },
   };
@@ -76,24 +77,26 @@ const RankingBoard = ({dark}) => {
   });
 
   return (
-    <div className={`min-h-screen p-8 ${dark ? "bg-[#69363F]" : "bg-[#232122]"} `}>
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 text-[#b6a99a]">
+    <div className="min-h-screen p-8 bg-[#69363f18] bg-opacity-[.06] shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm">
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">
         Ranking Board
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Top Players Section */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl lg:text-2xl font-semibold mb-4">Top Players</h2>
+        <div className="bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] shadow-md rounded-lg p-6">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
+            Top Players
+          </h2>
           <div>
             {users.map((user, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between border-b py-4"
+                className="flex items-center justify-between border-b py-4 border-[#854951]"
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-[#F7E8E8] rounded-full">
-                    <span className="text-base lg:text-lg font-semibold text-[#854951]">
+                    <span className="text-base lg:text-lg font-bold text-[#854951]">
                       #{user.rank}
                     </span>
                   </div>
@@ -101,7 +104,7 @@ const RankingBoard = ({dark}) => {
                     <h3 className="text-sm lg:text-lg font-medium">
                       {user.name}
                     </h3>
-                    <p className="text-xs lg:text-sm text-gray-500">
+                    <p className="text-xs lg:text-sm text-[#622D37]">
                       Score: {user.score}
                     </p>
                   </div>
@@ -123,8 +126,8 @@ const RankingBoard = ({dark}) => {
         </div>
 
         {/* Scores Overview Section */}
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-center">
+        <div className="bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] shadow-md rounded-lg p-6">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
             Scores Overview
           </h2>
           <Bar data={barChartData} options={barChartOptions} />

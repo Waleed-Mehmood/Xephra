@@ -35,8 +35,8 @@ export const menuItems = [
   },
 
   {
-    name: "User Ranking",
-    key: "userRanking",
+    name: "Ranking Board",
+    key: "rankingBoard",
     icon: <PiRankingBold className="w-5 h-5" />,
   },
   {
