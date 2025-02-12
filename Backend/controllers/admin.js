@@ -5,6 +5,8 @@ const Profile = require("../models/AdminProfile");
 const User = require("../models/User");
 const Participant = require("../models/Participant");
 const { default: mongoose } = require("mongoose");
+const UserSubmission = require("../models/UserSubmission");
+const UserProfile = require("../models/UserProfile");
 
 exports.newEvent = async (req, res) => {
   try {
@@ -338,4 +340,36 @@ exports.markEventAsHosted = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
+};
+
+
+exports.getEventSubmissions = async (req, res) => {
+    try {
+        const { eventId } = req.params;
+
+        // 1. Fetch all submissions for the given event ID
+        const submissions = await UserSubmission.find({ eventId });
+
+        if (submissions.length === 0) {
+            return res.status(404).json({ message: "No submissions found for this event." });
+        }
+
+        // 2. Extract unique user IDs from submissions
+        const userIds = [...new Set(submissions.map(sub => sub.userId))];
+        console.log("userIds:", userIds);
+
+        // 3. Fetch user profiles using `userId` (string) from the User collection
+        const users = await UserProfile.find({ userId: { $in: userIds } });
+
+        res.json({
+            eventId,
+            totalSubmissions: submissions.length,
+            submissions,
+            users
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
 };
