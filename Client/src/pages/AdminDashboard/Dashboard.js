@@ -146,14 +146,15 @@ function Dashboard() {
 
   return (
     <div
-      className={`flex h-full bg-[url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')] 
+    style={{ backgroundImage: "url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')" }}
+    className={`flex h-full bg-opacity-0 bg-cover bg-fixed relative 
       ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
-      ${isSideMenuOpen ? "overflow-hidden" : ""} 
-      bg-fixed bg-cover relative`}
-    >
-      <div className="absolute inset-x-0 bottom-0 h-[200%] bg-gradient-to-t from-gray-800 via-transparent to-transparent z-10 pointer-events-none"></div>
-      <div className="absolute inset-0 bg-cover bg-center backdrop-blur-sm opacity-10 z-0"></div>{" "}
-    
+      ${isSideMenuOpen ? "overflow-hidden" : ""}`}
+  >
+    <div className="absolute inset-x-0 bottom-0 h-full bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-75"></div>
+    <div className="absolute inset-0 bg-cover bg-center backdrop-blur-sm opacity-10 z-0"></div>
+
+  
       {/* Sidebar for larger screens */}
       <aside
         className={`z-20 w-64 overflow-y-auto ${

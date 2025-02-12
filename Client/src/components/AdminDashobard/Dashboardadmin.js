@@ -185,10 +185,10 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
        
       >
         <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white mt-20 ">
-          <h1 className=" bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
+          <h1 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
             Welcome Admin!
           </h1>
-          <h2 className="bg-gradient-to-l from-[#8a6e3b] via-[#d1a759] to-[#ffecb2] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
+          <h2 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-l from-[#8a6e3b] via-[#d1a759] to-[#ffecb2] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
             Manage and Monitor all the Gaming Events and Rankings Efficiently.
           </h2>
         </div>
@@ -197,13 +197,11 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* Analytics & Stats Dashboard Section */}
       <div
-        className={`${
-          dark ? "bg-[#69363F]" : "bg-[#232122]"
-        } p-4 mt-8 rounded shadow`}
+        className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8 `}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-            dark ? "text-[#B7A692]" : "text-white"
+            dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
           }`}
         >
           Analytics & Stats
@@ -224,13 +222,11 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div
-          className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${
-            dark ? "bg-[#69363F]" : "bg-[#232122]"
-          } `}
+          className={`col-span-12 lg:col-span-9 bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "text-[#B7A692]" : "text-white"
+              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
             } `}
           >
             Posted Events
@@ -242,25 +238,27 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+               <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
                   <img
                     src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                     alt={event.title}
-                    className="h-32 w-full object-cover rounded"
+                    className="h-60 w-full object-cover rounded"
                   />
-                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                     {event.title}
                   </h3>
+                  </div>
                 </div>
               </Link>
             ))}
           </Slider>
           <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "text-[#B7A692]" : "text-white"
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-6 ${
+              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
             } `}
           >
-            Posted Events
+            Completed Events
           </h2>
           <Slider {...settings}>
             {events.map((event) => (
@@ -269,15 +267,17 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
+                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
                   <img
                     src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                     alt={event.title}
-                    className="h-32 w-full object-cover rounded"
+                    className="h-60 w-full object-cover rounded"
                   />
-                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
+                 <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                 <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                     {event.title}
                   </h3>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -287,12 +287,12 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         {/* Rankings Section */}
         <div
           className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${
-            dark ? "bg-[#69363F]" : "bg-[#232122]"
+            dark ? "bg-[#292622e3]" : "bg-[#232122]"
           } `}
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "text-[#B7A692]" : "text-white"
+              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
             } `}
           >
             User Rankings
@@ -308,7 +308,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 <div className="flex-1">
                   <p
                     className={`font-bold lg:text-lg sm:text-base ${
-                      dark ? "text-[#B7A692]" : "text-white"
+                      dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
                     } `}
                   >
                     {user.name}
@@ -316,7 +316,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   <div className="flex items-center space-x-2">
                     <p
                       className={`text-sm ${
-                        dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"
+                        dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-[#D3D3D3]"
                       } `}
                     >
                       Rank: {user.rank}
@@ -338,7 +338,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             onClick={changeMenu}
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
-                ? "bg-[#302B27] hover:bg-[#8b796b]"
+                ? "bg-[#4f463f] hover:bg-[#8b796b]"
                 : "bg-[#854951] hover:bg-[#A15D66]"
             }  `}
           >
@@ -349,14 +349,12 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* User Management Section */}
       <div
-        className={`p-4 mt-8 rounded shadow ${
-          dark ? "bg-[#69363F]" : "bg-[#232122]"
-        } `}
+        className={`mt-8 bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
       >
         <div className="flex justify-between items-center mb-4">
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${
-              dark ? "text-[#B7A692]" : "text-white"
+              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
             }`}
           >
             Manage Users
@@ -364,7 +362,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           <Link
             to="/dashboard/users"
             className={`hover:underline text-sm ${
-              dark ? "text-[#B7A692]" : "text-white"
+              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]" : "text-white"
             }`}
           >
             See All

@@ -152,7 +152,7 @@ function Dashboard() {
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
       bg-cover bg-center relative`}
     >
-      <div className="absolute inset-x-0 bottom-0 h-[200%] bg-gradient-to-t from-gray-800 via-transparent to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute inset-x-0 bottom-0 h-2/4 bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-7 0"></div>
       <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
     
       <aside

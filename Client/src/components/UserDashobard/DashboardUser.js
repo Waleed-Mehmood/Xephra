@@ -2,18 +2,20 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { useSelector, useDispatch } from "react-redux";
-import { getEvents,getEventsByUserId } from "../../redux/features/eventsSlice";
+import { getEvents, getEventsByUserId } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 
 const DashboardUser = ({ dark }) => {
   const dispatch = useDispatch();
-  const { loading,events, event,participants } = useSelector((state) => state.events);
+  const { loading, events, event, participants } = useSelector(
+    (state) => state.events
+  );
   const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
 
   useEffect(() => {
     dispatch(getEvents());
     if (userId) {
-      dispatch(getEventsByUserId(userId)); 
+      dispatch(getEventsByUserId(userId));
     }
   }, [dispatch, event]);
 
@@ -24,7 +26,7 @@ const DashboardUser = ({ dark }) => {
   const sortedRegisteredEvents = [...participants].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
-  
+
   console.log("Participants", participants);
 
   const rankings = [
@@ -116,7 +118,6 @@ const DashboardUser = ({ dark }) => {
       },
     ],
   };
-  
 
   return (
     <div className="container mx-auto p-4">
@@ -129,10 +130,11 @@ const DashboardUser = ({ dark }) => {
         // }}
       >
         <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white lg:mt-4">
-          <h1 className=" bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent  w-1/2 text-2xl lg:text-[3.6rem] md:text-5xl sm:text-6xl sm:w-full font-bold">
-            Welcome to the<br></br> Gaming <br/>Dashboard
+          <h1 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent w-1/2 text-2xl lg:text-[3.6rem] md:text-5xl sm:text-6xl sm:w-full font-bold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.7)]">
+            Welcome to the<br></br> Gaming <br />
+            Dashboard
           </h1>
-          <h2 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
+          <h2 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)]">
             Stay updated with upcoming events and your ranking progress.
           </h2>
         </div>
@@ -141,83 +143,96 @@ const DashboardUser = ({ dark }) => {
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
-        <div
-          className={`col-span-12 lg:col-span-9 p-4 rounded shadow ${
-            dark ? "bg-[#69363F]" : "bg-[#232122]"
-          }`}
-        >
-          <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "text-[#B7A692]" : "text-white"
-            }`}
-          >
-            Upcoming Events
-          </h2>
-          <Slider {...settings1}>
-          {sortedUpcomingEvents.length ===0 ? <p className="text-red-500 text-xl lg:text-2xl">No Registered Events! </p> :
-            sortedUpcomingEvents?.map((event) => (
-              <Link
-                to={`/eventuser/${event?._id}`}
-                key={event._id}
-                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
-              >
-                <div className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]">
-                  <img
-                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
-                    alt={event.title}
-                    className="h-32 w-full object-cover rounded"
-                  />
-                  <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                    {event.title}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </Slider>
-
-          <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 mt-8 ${
-              dark ? "text-[#B7A692]" : "text-white"
-            }`}
-          >
-            Registered Events
-          </h2>
-          <Slider {...settings2}>
-          {sortedRegisteredEvents.length ===0 ? <p className="text-red-500 text-lg lg:text-xl">No Registered Events! </p> :
-            sortedRegisteredEvents.map((event) => (
-              <Link
-              to={`/eventuser/${event?.eventId?._id}`}
-              key={event?.eventId?._id}
-              className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+        <div className={`col-span-12 lg:col-span-9 }`}>
+          <div className="bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 pb-10">
+            <h2
+              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-3xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center`}
             >
-              <div
-                key={event?.eventId?.id}
-                className="flex-none bg-white rounded shadow p-4 flex flex-col h-full min-h-[200px]"
-              >
-                <img
-                  src={`${process.env.REACT_APP_BACKEND}/${event?.eventId?.image}`}
-                  alt={event.title}
-                  className="h-32 w-full object-cover rounded"
-                />
-                <h3 className="lg:text-lg sm:text-base font-bold mt-2 flex-grow text-center">
-                  {event?.eventId?.title}
-                </h3>
-              </div>
-              </Link>
-            ))}
-          </Slider>
-        </div>
+              Upcoming Events
+            </h2>
+            <Slider {...settings1}>
+              {sortedUpcomingEvents.length === 0 ? (
+                <p className="text-red-500 text-xl lg:text-2xl">
+                  No Registered Events!{" "}
+                </p>
+              ) : (
+                sortedUpcomingEvents?.map((event) => (
+                  <Link
+                    to={`/eventuser/${event?._id}`}
+                    key={event._id}
+                    className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+                  >
+                    <div className="relative rounded-lg shadow-lg overflow-hidden h-full min-h-[200px]">
+                      {/* Image as background */}
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                        alt={event.title}
+                        className="h-60 w-full object-cover"
+                      />
 
+                      {/* Title overlay */}
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                          {event?.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </Slider>
+          </div>
+
+          <div className="bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5">
+            <h2
+              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2 ${
+                dark ? "text-[#B7A692]" : "text-white"
+              }`}
+            >
+              Registered Events
+            </h2>
+            <Slider {...settings2}>
+              {sortedRegisteredEvents.length === 0 ? (
+                <p className="text-red-500 text-center text-lg lg:text-xl">
+                  No Registered Events!{" "}
+                </p>
+              ) : (
+                sortedRegisteredEvents.map((event) => (
+                  <Link
+                    to={`/eventuser/${event?.eventId?._id}`}
+                    key={event?.eventId?._id}
+                    className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+                  >
+                    <div
+                      key={event?.eventId?.id}
+                      className="relative rounded-lg shadow flex flex-col h-full min-h-[200px]"
+                    >
+                      {/* Image as background */}
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND}/${event?.eventId?.image}`}
+                        alt={event.title}
+                        className="h-60 w-full object-cover rounded"
+                      />
+
+                      {/* Title overlay */}
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                          {event?.eventId?.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              )}
+            </Slider>
+          </div>
+        </div>
         {/* Rankings Section */}
         <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${
-            dark ? "bg-[#69363F]" : "bg-[#232122]"
-          }`}
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow bg-[#292622e3]`}
         >
           <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "text-[#B7A692]" : "text-white"
-            }`}
+            className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
           >
             User Rankings
           </h2>
@@ -231,24 +246,22 @@ const DashboardUser = ({ dark }) => {
                 />
                 <div className="flex-1">
                   <p
-                    className={`font-bold lg:text-lg sm:text-base ${
-                      dark ? "text-[#B7A692]" : "text-white"
-                    }`}
+                    className={`font-bold lg:text-lg sm:text-base bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
                   >
                     {user.name}
                   </p>
                   <div className="flex items-center space-x-2">
                     <p
-                      className={`text-sm ${
-                        dark ? "text-[#B9AC9B]" : "text-[#D3D3D3]"
-                      } `}
+                      className={`text-sm bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent `}
                     >
                       Rank: {user.rank}
                     </p>
-                    <div className="w-full bg-gray-200 h-2 rounded">
+                    <div className="w-full bg-[#69363F] h-2 rounded">
                       <div
                         className={`h-2 rounded ${
-                          dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                          dark
+                            ? "bg-[linear-gradient(90deg,#AE8D52_0%,#BCA477_17.5%,#C6B492_35.5%,#B69A66_54.5%,#CBA766_100%)]"
+                            : "bg-[#A15D66]"
                         }`}
                         style={{ width: `${user.rank}%` }}
                       ></div>
