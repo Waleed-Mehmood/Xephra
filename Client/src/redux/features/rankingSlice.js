@@ -59,13 +59,25 @@ export const fetchUserSubmissions = createAsyncThunk(
     }
   )
 
-
+  // thunk for event ranking approval and user stats updation
+  const assignEventRanking = createAsyncThunk(
+    'ranking/assignRank',
+    async (rankingData , {rejectWithValue})=>{
+      try {
+        const response = await axios.post(`${apiUrl}/rank/assign-rank`, rankingData);
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  )
 const rankingSlice = createSlice({
   name: "ranking",
   initialState: {
     loading: false,
     data: null,
     submissions: [],
+    userStats: null,
     error: null,
   },
   reducers: {},
@@ -108,6 +120,18 @@ const rankingSlice = createSlice({
       .addCase(deleteUserSubmission.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to delete submission.';
+      })
+      .addCase(assignEventRanking.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(assignEventRanking.fulfilled, (state, action) => {
+        state.loading = false;
+        state.event = action.payload.data; 
+        state.userStats = action.payload.userStats; 
+      })
+      .addCase(assignEventRanking.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

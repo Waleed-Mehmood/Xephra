@@ -1,6 +1,7 @@
 const express = require("express");
 const UserSubmission = require("../models/UserSubmission");
 const eventRankingBoard = require("../models/EventRankingBoard");
+const UserEventStats = require("../models/userEventStats");
 
 exports.postRankingApproval = async (req, res) => {
   try {
@@ -81,28 +82,72 @@ exports.userApprovalDelete = async (req, res) => {
 
 exports.assignEventRanking = async (req, res) => {
   const { userId, eventId, newRank, score } = req.body;
-    
+
   try {
     let event = await eventRankingBoard.findOne({ eventId });
 
-    if(!event){
+    if (!event) {
       event = new eventRankingBoard({
         eventId,
         ranking: [],
       });
-    };
-
-    const existingRank = event.rankings.find((r)=> r.rank === newRank);
-    if(existingRank){
-      return res.status(200).json({
-        message: "rank found same"
-      })
     }
 
-    
+    let points = 0;
+    if (newRank === 1) points = 100;
+    else if (newRank === 2) points = 80;
+    else if (newRank === 3) points = 60;
+    else points = 40;
+
+    const existingRank = event.rankings.find((r) => r.rank === newRank);
+    if (existingRank) {
+      event.rankings = event.rankings.map((r) =>
+        r.rank >= newRank ? { ...r, rank: r.rank + 1 } : r
+      );
+    }
+
+    const userIndex = event.rankings.findIndex(
+      (r) => r.userId.toString() === userId
+    );
+    if (userIndex >= 0) {
+      event.rankings[userIndex] = { userId, rank: newRank, score };
+    } else {
+      event.rankings.push({
+        userId,
+        rank: newRank,
+        score,
+      });
+    }
+    event.rankings.sort((a, b) => a.rank - b.rank);
+
+    await event.save();
+
+    let userStats = await UserEventStats.findOne({ userId });
+
+    if (!userStats) {
+      userStats = new UserEventStats({
+        userId,
+        totalPoints: points,
+        totalEvents: 1,
+        averagePoints: points,
+        weightedScore: points + 5 * 1,
+      });
+    } else {
+      userStats.totalPoints += points;
+      userStats.totalEvents += 1;
+      userStats.weightedScore = userStats.totalPoints + (5* userStats.totalEvents);
+      userStats.averagePoints = (
+        userStats.totalPoints / userStats.totalEvents
+      ).toFixed(2);
+    }
+
+    await userStats.save();
+
     res.status(200).json({
-      message:"event not found same"
-    })
+      message: "Rank Assigned and Stats Updated Successfully",
+      data: event,
+      userStats,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
