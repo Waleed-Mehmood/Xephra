@@ -5,16 +5,17 @@ import {
   clearRankings,
   assignEventRanking,
   resetMessage,
+  declineSubmission,
+  deleteUserSubmission
 } from "../../redux/features/rankingSlice";
 import { getEventById } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 import { useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 
 const TournamentUsersRankingApproval = () => {
   const dispatch = useDispatch();
-  const { rankings, loading, error, data, userStats, message } = useSelector(
+  const { rankings, loading, error, data, userStats, message, submissions } = useSelector(
     (state) => state.ranking
   );
   const { event } = useSelector((state) => state.events);
@@ -28,7 +29,7 @@ const TournamentUsersRankingApproval = () => {
       dispatch(fetchEventSubmissions(eventId));
       dispatch(getEventById(eventId));
     }
-  }, [dispatch, eventId]);
+  }, [dispatch, eventId,submissions,data ]);
 
   useEffect(() => {
     if (message) {
@@ -62,7 +63,6 @@ const TournamentUsersRankingApproval = () => {
       newRank: Number(user.rank),
       score: user.score,
     };
-    console.log(rankingData);
     dispatch(assignEventRanking(rankingData));
   };
 
@@ -79,6 +79,13 @@ const TournamentUsersRankingApproval = () => {
       score: submission.score,
     };
     dispatch(assignEventRanking(rankingData));
+  };
+
+  const handleDecline = (data) => {
+    dispatch(declineSubmission({ userId: data.userId, eventId: data.eventId }));
+  };
+  const handleDelete = (data) => {
+    dispatch(deleteUserSubmission({ userId: data.userId, eventId: data.eventId }));
   };
 
   return (
@@ -150,8 +157,15 @@ const TournamentUsersRankingApproval = () => {
                         >
                           Edit
                         </button>
-                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                        <button className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
+                          onClick={()=>handleDecline(submission)}
+                        >
                           Decline
+                        </button>
+                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                          onClick={()=>handleDelete(submission)}
+                        >
+                          Delete
                         </button>
                       </td>
                     </tr>
@@ -166,7 +180,6 @@ const TournamentUsersRankingApproval = () => {
               )}
             </tbody>
           </table>
-          <ToastContainer />
         </div>
       </div>
 

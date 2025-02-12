@@ -144,6 +144,12 @@ exports.assignEventRanking = async (req, res) => {
 
     await userStats.save();
 
+    let submission = await UserSubmission.findOne({userId, eventId});
+    submission.status = "approved";
+
+    await submission.save();
+
+
     res.status(200).json({
       message: "Rank Assigned and Stats Updated Successfully",
       data: event,
@@ -166,3 +172,24 @@ function calculatePoints(rank) {
   }
 }
 
+exports.declineRanking= async(req, res)=>{
+  const {userId, eventId} = req.body;
+  try {
+    const submission = await UserSubmission.findOne({userId, eventId});
+    if(!submission){
+      return res.status(404).json({
+        message: "Submission not found"
+      })
+    }
+
+    submission.status= "not approved";
+    await submission.save();
+    res.status(200).json({
+      message: "not approved"
+    })
+  } catch (error) {
+    res.status(500).json({
+      error
+    })
+  }
+}
