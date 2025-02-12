@@ -27,14 +27,14 @@ function Sidebar({ onMenuClick, dark }) {
 
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
+      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5 bg-transparent">
         <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
         {menuItems.map((item, index) => (
           <li
             key={item.key}
-            className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#a39c879c]"
+            className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#854951] text-[#D4AD66] hover:text-white"
             onClick={() => onMenuClick(item.key)}
           >
             <span
@@ -44,8 +44,8 @@ function Sidebar({ onMenuClick, dark }) {
             />
             <a
               className={`inline-flex items-center w-full text-sm font-semibold ${
-                dark ? "text-white" : "text-white"
-              } transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100`}
+                dark ? "" : "text-white"
+              } transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
             >
               {item.icon}
               <span className="ml-4">{item.name}</span>
@@ -55,9 +55,9 @@ function Sidebar({ onMenuClick, dark }) {
       </ul>
       <div className="px-6 my-6">
         <button
-          className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? "bg-[#302B27] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              ? "active:bg-[#A15D66]"
               : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
@@ -68,9 +68,9 @@ function Sidebar({ onMenuClick, dark }) {
       <div className="px-6 my-6">
         <button
           onClick={logoutSubmit}
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? "bg-[#c76f7e] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              ? "bg-[#854951] active:bg-[#A15D66]"
               : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
@@ -92,7 +92,7 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
     <div
       className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto transform transition-transform ${
         isSideMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } ${dark ? "bg-[#69363F]" : "bg-[#232122]"} md:hidden`}
+      } ${dark ? "bg-[#292622] bg-opacity-90" : "bg-[#232122]"} md:hidden`}
     >
       <Sidebar
         dark={dark}
@@ -157,7 +157,7 @@ function Dashboard() {
     
       <aside
         className={`z-20 w-64 overflow-y-auto ${
-          dark ? "bg-[#69363F]" : "bg-[#232122]"
+          dark ? "bg-[#292622] bg-opacity-85" : "bg-[#232122]"
         } hidden md:block flex-shrink-0`}
       >
         <Sidebar dark={dark} onMenuClick={setActiveMenu} />

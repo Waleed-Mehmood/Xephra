@@ -15,7 +15,7 @@ export default function Header({
 }) {
   return (
     <header
-      className={`z-10 py-4 shadow-md ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}
+      className={`z-10 py-4 shadow-md ${dark ? "bg-[#292622] bg-opacity-85" : "bg-[#232122]"}`}
     >
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-white dark:text-white">
         {/* Menu Button */}
