@@ -27,14 +27,14 @@ function Sidebar({ onMenuClick, dark }) {
 
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
+      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5 bg-transparent">
         <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
         {menuItems.map((item, index) => (
           <li
             key={item.key}
-            className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#a39c879c]"
+            className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#854951] text-[#D4AD66] hover:text-white"
             onClick={() => onMenuClick(item.key)}
           >
             <span
@@ -44,8 +44,8 @@ function Sidebar({ onMenuClick, dark }) {
             />
             <a
               className={`inline-flex items-center w-full text-sm font-semibold ${
-                dark ? "text-white" : "text-white"
-              } transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100`}
+                dark ? "" : "text-white"
+              } transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
             >
               {item.icon}
               <span className="ml-4">{item.name}</span>
@@ -55,9 +55,9 @@ function Sidebar({ onMenuClick, dark }) {
       </ul>
       <div className="px-6 my-6">
         <button
-          className={`flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? "bg-[#302B27] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              ? "active:bg-[#A15D66]"
               : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
@@ -68,9 +68,9 @@ function Sidebar({ onMenuClick, dark }) {
       <div className="px-6 my-6">
         <button
           onClick={logoutSubmit}
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? "bg-[#c76f7e] hover:bg-[#8b796b] active:bg-[#A15D66]"
+              ? "bg-[#854951] active:bg-[#A15D66]"
               : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
@@ -92,7 +92,7 @@ function MobileSidebar({ dark, onMenuClick, toggleSideMenu, isSideMenuOpen }) {
     <div
       className={`fixed inset-y-0 z-20 w-64 mt-16 overflow-y-auto transform transition-transform ${
         isSideMenuOpen ? "translate-x-0" : "-translate-x-full"
-      } ${dark ? "bg-[#69363F]" : "bg-[#232122]"} md:hidden`}
+      } ${dark ? "bg-[#292622] bg-opacity-90" : "bg-[#232122]"} md:hidden`}
     >
       <Sidebar
         dark={dark}
@@ -150,14 +150,14 @@ function Dashboard() {
       className={`flex h-full bg-[url('https://images.ctfassets.net/w5r1fvmogo3f/4UqXpuijA7dp2mMXP2vDtH/ccebdeee7f7853f2b4de8637d31c92cc/ghost_2f2b6b7fdfe84fc4b4778313255fb676.png')] 
       ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
-      bg-fixed bg-center relative`}
+      bg-cover bg-center relative`}
     >
-      <div className="absolute inset-x-0 bottom-0 h-[200%] bg-gradient-to-t from-gray-800 via-transparent to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute inset-x-0 bottom-0 h-2/4 bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-7 0"></div>
       <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
     
       <aside
         className={`z-20 w-64 overflow-y-auto ${
-          dark ? "bg-[#69363F]" : "bg-[#232122]"
+          dark ? "bg-[#292622] bg-opacity-85" : "bg-[#232122]"
         } hidden md:block flex-shrink-0`}
       >
         <Sidebar dark={dark} onMenuClick={setActiveMenu} />
