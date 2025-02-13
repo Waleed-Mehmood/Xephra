@@ -5,7 +5,7 @@ import Loading from "../../utils/Loading/Loading";
 
 const NewEvents = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
-  const {loading, error} = useSelector((state) => state.events);
+  const { loading, error } = useSelector((state) => state.events);
   const [formData, setFormData] = useState({
     title: "",
     game: "",
@@ -55,128 +55,134 @@ const NewEvents = ({ setActiveMenu, dark }) => {
       image: null,
       prizePool: "",
       rules: "",
-    })
+    });
 
     // setActiveMenu("postedEvents");
   };
-  if(loading){
-    return <Loading/>
+  if (loading) {
+    return <Loading />;
   }
 
   return (
     <div
-      className={`mx-auto py-16 px-4 rounded-lg ${
-        dark ? "bg-[#69363F]" : "bg-[#232122]"
-      } `}
+      className={`mx-auto py-10 px-4 rounded-lg   bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm `}
     >
-      <h2 className="text-2xl font-bold text-[#b6a99a] mb-6">
+      <h2 className="text-[48px] font-bold text-[#b6a99a] mb-6 text-center drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent">
         Create New Tournament
       </h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Tournament Title</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="p-2 rounded-md"
-            required
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2 ">
+              Tournament Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="bg-[#00000082] text-white p-2 rounded-md"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2">Game</label>
+            <input
+              type="text"
+              name="game"
+              value={formData.game}
+              onChange={handleChange}
+              className="p-2 rounded-md bg-[#00000082] text-white"
+              required
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Game</label>
-          <input
-            type="text"
-            name="game"
-            value={formData.game}
-            onChange={handleChange}
-            className="p-2 rounded-md"
-            required
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              className="p-2 rounded-md bg-[#00000082] text-white"
+              required
+            />
+          </div>
 
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Date</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="p-2 rounded-md"
-            required
-          />
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2">Time</label>
+            <input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              className="p-2 rounded-md bg-[#00000082] text-white"
+              required
+            />
+          </div>
         </div>
-
         <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Time</label>
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="p-2 rounded-md"
-            required
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Description</label>
+          <label className="text-[#D4AD66] ml-1 pb-2">Description</label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="p-2 rounded-md"
+            className="p-2 rounded-md bg-[#00000082] text-white"
             rows="4"
             required
           />
         </div>
         <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Rules</label>
+          <label className="text-[#D4AD66] ml-1 pb-2">Rules</label>
           <textarea
             name="rules"
             value={formData.rules}
             onChange={handleChange}
-            className="p-2 rounded-md"
+            className="p-2 rounded-md bg-[#00000082] text-white"
             rows="2"
             required
           />
         </div>
 
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Image Upload</label>
-          <input
-            type="file"
-            name="image"
-            onChange={handleImageChange}
-            className="p-2 rounded-md"
-            required
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2">Prize Pool</label>
+            <input
+              type="text"
+              name="prizePool"
+              value={formData.prizePool}
+              onChange={handleChange}
+              className="p-2 rounded-md bg-[#00000082] text-white"
+              required
+            />
+          </div>
 
-        <div className="flex flex-col">
-          <label className="text-[#b6a99a]">Prize Pool</label>
-          <input
-            type="text"
-            name="prizePool"
-            value={formData.prizePool}
-            onChange={handleChange}
-            className="p-2 rounded-md"
-            required
-          />
+          <div className="flex flex-col">
+            <label className="text-[#D4AD66] ml-1 pb-2">Image Upload</label>
+            <input
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+              className="p-[5px] rounded-md bg-[#00000082] text-white"
+              required
+            />
+          </div>
         </div>
-
-        <button
-          type="submit"
-          className={`text-white px-6 py-2 rounded-md transition ${
-            dark
-              ? "bg-[#302B27] hover:bg-[#49413C]"
-              : "bg-[#854951] hover:bg-[#A15D66]"
-          }`}
-        >
-          Create Event
-        </button>
+        <div className="flex justify-center mt-4">
+          <button
+            type="submit"
+            className={`text-[#C9B796] px-10 py-3 rounded-md transition ${
+              dark
+                ? "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#49413C]"
+                : "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#A15D66]"
+            } `}
+          >
+            Create Event
+          </button>
+        </div>
         {error && <p className="text-red-500">{error?.error}</p>}
       </form>
     </div>

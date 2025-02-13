@@ -183,8 +183,8 @@ const UserProfile = ({ dark, profile }) => {
       <div>
         <div className={dark ? "bg-gradient-to-r from-[#3e2027] to-[#2e1c20] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4" : "bg-[#232122] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4"}>
           <div className="flex flex-col items-end gap-0">
-            <h1 className="text-xl text-white">Rank : 12</h1>
-            <h2 className=" text-white">Score: 12</h2>
+            <h1 className="text-xl text-[#D4AD66]">Rank : 12</h1>
+            <h2 className=" text-[#D4AD66]">Score: 12</h2>
           </div>
 
           <div className={styles.profileImageContainer}>
@@ -215,8 +215,8 @@ const UserProfile = ({ dark, profile }) => {
               </label>
             </div>
             <div className="flex flex-col gap-4">
-              <label className="text-3xl ml-10">{profileData.username}</label>
-              <label className="text-xl ml-10">{profileData.bio}</label>
+              <label className=" text-[#D4AD66] text-3xl ml-10">{profileData.username}</label>
+              <label className="text-[#D4AD66] text-xl ml-10">{profileData.bio}</label>
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@ const UserProfile = ({ dark, profile }) => {
   <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
     {/* Username */}
     <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaUser /> Username
       </label>
       <input
@@ -239,7 +239,7 @@ const UserProfile = ({ dark, profile }) => {
 
     {/* Full Name */}
     <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaUser /> Full Name
       </label>
       <input
@@ -255,7 +255,7 @@ const UserProfile = ({ dark, profile }) => {
   <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
     {/* Email */}
     <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
-      <label className="flex items-center gap-2">
+      <label className=" text-[#D4AD66] flex items-center gap-2">
         <FaEnvelope /> Email
       </label>
       <input
@@ -269,7 +269,7 @@ const UserProfile = ({ dark, profile }) => {
 
     {/* Phone Number */}
     <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaPhone /> Phone Number
       </label>
       <input
@@ -285,7 +285,7 @@ const UserProfile = ({ dark, profile }) => {
   {/* Address Field */}
   <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
     <div className="grid grid-cols-1 gap-2 w-full lg:w-90">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaMapMarkedAlt /> Address
       </label>
       <input
@@ -299,7 +299,7 @@ const UserProfile = ({ dark, profile }) => {
 
     {/* Age Field */}
     <div className="grid grid-cols-1 w-full lg:w-90 gap-2">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaCalendarAlt /> Age
       </label>
       <input
@@ -315,7 +315,7 @@ const UserProfile = ({ dark, profile }) => {
   <div className="grid grid-cols-1 lg:flex lg:justify-between gap-5 sm:ml-4">
     {/* City Field */}
     <div className="grid grid-cols-1 w-full lg:w-90 gap-2">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaCity /> City
       </label>
       <input
@@ -329,7 +329,7 @@ const UserProfile = ({ dark, profile }) => {
 
     {/* Country Field */}
     <div className="grid grid-cols-1 w-full lg:w-90 gap-2">
-      <label className="flex items-center gap-2">
+      <label className="text-[#D4AD66] flex items-center gap-2">
         <FaCity /> Country
       </label>
       <input
@@ -342,7 +342,7 @@ const UserProfile = ({ dark, profile }) => {
     </div>
   </div>
 
-  <label className="sm:ml-4">
+  <label className="text-[#D4AD66] sm:ml-4">
     <FaEnvelope /> Bio/About
   </label>
   <textarea
@@ -352,7 +352,7 @@ const UserProfile = ({ dark, profile }) => {
     className={`${styles.userProfiletextarea} p-2 rounded border h-32 sm:ml-4`}
   ></textarea>
 
-  <label className="sm:ml-4">
+  <label className="text-[#D4AD66] sm:ml-4">
     <FaGamepad /> Favourite Games
   </label>
   <div className="flex flex-col space-y-2 sm:ml-4">
@@ -363,6 +363,7 @@ const UserProfile = ({ dark, profile }) => {
         onChange={handleGameChange}
         className={`${styles.userProfileInput} p-2 rounded border flex-1`}
       />
+        
       <button
         type="button"
         onClick={handleAddGame}
@@ -378,12 +379,12 @@ const UserProfile = ({ dark, profile }) => {
 
 
 
-            <ul className="space-y-1">
+            <ol className="list-decimal space-y-1">
               {profileData.favoriteGames.length > 0 ? (
                 profileData.favoriteGames.map((game, index) => (
-                  <li key={index} className="flex items-center">
+                  <li key={index} className="flex items-center ml-2">
                     <span className="text-[#B6A99A] text-md font-bold">
-                      {game}
+                     {game}
                     </span>
                     <button
                       type="button"
@@ -397,7 +398,7 @@ const UserProfile = ({ dark, profile }) => {
               ) : (
                 <p className="text-gray-500">No favorite games added yet.</p>
               )}
-            </ul>
+            </ol>
           </div>
 
           {/* Show message if no changes are detected */}
@@ -405,27 +406,31 @@ const UserProfile = ({ dark, profile }) => {
 
           {/* Conditionally render the button */}
           {profile ? (
+            
             <button
               className={`${styles.uploadBtn} ${
                 dark
                   ? "bg-[#302B27] hover:bg-[#49413C]"
-                  : "bg-[#854951] hover:bg-[#A15D66]"
+                  : "bg-[#302B27] hover:bg-[#A15D66]"
               }`}
               onClick={handleProfileUpdateClick} // Handle update button click
             >
               Update
             </button>
+           
           ) : (
+          
             <button
-              className={`${styles.uploadBtn} ${
+              className={`text-[#C9B796] rounded-md font-bold border-[#C9B796] border-[1px] px-10 py-2   ${
                 dark
-                  ? "bg-[#302B27] hover:bg-[#49413C]"
-                  : "bg-[#854951] hover:bg-[#A15D66]"
+                 ? "bg-[#302B27] hover:bg-[#49413C]"
+                  : "bg-[#302B27] hover:bg-[#A15D66]"
               }`}
               onClick={handleCreate} // Create the profile if it doesn't exist
             >
               Create Profile
             </button>
+
           )}
         </div>
       </div>

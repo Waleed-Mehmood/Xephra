@@ -88,11 +88,13 @@ input[type="number"] {
 }
 
 .uploadBtn {
-  padding: 12px 20px;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 16px 20px;
+    color: #C9B796;
+    font-weight: bold;
+    margin-left: 16px;
+    border: solid #fff 1px;
+    border-radius: 10px;
+    font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
 }
@@ -129,5 +131,7 @@ input[type="number"] {
 }
 
 .message {
-  color: #b6a99a;
+  margin-left: 20px;
+  font-weight: bold;
+  color: #e0bf7c;
 }
