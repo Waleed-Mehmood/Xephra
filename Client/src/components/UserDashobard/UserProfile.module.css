@@ -78,24 +78,6 @@
   background-color: #1313138d !important;
   border: 1px solid #b3b3b3 !important;
 }
-
-/* Fallback for all inputs, lower specificity */
-input,
-textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background-color: #B6A99A;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-  
-  input:focus,
-  textarea:focus {
-    border-color: #5C2D33;
-    box-shadow: 0 0 5px rgba(255, 127, 80, 0.6);
-    outline: none;
-  }
   
   textarea {
     resize: vertical;
@@ -107,10 +89,12 @@ textarea {
   }
   
   .uploadBtn {
-    padding: 12px 20px;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
+    padding: 16px 20px;
+    color: #C9B796;
+    font-weight: bold;
+    margin-left: 16px;
+    border: solid #fff 1px;
+    border-radius: 10px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
@@ -149,5 +133,7 @@ textarea {
 
 
 .message {
-  color: #B6A99A;
+  margin-left: 20px;
+  font-weight: bold;
+  color: #e0bf7c;
 }

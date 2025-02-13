@@ -16,36 +16,57 @@ const CompletedEvents = ({ dark }) => {
     return <Loading />;
   }
 
-  const TournamentCard = ({ _id, title, game, date, time, description, image, prizePool }) => {
+  const TournamentCard = ({
+    _id,
+    title,
+    game,
+    date,
+    time,
+    description,
+    image,
+    prizePool,
+  }) => {
+  
+    const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
     return (
-      <Link
-        to={`/eventuser/${_id}`}
-        className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl block"
-      >
-        <img className="w-full h-56 object-cover" src={`${process.env.REACT_APP_BACKEND}/${image}`} alt={title} />
+      <div className="bg-[#000000] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-x border-slate-300 border-[0.2px] ">
+        <Link to={`/userdashboard/eventdetailuser/${_id}`} className="relative block w-full">
+          <img className="w-full h-60 object-cover" src={imageUrl} alt={title} />
+          <h3 className="drop-shadow-2xl absolute bottom-0 left-0 w-[55%] text-2xl font-bold text-white [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)] px-4 py-2">
+            {title}
+          </h3>
+        </Link>
+  
         <div className="p-4">
-          <h3 className="text-xl font-bold text-[#b8a896]">{title}</h3>
-          <p className="text-[#69363f] font-bold mt-1">{game}</p>
-          <p className="text-sm text-gray-400">{date} • {time}</p>
-          <p className="text-gray-300 mt-2">{description}</p>
-          <p className="text-lg font-semibold text-[#FFD700] mt-2">Prize Pool: {prizePool}</p>
-
+          <Link to={`/userdashboard/eventdetailuser/${_id}`}>
+          <p className="text-[#C9B796] text-lg font-bold mt-1">{game}</p>
+           <p className="text-[#C9B796] mt-2  line-clamp-3">{description}</p>
+           <p className="text-lg text-[#C9B796] lg:w-[100%] mt-2">
+           <span className=" bg-[#302A27] px-5">{date}</span> • <span className=" bg-[#302A27] px-5">{time}</span>
+          </p>
+          <div>
+            <span className="text-xl font-bold text-[#D4AD66] mt-2">PKR: {prizePool}</span>
+          </div>
+          </Link> 
+          <div className="flex justify-center">
           {/* User Ranking Button */}
-          <Link
+            <Link
             to={`/tournamentrankings/${_id}`}
-            className="mt-4 inline-block bg-[#69363F] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#894b5c] hover:scale-105"
+            className="mt-4 inline-block bg-[#8f404f] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#69363F] hover:scale-105"
           >
             Users Ranking
           </Link>
+          </div>
         </div>
-      </Link>
+      </div>
     );
   };
 
+
   return (
-    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#b6a99a]">Completed Events</h2>
+    <div className={`mx-auto py-10 px-4 rounded-lg shadow-2xl shadow-gray-950 backdrop-blur-sm ${dark ? "" : "bg-[#232122]"}`}>
+      <div className="flex justify-center items-center mb-8">
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Completed Events</h2>
       </div>
 
       {error && <p className="text-red-500 text-center">Error: {error}</p>}
