@@ -65,23 +65,23 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
     const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
 
     return (
-      <div className="bg-[#202938] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
-        <Link to={`/eventadmin/${_id}`}>
+      <div className="bg-[#000000] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl">
+        <Link to={`/eventadmin/${_id}`} className="relative block w-full">
           <img
             className="w-full h-56 object-cover"
             src={imageUrl}
             alt={title}
           />
+           <h3 className="drop-shadow-2xl absolute bottom-0 left-0 w-[55%] text-2xl font-bold text-white [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)] px-4 py-2">{title}</h3>
         </Link>
         <div className="p-4">
-          <Link to={`/eventadmin/${_id}`}>
-            <h3 className="text-xl font-bold text-[#b8a896]">{title}</h3>
-          </Link>
-          <p className="text-[#69363f] font-bold mt-1">{game}</p>
+          <Link to={`/eventadmin/${_id}`}>         
+          <p className="text-[#C9B796] text-lg font-bold mt-1">{game}</p>
           <p className="text-sm text-gray-400">
-            {date} • {time}
+            <span className="bg-[#302A27] font-bold px-2 w-1/2">{date}</span> •<span className="bg-[#302A27] font-bold px-2 w-1/2">{time}</span> 
           </p>
-          <p className="text-gray-300 mt-2">{description}</p>
+          <p className="text-[#C9B796] mt-2  line-clamp-3">{description}</p>
+          </Link>
           <div className="mt-4 flex justify-between items-center">
             <span className="text-xl font-bold text-white">{prizePool}</span>
             {isAdmin && (
@@ -121,21 +121,19 @@ const PostedEvents = ({ setActiveMenu, dark }) => {
 
   return (
     <div
-      className={`mx-auto py-16 px-4 rounded-lg min-h-full ${
-        dark ? "bg-[#69363F]" : "bg-[#232122]"
-      } `}
+      className={`mx-auto py-10 px-4 rounded-lg min-h-full  bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm `}
     >
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#b6a99a]">
+        <h2 className="text-3xl font-bold text-center  bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent py-6 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)]">
           POSTED EVENTS
         </h2>
         {isAdmin && (
           <Link onClick={changeMenu}>
             <button
-              className={`flex items-center text-white px-2 sm:px-6 py-2 rounded-md transition text-sm sm:text-base ${
+              className={`flex items-center text-[#C9B796] px-2 sm:px-6 py-2 rounded-md transition text-sm sm:text-base ${
                 dark
-                  ? "bg-[#302B27] hover:bg-[#49413C]"
-                  : "bg-[#854951] hover:bg-[#A15D66]"
+                  ? "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#49413C]"
+                  : "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#A15D66]"
               } `}
             >
               <FaPlus className="mr-2" /> New Event

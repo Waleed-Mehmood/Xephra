@@ -77,10 +77,10 @@ const RankingApproval = ({ dark }) => {
   }
   console.log("game", game);
   return (
-    <div className="bg-[#f7e8e8] border border-gray-300 rounded-lg p-6 mx-auto text-center min-h-full">
+    <div className="rounded-lg p-6 mx-auto text-center min-h-full shadow-2xl shadow-gray-950 backdrop-blur-sm">
       <h1
-        className={`text-2xl font-bold mb-6 font-['Press_Start_2P'] ${
-          dark ? "text-[#69363F]" : "text-[#232122]"
+        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 font-['Press_Start_2P'] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent ${
+          dark ? "" : "text-[#232122]"
         }`}
       >
         User Game Entry
@@ -90,42 +90,42 @@ const RankingApproval = ({ dark }) => {
           <thead>
             <tr>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
                 Game Name
               </th>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
                 Rank
               </th>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
                 Score
               </th>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
                 Screenshot
               </th>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
                 Status
               </th>
               <th
-                className={`text-white py-3 px-4 border border-gray-300 ${
+                className={`text-[#C9B796] py-3 px-4 border border-[#C9B796] ${
                   dark ? "bg-[#69363F]" : "bg-[#232122]"
                 }`}
               >
@@ -136,9 +136,9 @@ const RankingApproval = ({ dark }) => {
           <tbody>
             <tr
               key={game.id}
-              className="bg-white hover:bg-[#f1dcdc] transition"
+              className="bg-[#C9B796] hover:bg-[#b1a185] transition"
             >
-              <td className="py-3 px-4 border border-gray-300">
+              <td className="py-3 px-4 border border-[#69363F]">
                 <select
                   id="hostedEvents"
                   onChange={(e) => {
@@ -155,7 +155,7 @@ const RankingApproval = ({ dark }) => {
                   }}
                   value={game.eventId}
                   defaultValue=""
-                  className="py-3 px-4"
+                  className="py-2 px-4 bg-[#303030] text-[#C9B796]"
                 >
                   <option value="" disabled>
                     Select an event
@@ -168,43 +168,43 @@ const RankingApproval = ({ dark }) => {
                     ))}
                 </select>
               </td>
-              <td className="py-3 px-4 border border-gray-300">
+              <td className="py-3 px-4 border border-[#69363F]">
                 <input
                   type="number"
                   value={game.rank}
                   onChange={(e) => handleInputChange("rank", e.target.value)}
-                  className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
+                  className="w-full border border-[#69363F] rounded px-2 py-1 placeholder-[#C9B796] bg-[#303030]"
                   placeholder="Enter rank"
                   disabled={game.status !== "-"}
                 />
               </td>
-              <td className="py-3 px-4 border border-gray-300">
+              <td className="py-3 px-4 border border-[#69363F]">
                 <input
                   type="number"
                   value={game.score}
                   onChange={(e) => handleInputChange("score", e.target.value)}
-                  className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
+                  className="w-full border border-[#69363F] rounded px-2 py-1 placeholder-[#C9B796] bg-[#303030]"
                   placeholder="Enter score"
                   disabled={game.status !== "-"}
                 />
               </td>
-              <td className="py-3 px-4 border border-gray-300">
+              <td className="py-3 px-4 border border-[#69363F]">
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleScreenshotUpload(e.target.files[0])}
-                  className="w-full border border-gray-300 rounded px-2 py-1 placeholder-[#6a5e5e]"
+                  className="text-[#C9B796] w-full border border-[#69363F] rounded px-2 py-1 placeholder-[#C9B796] bg-[#303030]"
                   disabled={game.status !== "-"}
                 />
                 {game.screenshot && (
                   <img
                     src={URL.createObjectURL(game.screenshot)}
                     alt="Screenshot Preview"
-                    className="mt-2 w-20 h-20 object-cover border border-gray-300 rounded"
+                    className="mt-2 w-20 h-20 object-cover border border-[#69363F] rounded"
                   />
                 )}
               </td>
-              <td className="py-3 px-4 border border-gray-300 text-center">
+              <td className="py-3 px-4 border border-[#69363F] text-center">
                 <span
                   className={`${
                     game.status === "Pending"
@@ -215,7 +215,7 @@ const RankingApproval = ({ dark }) => {
                   {game.status}
                 </span>
               </td>
-              <td className="py-3 px-4 border border-gray-300 text-center flex justify-center gap-2 items-center">
+              <td className="py-3 px-4 border-b border-r border-[#69363F] text-center flex justify-center gap-2 items-center">
                 {game.status === "-" ? (
                   <button
                     onClick={handleSubmit}
@@ -234,7 +234,7 @@ const RankingApproval = ({ dark }) => {
       </div>
 
       <div className="mt-4">
-        {submissions.length === 0 && !loading && <p>No submissions found.</p>}
+        {submissions.length === 0 && !loading && <p className="text-[#C9B796]">No submissions found.</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
           {submissions.map((submission) => (
             <div

@@ -197,7 +197,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* Analytics & Stats Dashboard Section */}
       <div
-        className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8 `}
+        className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm`}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -222,7 +222,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div
-          className={`col-span-12 lg:col-span-9 bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
+          className={`col-span-12 lg:col-span-9 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -349,7 +349,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* User Management Section */}
       <div
-        className={`mt-8 bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
+        className={`mt-8 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
       >
         <div className="flex justify-between items-center mb-4">
           <h2
