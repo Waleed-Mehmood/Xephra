@@ -78,24 +78,6 @@ label {
   border: 1px solid #b3b3b3 !important;
 }
 
-/* Fallback for all inputs, lower specificity */
-input,
-textarea {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background-color: #b6a99a;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #5c2d33;
-  box-shadow: 0 0 5px rgba(255, 127, 80, 0.6);
-  outline: none;
-}
-
 textarea {
   resize: vertical;
   min-height: 100px;

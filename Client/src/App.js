@@ -15,6 +15,7 @@ import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
 import EventDetailAdmin from "./components/AdminDashobard/EventDetailAdmin";
 import EventDetailUser from "./components/UserDashobard/EventDetailUser";
 import TournamentUsersRankingApproval from "./components/AdminDashobard/TournamentUsersRankingApproval";
+import EventDetailUserDashboard from "./components/UserDashobard/EventDetailUserDashboard";
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/eventadmin/:eventId" element={<EventDetailAdmin />} />
         <Route path="/eventuser/:eventId" element={<EventDetailUser />} />
+        <Route path="/userdashboard/eventdetailuser/:eventId" element={<EventDetailUserDashboard />} />
         <Route path="/dashboard/users" element={<Users />} />
         <Route
           path="/tournamentrankings/:eventId"
