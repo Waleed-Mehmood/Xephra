@@ -103,6 +103,19 @@ export const declineSubmission = createAsyncThunk(
   }
 );
 
+// Async thunk to fetch registered users and rankings for one event
+export const fetchRegisteredUsersAndRankings = createAsyncThunk(
+  'event/fetchRegisteredUsersAndRankings',
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/rank/event/${eventId}/participants`);
+      return response.data.result; 
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
+
 
 
 const rankingSlice = createSlice({
@@ -113,6 +126,7 @@ const rankingSlice = createSlice({
     message: null,
     rankings: { submissions: [], users: [] },
     submissions: [],
+    users: [],
     userStats: null,
     error: null,
   },
@@ -205,6 +219,18 @@ const rankingSlice = createSlice({
         );
       })
       .addCase(declineSubmission.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchRegisteredUsersAndRankings.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRegisteredUsersAndRankings.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchRegisteredUsersAndRankings.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

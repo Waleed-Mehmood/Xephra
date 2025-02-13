@@ -6,22 +6,22 @@ import {
   assignEventRanking,
   resetMessage,
   declineSubmission,
-  deleteUserSubmission
+  deleteUserSubmission,
 } from "../../redux/features/rankingSlice";
 import { getEventById } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
-import { useParams } from "react-router-dom";
-
+import { Link, useParams } from "react-router-dom";
+import FullScreenModal from "../../features/FullScreenModal";
 
 const TournamentUsersRankingApproval = () => {
   const dispatch = useDispatch();
-  const { rankings, loading, error, data, userStats, message, submissions } = useSelector(
-    (state) => state.ranking
-  );
+  const { rankings, loading, error, data, userStats, message, submissions } =
+    useSelector((state) => state.ranking);
   const { event } = useSelector((state) => state.events);
   const { eventId } = useParams();
   const [editData, setEditData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isScreenshotModalOpen, setIsScreenshotModalOpen] = useState(false);
 
   useEffect(() => {
     if (eventId) {
@@ -29,7 +29,7 @@ const TournamentUsersRankingApproval = () => {
       dispatch(fetchEventSubmissions(eventId));
       dispatch(getEventById(eventId));
     }
-  }, [dispatch, eventId,submissions,data ]);
+  }, [dispatch, eventId, submissions, data]);
 
   useEffect(() => {
     if (message) {
@@ -45,14 +45,11 @@ const TournamentUsersRankingApproval = () => {
   const handleEdit = (user) => {
     setEditData(user);
     setIsModalOpen(true);
-
   };
 
   const handleChange = (e) => {
     setEditData({ ...editData, [e.target.name]: e.target.value });
   };
-
-
 
   const handleSave = (user) => {
     setIsModalOpen(false);
@@ -71,6 +68,10 @@ const TournamentUsersRankingApproval = () => {
     setEditData(null);
   };
 
+  const handleScreenShotCloseModal = () => {
+    setIsScreenshotModalOpen(false);
+  };
+
   const HandleApproveRanking = (submission) => {
     const rankingData = {
       userId: submission.userId,
@@ -85,15 +86,25 @@ const TournamentUsersRankingApproval = () => {
     dispatch(declineSubmission({ userId: data.userId, eventId: data.eventId }));
   };
   const handleDelete = (data) => {
-    dispatch(deleteUserSubmission({ userId: data.userId, eventId: data.eventId }));
+    dispatch(
+      deleteUserSubmission({ userId: data.userId, eventId: data.eventId })
+    );
   };
 
   return (
     <div className="bg-[#B7AB95] min-h-screen p-8 flex justify-center">
       <div className="container mx-auto bg-[#232122] p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl md:text-4xl font-bold mb-6 text-white text-center">
-          {event?.title} Rankings
-        </h1>
+        <div className="flex flex-row justify-between  items-center p-3 mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold  text-white text-center">
+            {event?.title} Submissions
+          </h1>
+          <Link
+            to={`/tournamentrankings/${eventId}`}
+            className="mt-4 inline-block bg-[#69363F] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#894b5c] hover:scale-105"
+          >
+            Users Ranking
+          </Link>
+        </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-[#2c2c2c] text-white rounded-lg overflow-hidden text-center">
             <thead>
@@ -134,13 +145,21 @@ const TournamentUsersRankingApproval = () => {
                       <td className="py-3 px-6">
                         {submission?.score || "N/A"}
                       </td>
-                      <td className="py-3 px-6">
+                      <td
+                        className="py-3 px-6 cursor-pointer"
+                        onClick={() => setIsScreenshotModalOpen(true)}
+                      >
                         <img
                           src={`${process.env.REACT_APP_BACKEND}/${submission?.screenshot}`}
                           alt="screenshot"
                           className="w-12 h-12 rounded mx-auto"
                         />
                       </td>
+                      <FullScreenModal
+                        image={`${process.env.REACT_APP_BACKEND}/${submission?.screenshot}`}
+                        isOpen={isScreenshotModalOpen}
+                        onClose={handleScreenShotCloseModal}
+                      />
                       <td className="py-3 px-6 text-sm font-medium text-gray-300">
                         {submission.status || "Pending"}
                       </td>
@@ -157,13 +176,15 @@ const TournamentUsersRankingApproval = () => {
                         >
                           Edit
                         </button>
-                        <button className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
-                          onClick={()=>handleDecline(submission)}
+                        <button
+                          className="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
+                          onClick={() => handleDecline(submission)}
                         >
                           Decline
                         </button>
-                        <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                          onClick={()=>handleDelete(submission)}
+                        <button
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                          onClick={() => handleDelete(submission)}
                         >
                           Delete
                         </button>
@@ -215,12 +236,11 @@ const TournamentUsersRankingApproval = () => {
                   className="w-full p-2 border-none rounded-md bg-[#393939] text-white"
                 />
               </div>
-            
-             
+
               <div className="flex justify-end space-x-4">
                 <button
                   type="button"
-                  onClick={()=>handleSave(editData)}
+                  onClick={() => handleSave(editData)}
                   className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
                 >
                   Save
