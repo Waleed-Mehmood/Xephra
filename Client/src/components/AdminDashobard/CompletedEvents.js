@@ -43,7 +43,7 @@ const CompletedEvents = ({ dark }) => {
   };
 
   return (
-    <div className={`mx-auto py-16 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
+    <div className={`mx-auto py-10 px-4 rounded-lg ${dark ? "bg-[#69363F]" : "bg-[#232122]"}`}>
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#b6a99a]">Completed Events</h2>
       </div>
