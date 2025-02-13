@@ -246,7 +246,42 @@ exports.getRegisteredUsersAndRankings = async (req, res) => {
     });
 
     res.status(200).json({
-      result
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
+
+exports.getAllUsersRanking = async (req, res) => {
+  try {
+    const statsData = await UserEventStats.find({})
+      .sort({ weightedScore: -1 })
+      .lean();
+    if (!statsData.length) {
+      return res.status(404).json({
+        message: "no users stats is found!",
+      });
+    }
+
+    const userIds = statsData.map((stat) => stat.userId);
+    const userProfles = await UserProfile.find({
+      userId: { $in: userIds },
+    }).lean();
+    
+    const result = statsData.map((stat) => {
+      const profile = userProfles.find((p) => p.userId === stat.userId);
+      return {
+        ...stat,
+        userProfile: profile || null,
+      };
+    });
+
+    res.status(200).json({
+      result,
     });
   } catch (error) {
     console.log(error);
