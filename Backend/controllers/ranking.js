@@ -2,6 +2,7 @@ const express = require("express");
 const UserSubmission = require("../models/UserSubmission");
 const eventRankingBoard = require("../models/EventRankingBoard");
 const UserEventStats = require("../models/userEventStats");
+const UserProfile = require("../models/UserProfile");
 
 exports.postRankingApproval = async (req, res) => {
   try {
@@ -193,3 +194,31 @@ exports.declineRanking= async(req, res)=>{
     })
   }
 }
+exports.getTopRanking= async (req, res) => {
+  try {
+    // Get top 5 users based on weightedScore in descending order
+    const topUsersStats = await UserEventStats.find()
+        .sort({ weightedScore: -1 })
+        .limit(5);
+    
+    // Extract user IDs
+    const userIds = topUsersStats.map(stats => stats.userId);
+    
+    // Fetch user profiles using userIds
+    const userProfiles = await UserProfile.find({ userId: { $in: userIds } });
+    
+    // Create a mixed response combining stats and profiles
+    const mixedData = topUsersStats.map(stats => {
+        const userProfile = userProfiles.find(profile => profile.userId.toString() === stats.userId.toString());
+        return { ...stats.toObject(), userProfile };
+    });
+    
+    res.status(200).json({
+      mixedData
+    });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
+}
+  

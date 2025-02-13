@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useEffect} from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -11,6 +11,8 @@ import {
 import { Doughnut } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 
+
+
 // Register the required Chart.js components
 ChartJS.register(
   ArcElement,
@@ -22,6 +24,7 @@ ChartJS.register(
 );
 
 const RankingBoard = ({ dark }) => {
+
   const users = [
     { name: "Player1", rank: 1, score: 920, progress: 85 },
     { name: "Player2", rank: 2, score: 870, progress: 75 },
