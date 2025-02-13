@@ -5,7 +5,7 @@ import PostedEvents from "../../components/AdminDashobard/PostedEvents";
 import NewEvents from "../../components/AdminDashobard/NewEvents";
 import RankingApproval from "../../components/AdminDashobard/RankingApproval";
 import Dashboardadmin from "../../components/AdminDashobard/Dashboardadmin";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/xephra logo-01.png";
 import AdminProfile from "../../components/AdminDashobard/AdminProfile";
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ function Sidebar({ onMenuClick, dark }) {
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
       <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5">
-        <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
+        <img src={logo} className="h-13 w-44" alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
         {menuItems.map((item, index) => (

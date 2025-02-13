@@ -79,7 +79,7 @@ const RankingApproval = ({ dark }) => {
   return (
     <div className="rounded-lg p-6 mx-auto text-center min-h-full shadow-2xl shadow-gray-950 backdrop-blur-sm">
       <h1
-        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 font-['Press_Start_2P'] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent ${
+        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 font-['Press_Start_2P'] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent ${
           dark ? "" : "text-[#232122]"
         }`}
       >
