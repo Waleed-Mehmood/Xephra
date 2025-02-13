@@ -20,7 +20,7 @@ const RankingApproval = () => {
     <div 
       className="p-6 bg-cover bg-center min-h-screen rounded-xl shadow-2xl shadow-gray-950 backdrop-blur-sm"
     >
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center font-['Press_Start_2P'] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Admin Approval Panel</h1>
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center font-['Press_Start_2P'] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Admin Approval Panel</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {hostedEvents.map((event) => (
           <Link to={`/dashboard/tournamentrankingapproval/${event._id}`}>

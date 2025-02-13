@@ -51,7 +51,7 @@ const CompletedEvents = ({ dark }) => {
           <div className="flex justify-center">
           {/* User Ranking Button */}
             <Link
-            to={`/tournamentrankings/${_id}`}
+            to={`/userdashboard/tournamentrankings/${_id}`}
             className="mt-4 inline-block bg-[#8f404f] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#69363F] hover:scale-105"
           >
             Users Ranking
@@ -66,7 +66,7 @@ const CompletedEvents = ({ dark }) => {
   return (
     <div className={`mx-auto py-10 px-4 rounded-lg shadow-2xl shadow-gray-950 backdrop-blur-sm ${dark ? "" : "bg-[#232122]"}`}>
       <div className="flex justify-center items-center mb-8">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Completed Events</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Completed Events</h2>
       </div>
 
       {error && <p className="text-red-500 text-center">Error: {error}</p>}
