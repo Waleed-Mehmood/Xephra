@@ -61,7 +61,7 @@ export const fetchUserSubmissions = createAsyncThunk(
 
 
   // thunk for event ranking approval and user stats updation
-  const assignEventRanking = createAsyncThunk(
+ export const assignEventRanking = createAsyncThunk(
     'ranking/assignRank',
     async (rankingData , {rejectWithValue})=>{
       try {
@@ -90,12 +90,27 @@ export const fetchEventSubmissions = createAsyncThunk(
 );
 
 
+  // Async Thunk for Declining Submission
+export const declineSubmission = createAsyncThunk(
+  "submission/declineSubmission",
+  async ({ userId, eventId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${apiUrl}/rank/decline-submission`, { userId, eventId });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
+
 
 const rankingSlice = createSlice({
   name: "ranking",
   initialState: {
     loading: false,
     data: null,
+    message: null,
     rankings: { submissions: [], users: [] },
     submissions: [],
     userStats: null,
@@ -105,6 +120,9 @@ const rankingSlice = createSlice({
     clearRankings: (state) => {
       state.rankings = { submissions: [], users: [] }; // Clear previous rankings
     },
+    resetMessage: (state) => {
+      state.message = null;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -152,8 +170,9 @@ const rankingSlice = createSlice({
       })
       .addCase(assignEventRanking.fulfilled, (state, action) => {
         state.loading = false;
-        state.event = action.payload.data; 
+        state.data = action.payload.data; 
         state.userStats = action.payload.userStats; 
+        state.message = action.payload.message;
       })
          .addCase(assignEventRanking.rejected, (state, action) => {
         state.loading = false;
@@ -171,9 +190,26 @@ const rankingSlice = createSlice({
       .addCase(fetchEventSubmissions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(declineSubmission.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(declineSubmission.fulfilled, (state, action) => {
+        state.loading = false;
+        state.submissions = state.submissions.map((submission) =>
+          submission.userId === action.payload.submission.userId &&
+          submission.eventId === action.payload.submission.eventId
+            ? { ...submission, status: "not approved" }
+            : submission
+        );
+      })
+      .addCase(declineSubmission.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearRankings } = rankingSlice.actions;
+export const { clearRankings, resetMessage  } = rankingSlice.actions;
 export default rankingSlice.reducer;
