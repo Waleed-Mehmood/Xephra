@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Colors 
+  Colors ,
   ArcElement,
   BarElement,
 
