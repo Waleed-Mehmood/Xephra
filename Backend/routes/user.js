@@ -12,6 +12,7 @@ const {
   joinEvent,
   getEvents,
   getHostedEvents,
+  getProfileExisting
 } = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
@@ -27,5 +28,6 @@ router.get("/upcomingevents", upcomingEvents);
 router.post("/event-join", joinEvent);
 router.post("/registered-events", getEvents);
 router.get("/events/hosted", getHostedEvents);
+router.get('/profile-exit/:userId', getProfileExisting);
 
 module.exports = router;
