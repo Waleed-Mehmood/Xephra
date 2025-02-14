@@ -134,7 +134,7 @@ const DashboardUser = ({ dark }) => {
             Welcome to the<br></br> Gaming <br />
             Dashboard
           </h1>
-          <h2 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)]">
+          <h2 className={`bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] ${dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]" : "text-white"}`}>
             Stay updated with upcoming events and your ranking progress.
           </h2>
         </div>
@@ -144,7 +144,7 @@ const DashboardUser = ({ dark }) => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div className={`col-span-12 lg:col-span-9 }`}>
-          <div className="bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm">
+          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.02]" : "bg-[#232122]"}`}>
             <h2
               className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-3xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center`}
             >
@@ -183,11 +183,9 @@ const DashboardUser = ({ dark }) => {
             </Slider>
           </div>
 
-          <div className="bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm">
+          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.02]" : "bg-[#232122]"}`}>
             <h2
-              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2 ${
-                dark ? "text-[#B7A692]" : "text-white"
-              }`}
+              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2`}
             >
               Registered Events
             </h2>
@@ -229,7 +227,7 @@ const DashboardUser = ({ dark }) => {
         </div>
         {/* Rankings Section */}
         <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow bg-[#292622e3]`}
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#292622e3]" : "bg-[#232122]"}`}
         >
           <h2
             className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
@@ -258,11 +256,7 @@ const DashboardUser = ({ dark }) => {
                     </p>
                     <div className="w-full bg-[#69363F] h-2 rounded">
                       <div
-                        className={`h-2 rounded ${
-                          dark
-                            ? "bg-[linear-gradient(90deg,#AE8D52_0%,#BCA477_17.5%,#C6B492_35.5%,#B69A66_54.5%,#CBA766_100%)]"
-                            : "bg-[#A15D66]"
-                        }`}
+                        className={`h-2 rounded bg-[linear-gradient(90deg,#AE8D52_0%,#BCA477_17.5%,#C6B492_35.5%,#B69A66_54.5%,#CBA766_100%)]`}
                         style={{ width: `${user.rank}%` }}
                       ></div>
                     </div>
@@ -273,10 +267,10 @@ const DashboardUser = ({ dark }) => {
           </ul>
           <Link
             to="/user-rankings"
-            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
+            className={`font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
-                ? "bg-[#4f463f] hover:bg-[#8b796b]"
-                : "bg-[#854951] hover:bg-[#A15D66]"
+                ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"
+                : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#854951]"
             }`}
           >
             See All

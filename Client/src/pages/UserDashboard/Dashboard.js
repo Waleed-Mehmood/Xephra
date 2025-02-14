@@ -55,10 +55,10 @@ function Sidebar({ onMenuClick, dark }) {
       </ul>
       <div className="px-6 my-6">
         <button
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? "active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
+              : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
           }`}
         >
           Chat System
@@ -68,10 +68,10 @@ function Sidebar({ onMenuClick, dark }) {
       <div className="px-6 my-6">
         <button
           onClick={logoutSubmit}
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]  transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
               ? "bg-[#854951] active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              : "text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
           <TbLogout2
@@ -147,12 +147,12 @@ function Dashboard() {
 
   return (
     <div
-      className={`flex h-full bg-[url('https://images.ctfassets.net/w5r1fvmogo3f/4UqXpuijA7dp2mMXP2vDtH/ccebdeee7f7853f2b4de8637d31c92cc/ghost_2f2b6b7fdfe84fc4b4778313255fb676.png')] 
-      ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
+      className={`flex h-full  
+      ${dark ? "bg-[url('https://images.ctfassets.net/w5r1fvmogo3f/4UqXpuijA7dp2mMXP2vDtH/ccebdeee7f7853f2b4de8637d31c92cc/ghost_2f2b6b7fdfe84fc4b4778313255fb676.png')]" : "bg-[url('https://wallpapercat.com/w/full/f/b/6/1501928-3840x2160-desktop-4k-action-adventure-game-background.jpg')]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
       bg-cover bg-center relative`}
     >
-      <div className="absolute inset-x-0 bottom-0 h-2/4 bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-7 0"></div>
+      <div className={`absolute inset-x-0 bottom-0 h-2/4 z-10 pointer-events-none opacity-7 0 ${dark ? "bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)]": ""}`}></div>
       <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
     
       <aside

@@ -52,7 +52,9 @@ const RegisteredEvents = ({ dark }) => {
 
   return (
     <div
-      className={`mx-auto py-10 px-4 rounded-lg min-h-full  bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm`}
+      className={`mx-auto py-10 px-4 rounded-lg min-h-full shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm ${
+        dark
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}
     >
       <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] ">
         REGISTERED EVENTS
