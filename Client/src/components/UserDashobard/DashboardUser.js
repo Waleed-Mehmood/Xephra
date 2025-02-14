@@ -4,12 +4,15 @@ import Slider from "react-slick";
 import { useSelector, useDispatch } from "react-redux";
 import { getEvents, getEventsByUserId } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
+import { getTopRanking } from "../../redux/features/rankingSlice";
 
 const DashboardUser = ({ dark }) => {
   const dispatch = useDispatch();
   const { loading, events, event, participants } = useSelector(
     (state) => state.events
   );
+    const { topranks } = useSelector((state) => state.ranking);
+  
   const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
 
   useEffect(() => {
@@ -19,6 +22,10 @@ const DashboardUser = ({ dark }) => {
     }
   }, [dispatch, event]);
 
+    useEffect(() => {
+      dispatch(getTopRanking());
+    }, []);
+
   const sortedUpcomingEvents = [...events].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
@@ -27,7 +34,7 @@ const DashboardUser = ({ dark }) => {
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 
-  console.log("Participants", participants);
+
 
   const rankings = [
     {
@@ -119,6 +126,11 @@ const DashboardUser = ({ dark }) => {
     ],
   };
 
+  const maxWightedScore = Math.max(
+    ...topranks.map((user) => user.weightedScore)
+  );
+
+
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section */}
@@ -162,7 +174,7 @@ const DashboardUser = ({ dark }) => {
                     key={event._id}
                     className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
                   >
-                    <div className="relative rounded-lg shadow-lg overflow-hidden h-full min-h-[200px]">
+                    <div className="relative rounded-lg shadow-lg overflow-hidden h-full min-h-[200px]  hover:scale-105 transition duration-200">
                       {/* Image as background */}
                       <img
                         src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
@@ -171,7 +183,7 @@ const DashboardUser = ({ dark }) => {
                       />
 
                       {/* Title overlay */}
-                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t  from-black/100 to-[#00000020] p-3">
                         <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                           {event?.title}
                         </h3>
@@ -203,7 +215,7 @@ const DashboardUser = ({ dark }) => {
                   >
                     <div
                       key={event?.eventId?.id}
-                      className="relative rounded-lg shadow flex flex-col h-full min-h-[200px]"
+                      className="relative rounded-lg shadow flex flex-col h-full min-h-[200px]  hover:scale-105 transition duration-200"
                     >
                       {/* Image as background */}
                       <img
@@ -213,7 +225,7 @@ const DashboardUser = ({ dark }) => {
                       />
 
                       {/* Title overlay */}
-                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t  from-black/100 to-[#00000020] p-3">
                         <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                           {event?.eventId?.title}
                         </h3>
@@ -235,39 +247,55 @@ const DashboardUser = ({ dark }) => {
             User Rankings
           </h2>
           <ul>
-            {rankings.slice(0, 5).map((user) => (
-              <li key={user.id} className="flex items-center mb-4">
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div className="flex-1">
-                  <p
-                    className={`font-bold lg:text-lg sm:text-base bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
-                  >
-                    {user.name}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <p
-                      className={`text-sm bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent `}
-                    >
-                      Rank: {user.rank}
-                    </p>
-                    <div className="w-full bg-[#69363F] h-2 rounded">
-                      <div
-                        className={`h-2 rounded bg-[linear-gradient(90deg,#AE8D52_0%,#BCA477_17.5%,#C6B492_35.5%,#B69A66_54.5%,#CBA766_100%)]`}
-                        style={{ width: `${user.rank}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
+            {topranks && topranks.length > 0
+              ? topranks.map((user, index) => {
+                  const progress =
+                    (user?.weightedScore / maxWightedScore) * 100;
+                  return (
+                    <li key={user.id} className="flex items-center mb-4">
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full mr-4 object-cover"
+                      />
+                      <div className="flex-1">
+                        <p
+                          className={`font-bold lg:text-lg sm:text-base ${
+                            dark
+                              ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                              : "text-white"
+                          } `}
+                        >
+                          {user?.userProfile?.fullName}
+                        </p>
+                        <div className="flex items-center space-x-2">
+                          <p
+                            className={`text-sm ${
+                              dark
+                                ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                                : "text-[#D3D3D3]"
+                            } `}
+                          >
+                            Rank: {index + 1}
+                          </p>
+                          <div className="w-full bg-gray-200 h-2 rounded">
+                            <div
+                              className={`h-2 rounded ${
+                                dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                              } `}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
           </ul>
           <Link
-            to="/user-rankings"
-            className={`font-semibold py-2 px-4 rounded mt-4 block text-center ${
+            to="/userdashboard/allranking"
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
                 ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"
                 : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#854951]"

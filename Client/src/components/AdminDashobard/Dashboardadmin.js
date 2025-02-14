@@ -10,6 +10,10 @@ import {
   Title,
   Tooltip,
   Legend,
+  Colors ,
+  ArcElement,
+  BarElement,
+
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
@@ -21,6 +25,7 @@ import {
 } from "../../redux/features/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
+import { getTopRanking } from "../../redux/features/rankingSlice";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -28,86 +33,27 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
+  BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Colors
 );
 
 const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
   const { events } = useSelector((state) => state.events);
   const { users, profile } = useSelector((state) => state.profile);
+  const { topranks } = useSelector((state) => state.ranking);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllUsers());
+    dispatch(getTopRanking());
   }, []);
 
-  const rankings = [
-    {
-      id: 1,
-      name: "Player 1",
-      rank: 90,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQklBSe2monSAS1cBms7tDarsAdheQa0J-9Ow&s",
-    },
-    {
-      id: 2,
-      name: "Player 2",
-      rank: 80,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH9aDM4CsWt5f1we4gCSHvQQzDKcs924yZ8IhkCVldVQI3Lt6vAWDDOlerW3SswqIBrI&usqp=CAU",
-    },
-    {
-      id: 3,
-      name: "Player 3",
-      rank: 70,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvXcLBAnNaG9u_juSWT6vyOeW1Q3N3xh0QWA&s",
-    },
-    {
-      id: 4,
-      name: "Player 4",
-      rank: 65,
-      image:
-        "https://static.vecteezy.com/system/resources/thumbnails/005/076/598/small/cool-boy-mask-mascot-esports-logo-illustration-free-vector.jpg",
-    },
-    {
-      id: 5,
-      name: "Player 5",
-      rank: 60,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s",
-    },
-  ];
-
-  const RegisteredEvents = [
-    {
-      id: 1,
-      title: "League of Legends World Cup",
-      image:
-        "https://cdn.wccftech.com/wp-content/uploads/2019/05/LoL-1030x579.jpg",
-    },
-    {
-      id: 2,
-      title: "Minecraft Building Championship",
-      image:
-        "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a",
-    },
-    {
-      id: 3,
-      title: "Apex Legends Championship Series",
-      image:
-        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
-    },
-    {
-      id: 4,
-      title: "PUBG Mobile Global Championship 2024",
-      image:
-        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
-    },
-  ];
 
   const settings = {
     dots: false,
@@ -135,9 +81,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     ],
   };
 
-  const changeMenu = () => {
-    setActiveMenu("userRanking");
-  };
+ 
 
   const handleDelete = (userId) => {
     dispatch(deleteUser(userId));
@@ -160,19 +104,24 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       {
         label: "Total Events",
         data: [5, 7, 8, 9, 10, 11],
-        borderColor: "#A15D66",
-        backgroundColor: "#bfad9f",
+        borderColor: "yellow",
+        backgroundColor: "black",
         fill: true,
       },
       {
         label: "Active Users",
         data: [50, 55, 60, 65, 70, 75],
-        borderColor: "#69363F",
-        backgroundColor: "#c39ea5",
+        borderColor: "yellow",
+        backgroundColor: "black",
         fill: true,
       },
     ],
   };
+  
+
+  const maxWightedScore = Math.max(
+    ...topranks.map((user) => user.weightedScore)
+  );
 
   return (
     <div className="container mx-auto p-4">
@@ -202,13 +151,41 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           Analytics & Stats
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-lg font-bold">Performance Overview</h3>
-            <Line data={analyticsData} options={{ responsive: true }} />
+          <div className="bg-[#232122] p-4 rounded shadow">
+            <h3 className="text-lg text-white font-bold">Performance Overview</h3>
+            <Line
+      data={analyticsData}
+      options={{
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "white" },
+          },
+        },
+        scales: {
+          x: { ticks: { color: "white" } },
+          y: { ticks: { color: "white" } },
+        },
+      }}
+    />
           </div>
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-lg font-bold">Total Events & Active Users</h3>
-            <Line data={analyticsData} options={{ responsive: true }} />
+          <div className="bg-[#232122] p-4 rounded shadow">
+            <h3 className="text-lg text-white font-bold">Total Events & Active Users</h3>
+            <Line
+      data={analyticsData}
+      options={{
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "white" },
+          },
+        },
+        scales: {
+          x: { ticks: { color: "white" } },
+          y: { ticks: { color: "white" } },
+        },
+      }}
+    />
           </div>
         </div>
       </div>
@@ -233,7 +210,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
               <Link
                 to={`/eventadmin/${event?._id}`}
                 key={event._id}
-                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px] hover:scale-105 transition duration-200"
               >
                 <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
                   <img
@@ -241,10 +218,12 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                     alt={event.title}
                     className="h-60 w-full object-cover rounded"
                   />
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <div>
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
                     <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                       {event.title}
                     </h3>
+                  </div>
                   </div>
                 </div>
               </Link>
@@ -266,13 +245,13 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
+                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full hover:scale-105 transition duration-200 ">
                   <img
                     src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                     alt={event.title}
-                    className="h-60 w-full object-cover rounded"
+                    className="h-60 w-full object-cover rounded "
                   />
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
                     <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                       {event.title}
                     </h3>
@@ -299,48 +278,54 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             User Rankings
           </h2>
           <ul>
-            {rankings.slice(0, 5).map((user) => (
-              <li key={user.id} className="flex items-center mb-4">
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div className="flex-1">
-                  <p
-                    className={`font-bold lg:text-lg sm:text-base ${
-                      dark
-                        ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                        : "text-white"
-                    } `}
-                  >
-                    {user.name}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <p
-                      className={`text-sm ${
-                        dark
-                          ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                          : "text-[#D3D3D3]"
-                      } `}
-                    >
-                      Rank: {user.rank}
-                    </p>
-                    <div className="w-full bg-gray-200 h-2 rounded">
-                      <div
-                        className={`h-2 rounded ${
-                          dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
-                        } `}
-                        style={{ width: `${user.rank}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
+            {topranks && topranks.length > 0
+              ? topranks.map((user, index) => {
+                  const progress =
+                    (user?.weightedScore / maxWightedScore) * 100;
+                  return (
+                    <li key={user.id} className="flex items-center mb-4">
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full mr-4 object-cover"
+                      />
+                      <div className="flex-1">
+                        <p
+                          className={`font-bold lg:text-lg sm:text-base ${
+                            dark
+                              ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                              : "text-white"
+                          } `}
+                        >
+                          {user?.userProfile?.fullName}
+                        </p>
+                        <div className="flex items-center space-x-2">
+                          <p
+                            className={`text-sm ${
+                              dark
+                                ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                                : "text-[#D3D3D3]"
+                            } `}
+                          >
+                            Rank: {index + 1}
+                          </p>
+                          <div className="w-full bg-gray-200 h-2 rounded">
+                            <div
+                              className={`h-2 rounded ${
+                                dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                              } `}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
           </ul>
           <Link
-            onClick={changeMenu}
+            to="/dashboard/allranking"
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
                 ? "bg-[#4f463f] hover:bg-[#8b796b]"
@@ -368,7 +353,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </h2>
           <Link
             to="/dashboard/users"
-            className={`hover:underline text-sm ${
+            className={`hover:scale-125 text-sm ${
               dark
                 ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
                 : "text-white"
@@ -378,9 +363,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </Link>
         </div>
         <div className="overflow-x-auto sm:overflow-x-hidden">
-          <table className="min-w-full bg-white rounded shadow">
+          <table className="min-w-full bg-[#232122] rounded shadow text-white">
             <thead>
-              <tr>
+              <tr className="bg-[#2c2c2c] ">
                 <th className="p-2 text-left">Name</th>
                 <th className="p-2 text-left">Email</th>
                 <th className="p-2 text-left">Role</th>
@@ -390,7 +375,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 <th className="p-2 text-left">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="border-[#393939] hover:bg-[#3a3a3a] transition duration-300">
               {users.slice(0, 3).map((user) => (
                 <tr key={user?._id}>
                   <td className="p-2">{user?.name}</td>
@@ -402,7 +387,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   <td className="p-2">
                     <button
                       onClick={() => handleProfileView(user?.userId)}
-                      className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
+                      className="bg-[#be9929] hover:bg-[#838025] text-white py-1 px-4 rounded mr-2"
                     >
                       View Profile
                     </button>
@@ -417,7 +402,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   </td>
                   <td className="p-2">
                     <button
-                      className="bg-[#302B27] text-white py-1 px-4 rounded"
+                      className="bg-[#cf2c2c] hover:bg-[#aa2a2a] text-white py-1 px-4 rounded"
                       onClick={() => handleDelete(user?.userId)}
                     >
                       Delete
