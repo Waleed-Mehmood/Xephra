@@ -50,7 +50,7 @@ const Users = () => {
   return (
     <div style={{ backgroundImage: "url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')" }} className="min-h-screen p-6 bg-cover">
       {/* Header Section */}
-      <div className="bg-[#232122] rounded-lg shadow-lg p-8 mb-8">
+      <div className="bg-[#854951] rounded-lg shadow-lg p-8 mb-8">
         <h1 className="text-3xl lg:text-4xl font-extrabold text-white text-center mb-4">
           User Management
         </h1>
@@ -68,7 +68,7 @@ const Users = () => {
         ) : (
           <table className="w-full border-collapse text-white">
             <thead className="bg-[#854951]">
-              <tr className="bg-[#393939]">
+              <tr>
                 <th className="text-white font-medium text-sm lg:text-base p-4 text-left">
                   Name
                 </th>
@@ -111,7 +111,7 @@ const Users = () => {
                     {new Date(user?.createdAt).toLocaleDateString()}
                   </td>
                   <td className="p-4 text-gray-100 text-sm lg:text-base">
-                    <button  onClick={()=>handleProfileView(user?.userId)} className="bg-[#be9929] hover:bg-[#838025] text-white py-2 px-4 rounded-lg text-xs lg:text-sm font-semibold mr-2 transition duration-300">
+                    <button  onClick={()=>handleProfileView(user?.userId)} className="bg-[#be9929] hover:bg-[#bbb633] text-white py-2 px-4 rounded-lg text-xs lg:text-sm font-semibold mr-2 transition duration-300">
                       View Profile
                     </button>
                   </td>

@@ -131,7 +131,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           <h1 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
             Welcome Admin!
           </h1>
-          <h2 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-l from-[#8a6e3b] via-[#d1a759] to-[#ffecb2] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
+          <h2 className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl ${dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]" : "text-white"}`}>
             Manage and Monitor all the Gaming Events and Rankings Efficiently.
           </h2>
         </div>
@@ -139,7 +139,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* Analytics & Stats Dashboard Section */}
       <div
-        className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm`}
+        className={`p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -194,7 +194,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div
-          className={`col-span-12 lg:col-span-9 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
+          className={`col-span-12 lg:col-span-9 backdrop-blur-sm p-4 rounded shadow-2xl shadow-gray-950 ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -230,7 +230,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             ))}
           </Slider>
           <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-6 ${
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mt-2 mb-4 ${
               dark
                 ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
                 : "text-white"
@@ -305,7 +305,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                               dark
                                 ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
                                 : "text-[#D3D3D3]"
-                            } `}
+                            }`}
                           >
                             Rank: {index + 1}
                           </p>
@@ -328,8 +328,8 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             to="/dashboard/allranking"
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
-                ? "bg-[#4f463f] hover:bg-[#8b796b]"
-                : "bg-[#854951] hover:bg-[#A15D66]"
+                ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"
+                : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#854951]"
             }  `}
           >
             See All
@@ -339,7 +339,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* User Management Section */}
       <div
-        className={`mt-8 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
+        className={`mt-8 backdrop-blur-sm p-4 rounded shadow-2xl shadow-gray-950 ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
       >
         <div className="flex justify-between items-center mb-4">
           <h2
@@ -353,7 +353,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </h2>
           <Link
             to="/dashboard/users"
-            className={`hover:scale-125 text-sm ${
+            className={`text-sm ${
               dark
                 ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
                 : "text-white"
@@ -387,7 +387,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   <td className="p-2">
                     <button
                       onClick={() => handleProfileView(user?.userId)}
-                      className="bg-[#be9929] hover:bg-[#838025] text-white py-1 px-4 rounded mr-2"
+                      className="bg-[#be9929] hover:bg-[#99952a] text-white py-1 px-4 rounded mr-2"
                     >
                       View Profile
                     </button>

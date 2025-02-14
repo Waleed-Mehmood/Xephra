@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchHostedTournaments } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 
-const RankingApproval = () => {
+const RankingApproval = ({dark}) => {
   const dispatch = useDispatch();
     const { hostedEvents, loading, error } = useSelector((state) => state.events);
   
@@ -18,7 +18,9 @@ const RankingApproval = () => {
 
   return (
     <div 
-      className="p-6 bg-cover bg-center min-h-screen rounded-xl shadow-2xl shadow-gray-950 backdrop-blur-sm"
+      className={`p-6 bg-cover bg-center min-h-screen rounded-xl shadow-2xl shadow-gray-950 backdrop-blur-sm  ${
+        dark
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}
     >
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center font-['Press_Start_2P'] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">Admin Approval Panel</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">

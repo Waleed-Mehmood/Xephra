@@ -52,7 +52,9 @@ const CompletedEvents = ({ dark }) => {
             {/* User Ranking Button */}
               <Link
               to={`/dashboard/tournamentrankings/${_id}`}
-              className="mt-4 inline-block bg-[#8f404f] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#69363F] hover:scale-105"
+              className={`mt-4 inline-block px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#69363F] hover:scale-105 ${
+                dark
+                  ? "bg-[#8f404f] text-white hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]":"bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#69363f] text-white hover:text-black"}`}
             >
               Users Ranking
             </Link>

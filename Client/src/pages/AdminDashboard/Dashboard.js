@@ -54,10 +54,10 @@ function Sidebar({ onMenuClick, dark }) {
       </ul>
       <div className="px-6 my-6">
         <button
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? " active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
+              : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
           }`}
         >
           Chat System
@@ -70,7 +70,7 @@ function Sidebar({ onMenuClick, dark }) {
           className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
               ? "bg-[#854951] active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              : "text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
           <TbLogout2
