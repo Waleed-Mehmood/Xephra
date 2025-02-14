@@ -181,7 +181,7 @@ const UserProfile = ({ dark, profile }) => {
     <>
     
       <div>
-        <div className={dark ? "bg-gradient-to-r from-[#3e2027] to-[#2e1c20] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4" : "bg-[#232122] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4"}>
+        <div className={dark ? "bg-[#69363F] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4" : "bg-[#232122] p-4 rounded-2xl gap-4 shadow-lg mb-2 sm:m-4"}>
           <div className="flex flex-col items-end gap-0">
             <h1 className="text-xl text-[#D4AD66]">Rank : 12</h1>
             <h2 className=" text-[#D4AD66]">Score: 12</h2>
