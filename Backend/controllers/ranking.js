@@ -254,7 +254,39 @@ exports.getRegisteredUsersAndRankings = async (req, res) => {
       error,
     });
   }
-};
+
+}
+
+
+exports.getTopRanking= async (req, res) => {
+  try {
+    // Get top 5 users based on weightedScore in descending order
+    const topUsersStats = await UserEventStats.find()
+        .sort({ weightedScore: -1 })
+        .limit(5);
+    
+    // Extract user IDs
+    const userIds = topUsersStats.map(stats => stats.userId);
+    
+    // Fetch user profiles using userIds
+    const userProfiles = await UserProfile.find({ userId: { $in: userIds } });
+    
+    // Create a mixed response combining stats and profiles
+    const mixedData = topUsersStats.map(stats => {
+        const userProfile = userProfiles.find(profile => profile.userId.toString() === stats.userId.toString());
+        return { ...stats.toObject(), userProfile };
+    });
+    
+    res.status(200).json({
+      mixedData
+    });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+}
+}
+  
+
 
 exports.getAllUsersRanking = async (req, res) => {
   try {
@@ -290,3 +322,4 @@ exports.getAllUsersRanking = async (req, res) => {
     });
   }
 };
+
