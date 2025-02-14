@@ -1,4 +1,5 @@
 const express = require("express");
+const moment = require("moment");
 const Events = require("../models/Events");
 const path = require("path");
 const Profile = require("../models/AdminProfile");
@@ -376,3 +377,64 @@ exports.getEventSubmissions = async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
+
+exports.getTotalEventAndUsers = async (req, res) => {
+  try {
+    // Get the last 12 months from the current date
+    const last12Months = [...Array(12)].map((_, i) =>
+      moment().subtract(i, "months").format("MMMM") // "January", "February", etc.
+    ).reverse(); // Reverse to get them in order from oldest to latest
+
+    // Function to aggregate counts by month
+    const aggregateByMonth = async (Model) => {
+      return await Model.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: moment().subtract(12, "months").toDate(), // Last 12 months
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $month: "$createdAt" }, // Group by month number (1-12)
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: 1 }, // Sort by month number
+        },
+      ]);
+    };
+
+    // Fetch aggregated data
+    const eventsData = await aggregateByMonth(Events);
+    const usersData = await aggregateByMonth(User);
+
+    // Convert MongoDB month numbers to full month names
+    const monthMap = {};
+    last12Months.forEach((month, index) => {
+      monthMap[index + 1] = month;
+    });
+
+    // Map results into structured arrays
+    const formatData = (data) => {
+      return last12Months.map((month, i) => {
+        const entry = data.find((item) => item._id === i + 1);
+        return entry ? entry.count : 0;
+      });
+    };
+
+    res.status(200).json({
+      labels: last12Months,
+      totalEvents: formatData(eventsData),
+      totalUsers: formatData(usersData),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+};
+
+
+
