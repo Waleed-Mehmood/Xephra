@@ -150,12 +150,12 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           Analytics & Stats
         </h2>
         <div className="w-full flex justify-center">
-          <div className="w-full max-w-screen-xl grid grid-cols-1 md:grid-cols-1 gap-6">
-            <div className="bg-[#232122] p-4 rounded shadow w-full">
+          <div className="w-full max-w-screen-xl grid grid-cols-1 md:grid-cols-1 gap-6 h-[300px]">
+            <div className="bg-[#232122] p-4 rounded shadow w-full h-[100%]">
               <h3 className="text-lg text-white font-bold">
                 Total Events & Active Users
               </h3>
-              <div className="w-full">
+              <div className="w-full h-[250px]">
                 <Line
                   data={analyticsData}
                   options={{
