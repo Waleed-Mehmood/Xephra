@@ -10,6 +10,8 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement,
+  BarElement,
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
@@ -21,6 +23,7 @@ import {
 } from "../../redux/features/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
+import { getTopRanking } from "../../redux/features/rankingSlice";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -28,6 +31,8 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  ArcElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
@@ -37,77 +42,15 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
   const { events } = useSelector((state) => state.events);
   const { users, profile } = useSelector((state) => state.profile);
+  const { topranks } = useSelector((state) => state.ranking);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllUsers());
+    dispatch(getTopRanking());
   }, []);
 
-  const rankings = [
-    {
-      id: 1,
-      name: "Player 1",
-      rank: 90,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQklBSe2monSAS1cBms7tDarsAdheQa0J-9Ow&s",
-    },
-    {
-      id: 2,
-      name: "Player 2",
-      rank: 80,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH9aDM4CsWt5f1we4gCSHvQQzDKcs924yZ8IhkCVldVQI3Lt6vAWDDOlerW3SswqIBrI&usqp=CAU",
-    },
-    {
-      id: 3,
-      name: "Player 3",
-      rank: 70,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvXcLBAnNaG9u_juSWT6vyOeW1Q3N3xh0QWA&s",
-    },
-    {
-      id: 4,
-      name: "Player 4",
-      rank: 65,
-      image:
-        "https://static.vecteezy.com/system/resources/thumbnails/005/076/598/small/cool-boy-mask-mascot-esports-logo-illustration-free-vector.jpg",
-    },
-    {
-      id: 5,
-      name: "Player 5",
-      rank: 60,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s",
-    },
-  ];
-
-  const RegisteredEvents = [
-    {
-      id: 1,
-      title: "League of Legends World Cup",
-      image:
-        "https://cdn.wccftech.com/wp-content/uploads/2019/05/LoL-1030x579.jpg",
-    },
-    {
-      id: 2,
-      title: "Minecraft Building Championship",
-      image:
-        "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000964/a28a81253e919298beab2295e39a56b7a5140ef15abdb56135655e5c221b2a3a",
-    },
-    {
-      id: 3,
-      title: "Apex Legends Championship Series",
-      image:
-        "https://ineqe.com/wp-content/uploads/2022/05/apex-media-news-saviors-patch-keyart.jpg.adapt_.crop16x9.431p.jpg",
-    },
-    {
-      id: 4,
-      title: "PUBG Mobile Global Championship 2024",
-      image:
-        "https://i.haberglobal.com.tr/rcman/Cw1230h692q95gm/storage/files/images/2024/08/13/pubg-nedir-pubg-kapaniyor-mu-robloxtan-sonra-sira-pubg-mobileda-mi-omv6.jpg",
-    },
-  ];
 
   const settings = {
     dots: false,
@@ -135,9 +78,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     ],
   };
 
-  const changeMenu = () => {
-    setActiveMenu("userRanking");
-  };
+ 
 
   const handleDelete = (userId) => {
     dispatch(deleteUser(userId));
@@ -173,6 +114,10 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       },
     ],
   };
+
+  const maxWightedScore = Math.max(
+    ...topranks.map((user) => user.weightedScore)
+  );
 
   return (
     <div className="container mx-auto p-4">
@@ -299,48 +244,54 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             User Rankings
           </h2>
           <ul>
-            {rankings.slice(0, 5).map((user) => (
-              <li key={user.id} className="flex items-center mb-4">
-                <img
-                  src={user.image}
-                  alt={user.name}
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div className="flex-1">
-                  <p
-                    className={`font-bold lg:text-lg sm:text-base ${
-                      dark
-                        ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                        : "text-white"
-                    } `}
-                  >
-                    {user.name}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <p
-                      className={`text-sm ${
-                        dark
-                          ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                          : "text-[#D3D3D3]"
-                      } `}
-                    >
-                      Rank: {user.rank}
-                    </p>
-                    <div className="w-full bg-gray-200 h-2 rounded">
-                      <div
-                        className={`h-2 rounded ${
-                          dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
-                        } `}
-                        style={{ width: `${user.rank}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
+            {topranks && topranks.length > 0
+              ? topranks.map((user, index) => {
+                  const progress =
+                    (user?.weightedScore / maxWightedScore) * 100;
+                  return (
+                    <li key={user.id} className="flex items-center mb-4">
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full mr-4 object-cover"
+                      />
+                      <div className="flex-1">
+                        <p
+                          className={`font-bold lg:text-lg sm:text-base ${
+                            dark
+                              ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                              : "text-white"
+                          } `}
+                        >
+                          {user?.userProfile?.fullName}
+                        </p>
+                        <div className="flex items-center space-x-2">
+                          <p
+                            className={`text-sm ${
+                              dark
+                                ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                                : "text-[#D3D3D3]"
+                            } `}
+                          >
+                            Rank: {index + 1}
+                          </p>
+                          <div className="w-full bg-gray-200 h-2 rounded">
+                            <div
+                              className={`h-2 rounded ${
+                                dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                              } `}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
           </ul>
           <Link
-            onClick={changeMenu}
+            to="/dashboard/allranking"
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
                 ? "bg-[#4f463f] hover:bg-[#8b796b]"

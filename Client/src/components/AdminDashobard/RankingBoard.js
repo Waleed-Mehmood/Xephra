@@ -33,7 +33,6 @@ const RankingBoard = ({ dark }) => {
   useEffect(() => {
     dispatch(getTopRanking());
   }, [dispatch]);
-  // console.log("top ranks", topranks);
 
 
   const barChartData = {
@@ -109,7 +108,6 @@ const RankingBoard = ({ dark }) => {
               ? topranks.map((user, index) => {
                   const progress =
                     (user?.weightedScore / maxWightedScore) * 100;
-                  console.log("progress", progress);
                   return (
                     <div
                       key={index}
@@ -146,39 +144,7 @@ const RankingBoard = ({ dark }) => {
                 })
               : "Currently we don't have top 5 players"}
 
-            {/* {users.map((user, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between border-b py-4 border-[#854951]"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-[#F7E8E8] rounded-full">
-                    <span className="text-base lg:text-lg font-bold text-[#854951]">
-                      #{user.rank}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="text-sm lg:text-lg font-medium">
-                      {user.name}
-                    </h3>
-                    <p className="text-xs lg:text-sm text-[#622D37]">
-                      Score: {user.score}
-                    </p>
-                  </div>
-                </div>
-                <div className="w-16">
-                  <Doughnut
-                    data={doughnutData(user.progress)}
-                    options={{
-                      cutout: "80%",
-                      plugins: {
-                        tooltip: { enabled: false },
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-            ))} */}
+        
           </div>
         </div>
 

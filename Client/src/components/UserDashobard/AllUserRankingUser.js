@@ -26,7 +26,7 @@ ChartJS.register(
   BarElement
 );
 
-const AllUserRankingBoard = ({ dark }) => {
+const AllUserRankingUser = ({ dark }) => {
   const dispatch = useDispatch();
   const { users, loading, error } = useSelector((state) => state.ranking);
   const { profile } = useSelector((state) => state.profile);
@@ -137,4 +137,4 @@ const AllUserRankingBoard = ({ dark }) => {
   );
 };
 
-export default AllUserRankingBoard;
+export default AllUserRankingUser;
