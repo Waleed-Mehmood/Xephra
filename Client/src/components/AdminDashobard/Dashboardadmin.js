@@ -10,10 +10,9 @@ import {
   Title,
   Tooltip,
   Legend,
-  Colors ,
+  Colors,
   ArcElement,
   BarElement,
-
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
@@ -26,6 +25,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
 import { getTopRanking } from "../../redux/features/rankingSlice";
+import { gettotaluserandevents } from "../../redux/features/profileSlice";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -46,14 +46,15 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const { events } = useSelector((state) => state.events);
   const { users, profile } = useSelector((state) => state.profile);
   const { topranks } = useSelector((state) => state.ranking);
+  const { userCount, eventCount } = useSelector((state) => state.profile);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllUsers());
     dispatch(getTopRanking());
+    dispatch(gettotaluserandevents());
   }, []);
-
 
   const settings = {
     dots: false,
@@ -81,8 +82,6 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     ],
   };
 
- 
-
   const handleDelete = (userId) => {
     dispatch(deleteUser(userId));
   };
@@ -103,21 +102,21 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     datasets: [
       {
         label: "Total Events",
-        data: [5, 7, 8, 9, 10, 11],
+        data:
+          eventCount.length > 0 ? eventCount.slice(0, 6) : [0, 0, 0, 0, 0, 0],
         borderColor: "yellow",
         backgroundColor: "black",
         fill: true,
       },
       {
         label: "Active Users",
-        data: [50, 55, 60, 65, 70, 75],
-        borderColor: "yellow",
+        data: userCount.length > 0 ? userCount.slice(0, 6) : [0, 0, 0, 0, 0, 0],
+        borderColor: "red",
         backgroundColor: "black",
         fill: true,
       },
     ],
   };
-  
 
   const maxWightedScore = Math.max(
     ...topranks.map((user) => user.weightedScore)
@@ -150,45 +149,34 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         >
           Analytics & Stats
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-[#232122] p-4 rounded shadow">
-            <h3 className="text-lg text-white font-bold">Performance Overview</h3>
-            <Line
-      data={analyticsData}
-      options={{
-        responsive: true,
-        plugins: {
-          legend: {
-            labels: { color: "white" },
-          },
-        },
-        scales: {
-          x: { ticks: { color: "white" } },
-          y: { ticks: { color: "white" } },
-        },
-      }}
-    />
-          </div>
-          <div className="bg-[#232122] p-4 rounded shadow">
-            <h3 className="text-lg text-white font-bold">Total Events & Active Users</h3>
-            <Line
-      data={analyticsData}
-      options={{
-        responsive: true,
-        plugins: {
-          legend: {
-            labels: { color: "white" },
-          },
-        },
-        scales: {
-          x: { ticks: { color: "white" } },
-          y: { ticks: { color: "white" } },
-        },
-      }}
-    />
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-screen-xl grid grid-cols-1 md:grid-cols-1 gap-6 h-[300px]">
+            <div className="bg-[#232122] p-4 rounded shadow w-full h-[100%]">
+              <h3 className="text-lg text-white font-bold">
+                Total Events & Active Users
+              </h3>
+              <div className="w-full h-[250px]">
+                <Line
+                  data={analyticsData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false, // Ensures it stretches to fit container
+                    plugins: {
+                      legend: {
+                        labels: { color: "white" },
+                      },
+                    },
+                    scales: {
+                      x: { ticks: { color: "white" } },
+                      y: { ticks: { color: "white" } },
+                    },
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
 
       {/* Main Section */}
       <div className="grid grid-cols-12 gap-6 mt-8">
@@ -202,29 +190,39 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
                 : "text-white"
             } `}
+
           >
-            Posted Events
-          </h2>
-          <Slider {...settings}>
-            {events.map((event) => (
-              <Link
-                to={`/eventadmin/${event?._id}`}
-                key={event._id}
-                className="flex-none p-1 flex flex-col h-full  min-h-[200px] hover:scale-105 transition duration-200"
-              >
-                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
-                  <img
-                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
-                    alt={event.title}
-                    className="h-60 w-full object-cover rounded"
-                  />
-                  <div>
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
-                    <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
-                      {event.title}
-                    </h3>
+            <h2
+              className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+                dark
+                  ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                  : "text-white"
+              } `}
+            >
+              Posted Events
+            </h2>
+            <Slider {...settings}>
+              {events.map((event) => (
+                <Link
+                  to={`/eventadmin/${event?._id}`}
+                  key={event._id}
+                  className="flex-none p-1 flex flex-col h-full  min-h-[200px] hover:scale-105 transition duration-200"
+                >
+                  <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
+                    <img
+                      src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                      alt={event.title}
+                      className="h-60 w-full object-cover rounded"
+                    />
+                    <div>
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
+                        <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                          {event.title}
+                        </h3>
+                      </div>
+                    </div>
                   </div>
-                  </div>
+
                 </div>
               </Link>
             ))}
@@ -256,68 +254,70 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                       {event.title}
                     </h3>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </Slider>
-        </div>
+                </Link>
+              ))}
+            </Slider>
+          </div>
 
-        {/* Rankings Section */}
-        <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${
-            dark ? "bg-[#292622e3]" : "bg-[#232122]"
-          } `}
-        >
-          <h2
-            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark
-                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                : "text-white"
+          {/* Rankings Section */}
+          <div
+            className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${
+              dark ? "bg-[#292622e3]" : "bg-[#232122]"
             } `}
           >
-            User Rankings
-          </h2>
-          <ul>
-            {topranks && topranks.length > 0
-              ? topranks.map((user, index) => {
-                  const progress =
-                    (user?.weightedScore / maxWightedScore) * 100;
-                  return (
-                    <li key={user.id} className="flex items-center mb-4">
-                      <img
-                        src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
-                        alt={user.name}
-                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                      />
-                      <div className="flex-1">
-                        <p
-                          className={`font-bold lg:text-lg sm:text-base ${
-                            dark
-                              ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                              : "text-white"
-                          } `}
-                        >
-                          {user?.userProfile?.fullName}
-                        </p>
-                        <div className="flex items-center space-x-2">
+            <h2
+              className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+                dark
+                  ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                  : "text-white"
+              } `}
+            >
+              User Rankings
+            </h2>
+            <ul>
+              {topranks && topranks.length > 0
+                ? topranks.map((user, index) => {
+                    const progress =
+                      (user?.weightedScore / maxWightedScore) * 100;
+                    return (
+                      <li key={user.id} className="flex items-center mb-4">
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                          alt={user.name}
+                          className="w-12 h-12 rounded-full mr-4 object-cover"
+                        />
+                        <div className="flex-1">
                           <p
-                            className={`text-sm ${
+                            className={`font-bold lg:text-lg sm:text-base ${
                               dark
                                 ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+
                                 : "text-[#D3D3D3]"
                             }`}
-                          >
-                            Rank: {index + 1}
+
+                            {user?.userProfile?.fullName}
                           </p>
-                          <div className="w-full bg-gray-200 h-2 rounded">
-                            <div
-                              className={`h-2 rounded ${
-                                dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                          <div className="flex items-center space-x-2">
+                            <p
+                              className={`text-sm ${
+                                dark
+                                  ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                                  : "text-[#D3D3D3]"
                               } `}
-                              style={{ width: `${progress}%` }}
-                            ></div>
+                            >
+                              Rank: {index + 1}
+                            </p>
+                            <div className="w-full bg-gray-200 h-2 rounded">
+                              <div
+                                className={`h-2 rounded ${
+                                  dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
+                                } `}
+                                style={{ width: `${progress}%` }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
+
                       </div>
                     </li>
                   );
@@ -334,8 +334,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           >
             See All
           </Link>
+
         </div>
-      </div>
+
 
       {/* User Management Section */}
       <div
@@ -409,12 +410,48 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                     </button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="border-[#393939] hover:bg-[#3a3a3a] transition duration-300">
+                {users.slice(0, 3).map((user) => (
+                  <tr key={user?._id}>
+                    <td className="p-2">{user?.name}</td>
+                    <td className="p-2">{user?.email}</td>
+                    <td className="p-2">{user?.role}</td>
+                    <td className="p-2">
+                      {new Date(user?.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="p-2">
+                      <button
+                        onClick={() => handleProfileView(user?.userId)}
+                        className="bg-[#be9929] hover:bg-[#838025] text-white py-1 px-4 rounded mr-2"
+                      >
+                        View Profile
+                      </button>
+                    </td>
+                    <td className="p-2">
+                      <button
+                        className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
+                        onClick={() => handleSuspend(user?.userId)}
+                      >
+                        {user.isSuspended ? "Unsuspend" : "Suspend"}
+                      </button>
+                    </td>
+                    <td className="p-2">
+                      <button
+                        className="bg-[#cf2c2c] hover:bg-[#aa2a2a] text-white py-1 px-4 rounded"
+                        onClick={() => handleDelete(user?.userId)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
+        <Modal isOpen={isModalOpen} onClose={closeModal} profile={profile} />
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal} profile={profile} />
     </div>
   );
 };

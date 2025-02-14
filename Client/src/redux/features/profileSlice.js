@@ -114,6 +114,18 @@ export const getUser = createAsyncThunk(
   }
 );
 
+export const gettotaluserandevents = createAsyncThunk(
+  "profile/gettotaluserandevents",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios(`${apiUrl}/admin/gettotalusersandevents`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
@@ -122,6 +134,8 @@ const profileSlice = createSlice({
     successMessage: null,
     loading: false,
     error: null,
+    userCount: [],
+    eventCount: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -219,7 +233,21 @@ const profileSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(gettotaluserandevents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(gettotaluserandevents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userCount = action.payload.totalUsers;
+        state.eventCount = action.payload.totalEvents;
+      })
+      .addCase(gettotaluserandevents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 
