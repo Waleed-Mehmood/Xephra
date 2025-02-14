@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Colors 
 } from "chart.js";
 import { Link } from "react-router-dom";
 import { getEvents } from "../../redux/features/eventsSlice";
@@ -30,7 +31,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Colors
 );
 
 const DashboardAdmin = ({ setActiveMenu, dark }) => {
@@ -160,19 +162,20 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       {
         label: "Total Events",
         data: [5, 7, 8, 9, 10, 11],
-        borderColor: "#A15D66",
-        backgroundColor: "#bfad9f",
+        borderColor: "yellow",
+        backgroundColor: "black",
         fill: true,
       },
       {
         label: "Active Users",
         data: [50, 55, 60, 65, 70, 75],
-        borderColor: "#69363F",
-        backgroundColor: "#c39ea5",
+        borderColor: "yellow",
+        backgroundColor: "black",
         fill: true,
       },
     ],
   };
+  
 
   return (
     <div className="container mx-auto p-4">
@@ -202,13 +205,41 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           Analytics & Stats
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-lg font-bold">Performance Overview</h3>
-            <Line data={analyticsData} options={{ responsive: true }} />
+          <div className="bg-[#232122] p-4 rounded shadow">
+            <h3 className="text-lg text-white font-bold">Performance Overview</h3>
+            <Line
+      data={analyticsData}
+      options={{
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "white" },
+          },
+        },
+        scales: {
+          x: { ticks: { color: "white" } },
+          y: { ticks: { color: "white" } },
+        },
+      }}
+    />
           </div>
-          <div className="bg-white p-4 rounded shadow">
-            <h3 className="text-lg font-bold">Total Events & Active Users</h3>
-            <Line data={analyticsData} options={{ responsive: true }} />
+          <div className="bg-[#232122] p-4 rounded shadow">
+            <h3 className="text-lg text-white font-bold">Total Events & Active Users</h3>
+            <Line
+      data={analyticsData}
+      options={{
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: { color: "white" },
+          },
+        },
+        scales: {
+          x: { ticks: { color: "white" } },
+          y: { ticks: { color: "white" } },
+        },
+      }}
+    />
           </div>
         </div>
       </div>
@@ -233,7 +264,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
               <Link
                 to={`/eventadmin/${event?._id}`}
                 key={event._id}
-                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px] hover:scale-105 transition duration-200"
               >
                 <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
                   <img
@@ -241,10 +272,12 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                     alt={event.title}
                     className="h-60 w-full object-cover rounded"
                   />
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <div>
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
                     <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                       {event.title}
                     </h3>
+                  </div>
                   </div>
                 </div>
               </Link>
@@ -266,13 +299,13 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
+                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full hover:scale-105 transition duration-200 ">
                   <img
                     src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                     alt={event.title}
-                    className="h-60 w-full object-cover rounded"
+                    className="h-60 w-full object-cover rounded "
                   />
-                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
                     <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                       {event.title}
                     </h3>
@@ -368,7 +401,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </h2>
           <Link
             to="/dashboard/users"
-            className={`hover:underline text-sm ${
+            className={`hover:scale-125 text-sm ${
               dark
                 ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
                 : "text-white"
@@ -378,9 +411,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </Link>
         </div>
         <div className="overflow-x-auto sm:overflow-x-hidden">
-          <table className="min-w-full bg-white rounded shadow">
+          <table className="min-w-full bg-[#232122] rounded shadow text-white">
             <thead>
-              <tr>
+              <tr className="bg-[#2c2c2c] ">
                 <th className="p-2 text-left">Name</th>
                 <th className="p-2 text-left">Email</th>
                 <th className="p-2 text-left">Role</th>
@@ -390,7 +423,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 <th className="p-2 text-left">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="border-[#393939] hover:bg-[#3a3a3a] transition duration-300">
               {users.slice(0, 3).map((user) => (
                 <tr key={user?._id}>
                   <td className="p-2">{user?.name}</td>
@@ -402,7 +435,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   <td className="p-2">
                     <button
                       onClick={() => handleProfileView(user?.userId)}
-                      className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
+                      className="bg-[#be9929] hover:bg-[#838025] text-white py-1 px-4 rounded mr-2"
                     >
                       View Profile
                     </button>
@@ -417,7 +450,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   </td>
                   <td className="p-2">
                     <button
-                      className="bg-[#302B27] text-white py-1 px-4 rounded"
+                      className="bg-[#cf2c2c] hover:bg-[#aa2a2a] text-white py-1 px-4 rounded"
                       onClick={() => handleDelete(user?.userId)}
                     >
                       Delete

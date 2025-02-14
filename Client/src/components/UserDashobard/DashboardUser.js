@@ -162,7 +162,7 @@ const DashboardUser = ({ dark }) => {
                     key={event._id}
                     className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
                   >
-                    <div className="relative rounded-lg shadow-lg overflow-hidden h-full min-h-[200px]">
+                    <div className="relative rounded-lg shadow-lg overflow-hidden h-full min-h-[200px]  hover:scale-105 transition duration-200">
                       {/* Image as background */}
                       <img
                         src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
@@ -171,7 +171,7 @@ const DashboardUser = ({ dark }) => {
                       />
 
                       {/* Title overlay */}
-                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t  from-black/100 to-[#00000020] p-3">
                         <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                           {event?.title}
                         </h3>
@@ -205,7 +205,7 @@ const DashboardUser = ({ dark }) => {
                   >
                     <div
                       key={event?.eventId?.id}
-                      className="relative rounded-lg shadow flex flex-col h-full min-h-[200px]"
+                      className="relative rounded-lg shadow flex flex-col h-full min-h-[200px]  hover:scale-105 transition duration-200"
                     >
                       {/* Image as background */}
                       <img
@@ -215,7 +215,7 @@ const DashboardUser = ({ dark }) => {
                       />
 
                       {/* Title overlay */}
-                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                      <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t  from-black/100 to-[#00000020] p-3">
                         <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
                           {event?.eventId?.title}
                         </h3>

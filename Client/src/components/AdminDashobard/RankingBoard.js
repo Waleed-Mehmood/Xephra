@@ -1,4 +1,4 @@
-import React from "react";
+import {React, useEffect} from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -10,7 +10,9 @@ import {
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
-import {Link} from 'react-router-dom';
+
+
+
 // Register the required Chart.js components
 ChartJS.register(
   ArcElement,
@@ -22,6 +24,7 @@ ChartJS.register(
 );
 
 const RankingBoard = ({ dark }) => {
+
   const users = [
     { name: "Player1", rank: 1, score: 920, progress: 85 },
     { name: "Player2", rank: 2, score: 870, progress: 75 },
@@ -88,11 +91,6 @@ const RankingBoard = ({ dark }) => {
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
             Top Players
           </h2>
-          <div className="flex justify-end">
-            <Link to="/dashboard/allranking" >
-              See All
-            </Link>
-          </div>
           <div>
             {users.map((user, index) => (
               <div
