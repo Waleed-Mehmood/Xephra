@@ -93,7 +93,9 @@ const RankingBoard = ({ dark }) => {
   );
 
   return (
-    <div className="min-h-screen p-8 bg-[#69363f18] bg-opacity-[.06] shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm">
+    <div className={`min-h-screen p-8 shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm ${
+        dark
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}>
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">
         Ranking Board
       </h1>

@@ -25,6 +25,7 @@ const CompletedEvents = ({ dark }) => {
     description,
     image,
     prizePool,
+    dark
   }) => {
   
     const imageUrl = `${process.env.REACT_APP_BACKEND}/${image}`;
@@ -52,7 +53,9 @@ const CompletedEvents = ({ dark }) => {
           {/* User Ranking Button */}
             <Link
             to={`/userdashboard/tournamentrankings/${_id}`}
-            className="mt-4 inline-block bg-[#8f404f] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#69363F] hover:scale-105"
+            className={`mt-4 inline-block px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:scale-105 ${
+              dark
+                ? "bg-[#8f404f] text-white hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]":"bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#69363f] text-white hover:text-black"}`}
           >
             Users Ranking
           </Link>
@@ -73,7 +76,7 @@ const CompletedEvents = ({ dark }) => {
 
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {hostedEvents.map((tournament) => (
-          <TournamentCard key={tournament._id} {...tournament} />
+          <TournamentCard key={tournament._id} {...tournament} dark={dark} />
         ))}
       </div>
     </div>
