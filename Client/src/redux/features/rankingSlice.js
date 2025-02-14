@@ -104,7 +104,31 @@ export const declineSubmission = createAsyncThunk(
   }
 );
 
-// aysnc thunk for getting top 5 ranks
+
+// Async thunk to fetch registered users and rankings for one event
+export const fetchRegisteredUsersAndRankings = createAsyncThunk(
+  'event/fetchRegisteredUsersAndRankings',
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/rank/event/${eventId}/participants`);
+      return response.data.result; 
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : error.message);
+    }
+  }
+);
+
+// Async thunk for fetching user stats
+export const fetchUserStats = createAsyncThunk('userStats/fetchUserStats', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(`${apiUrl}/rank/allusers-ranking`);  // Adjust the URL if needed
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'Something went wrong');
+  }
+});
+
+
 
 export const getTopRanking = createAsyncThunk(
   "ranking/getTopRanking",
@@ -128,6 +152,7 @@ const rankingSlice = createSlice({
     rankings: { submissions: [], users: [] },
     submissions: [],
     topranks: [],
+    users: [],
     userStats: null,
     error: null,
   },
@@ -227,6 +252,7 @@ const rankingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
       .addCase(getTopRanking.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -236,6 +262,31 @@ const rankingSlice = createSlice({
         state.topranks = action.payload;
       })
       .addCase(getTopRanking.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(fetchRegisteredUsersAndRankings.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRegisteredUsersAndRankings.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchRegisteredUsersAndRankings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchUserStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserStats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(fetchUserStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

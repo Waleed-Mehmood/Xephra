@@ -2,6 +2,7 @@ const express = require("express");
 const UserSubmission = require("../models/UserSubmission");
 const eventRankingBoard = require("../models/EventRankingBoard");
 const UserEventStats = require("../models/userEventStats");
+const Participant = require("../models/Participant");
 const UserProfile = require("../models/UserProfile");
 
 exports.postRankingApproval = async (req, res) => {
@@ -105,7 +106,9 @@ exports.assignEventRanking = async (req, res) => {
     }
 
     // Check if the user already has a ranking
-    const existingUserRank = event.rankings.find((r) => r.userId.toString() === userId);
+    const existingUserRank = event.rankings.find(
+      (r) => r.userId.toString() === userId
+    );
     let oldPoints = 0;
 
     if (existingUserRank) {
@@ -139,24 +142,25 @@ exports.assignEventRanking = async (req, res) => {
     } else {
       // Adjust user stats with new points and remove old points
       userStats.totalPoints = userStats.totalPoints - oldPoints + points;
-      userStats.weightedScore = userStats.totalPoints + 5 * userStats.totalEvents;
-      userStats.averagePoints = (userStats.totalPoints / userStats.totalEvents).toFixed(2);
+      userStats.weightedScore =
+        userStats.totalPoints + 5 * userStats.totalEvents;
+      userStats.averagePoints = (
+        userStats.totalPoints / userStats.totalEvents
+      ).toFixed(2);
     }
 
     await userStats.save();
 
-    let submission = await UserSubmission.findOne({userId, eventId});
+    let submission = await UserSubmission.findOne({ userId, eventId });
     submission.status = "approved";
 
     await submission.save();
-
 
     res.status(200).json({
       message: "Rank Assigned and Stats Updated Successfully",
       data: event,
       userStats,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
@@ -166,33 +170,91 @@ exports.assignEventRanking = async (req, res) => {
 // Helper function to calculate points based on rank
 function calculatePoints(rank) {
   switch (rank) {
-    case 1: return 100;
-    case 2: return 80;
-    case 3: return 60;
-    default: return 40;
+    case 1:
+      return 100;
+    case 2:
+      return 80;
+    case 3:
+      return 60;
+    default:
+      return 40;
   }
 }
 
-exports.declineRanking= async(req, res)=>{
-  const {userId, eventId} = req.body;
+exports.declineRanking = async (req, res) => {
+  const { userId, eventId } = req.body;
   try {
-    const submission = await UserSubmission.findOne({userId, eventId});
-    if(!submission){
+    const submission = await UserSubmission.findOne({ userId, eventId });
+    if (!submission) {
       return res.status(404).json({
-        message: "Submission not found"
-      })
+        message: "Submission not found",
+      });
     }
 
-    submission.status= "not approved";
+    submission.status = "not approved";
     await submission.save();
     res.status(200).json({
-      message: "not approved"
-    })
+      message: "not approved",
+    });
   } catch (error) {
     res.status(500).json({
-      error
-    })
+      error,
+    });
   }
+};
+
+exports.getRegisteredUsersAndRankings = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const participants = await Participant.find({ eventId });
+    const userIds = participants.map((participant) => participant.userId);
+
+    if (!participants.length) {
+      return res.status(404).json({
+        message: "No participants found for this event.",
+      });
+    }
+
+    const userProfiles = await UserProfile.find({
+      userId: { $in: userIds },
+    });
+
+    const EventRankingBoards = await eventRankingBoard.findOne({ eventId });
+
+    const rankingsMap = {};
+    if (EventRankingBoards) {
+      EventRankingBoards.rankings.forEach((rank) => {
+        rankingsMap[rank.userId] = {
+          rank: rank.rank,
+          score: rank.score,
+        };
+      });
+    }
+
+    const result = userProfiles.map((user) => ({
+      userId: user.userId,
+      name: user.fullName,
+      image: user.profileImage,
+      rank: rankingsMap[user.userId]?.rank || null,
+      score: rankingsMap[user.userId]?.score || null,
+    }));
+
+    result.sort((a, b) => {
+      if (a.rank === null) return 1;
+      if (b.rank === null) return -1;
+      return a.rank - b.rank;
+    });
+
+    res.status(200).json({
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+
 }
 
 
@@ -224,3 +286,40 @@ exports.getTopRanking= async (req, res) => {
 }
 }
   
+};
+
+exports.getAllUsersRanking = async (req, res) => {
+  try {
+    const statsData = await UserEventStats.find({})
+      .sort({ weightedScore: -1 })
+      .lean();
+    if (!statsData.length) {
+      return res.status(404).json({
+        message: "no users stats is found!",
+      });
+    }
+
+    const userIds = statsData.map((stat) => stat.userId);
+    const userProfles = await UserProfile.find({
+      userId: { $in: userIds },
+    }).lean();
+    
+    const result = statsData.map((stat) => {
+      const profile = userProfles.find((p) => p.userId === stat.userId);
+      return {
+        ...stat,
+        userProfile: profile || null,
+      };
+    });
+
+    res.status(200).json({
+      result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error,
+    });
+  }
+};
+

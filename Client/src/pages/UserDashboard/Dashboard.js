@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/UserDashobard/Header";
 import { menuItems } from "../../components/UserDashobard/UserMenus";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/xephra logo-01.png";
 import UserProfile from "../../components/UserDashobard/UserProfile";
 import DashboardUser from "../../components/UserDashobard/DashboardUser";
 import UpcomingEvents from "../../components/UserDashobard/UpcomingEvents";
@@ -28,7 +28,7 @@ function Sidebar({ onMenuClick, dark }) {
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
       <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5 bg-transparent">
-        <img src={logo} className="h-14 w-22 " alt="Flowbite Logo" />
+        <img src={logo} className="h-13 w-44" alt="Flowbite Logo" />
       </a>
       <ul className="mt-6">
         {menuItems.map((item, index) => (

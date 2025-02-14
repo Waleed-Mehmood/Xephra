@@ -14,6 +14,8 @@ import { getTopRanking } from "../../redux/features/rankingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../utils/Loading/Loading";
 
+import {Link} from 'react-router-dom';
+
 // Register the required Chart.js components
 ChartJS.register(
   ArcElement,
@@ -97,6 +99,11 @@ const RankingBoard = ({ dark }) => {
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
             Top Players
           </h2>
+          <div className="flex justify-end">
+            <Link to="/dashboard/allranking" >
+              See All
+            </Link>
+          </div>
           <div>
             {topranks && topranks.length > 0
               ? topranks.map((user, index) => {

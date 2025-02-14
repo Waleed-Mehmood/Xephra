@@ -17,10 +17,10 @@ import {
   getAllUsers,
   deleteUser,
   suspendUser,
-  getUser
+  getUser,
 } from "../../redux/features/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Modal from './Modal';
+import Modal from "./Modal";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -37,8 +37,8 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
   const { events } = useSelector((state) => state.events);
   const { users, profile } = useSelector((state) => state.profile);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllUsers());
@@ -145,15 +145,13 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const handleSuspend = (userId) => {
     dispatch(suspendUser(userId));
   };
- const handleProfileView = (userId) => {
-       dispatch(getUser(userId));
-       setIsModalOpen(true);
-     };
-     const closeModal = () => {
-       setIsModalOpen(false);
-     };
-   
-
+  const handleProfileView = (userId) => {
+    dispatch(getUser(userId));
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   // Chart data for Analytics & Stats
   const analyticsData = {
@@ -176,14 +174,10 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     ],
   };
 
-
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section for Admin */}
-      <div
-        className="relative bg-cover bg-center h-64"
-       
-      >
+      <div className="relative bg-cover bg-center h-64">
         <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white mt-20 ">
           <h1 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
             Welcome Admin!
@@ -194,14 +188,15 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         </div>
       </div>
 
-
       {/* Analytics & Stats Dashboard Section */}
       <div
         className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm`}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-            dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+            dark
+              ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+              : "text-white"
           }`}
         >
           Analytics & Stats
@@ -226,7 +221,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
             } `}
           >
             Posted Events
@@ -238,16 +235,16 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 key={event._id}
                 className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
               >
-               <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
+                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full">
                   <img
                     src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                     alt={event.title}
                     className="h-60 w-full object-cover rounded"
                   />
                   <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
-                  <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
-                    {event.title}
-                  </h3>
+                    <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                      {event.title}
+                    </h3>
                   </div>
                 </div>
               </Link>
@@ -255,7 +252,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </Slider>
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-6 ${
-              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
             } `}
           >
             Completed Events
@@ -273,10 +272,10 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                     alt={event.title}
                     className="h-60 w-full object-cover rounded"
                   />
-                 <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
-                 <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
-                    {event.title}
-                  </h3>
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-3">
+                    <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                      {event.title}
+                    </h3>
                   </div>
                 </div>
               </Link>
@@ -292,7 +291,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         >
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
-              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
             } `}
           >
             User Rankings
@@ -308,7 +309,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                 <div className="flex-1">
                   <p
                     className={`font-bold lg:text-lg sm:text-base ${
-                      dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+                      dark
+                        ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                        : "text-white"
                     } `}
                   >
                     {user.name}
@@ -316,7 +319,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   <div className="flex items-center space-x-2">
                     <p
                       className={`text-sm ${
-                        dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-[#D3D3D3]"
+                        dark
+                          ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                          : "text-[#D3D3D3]"
                       } `}
                     >
                       Rank: {user.rank}
@@ -354,7 +359,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         <div className="flex justify-between items-center mb-4">
           <h2
             className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${
-              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent" : "text-white"
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
             }`}
           >
             Manage Users
@@ -362,7 +369,9 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           <Link
             to="/dashboard/users"
             className={`hover:underline text-sm ${
-              dark ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]" : "text-white"
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
+                : "text-white"
             }`}
           >
             See All
@@ -392,13 +401,11 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                   </td>
                   <td className="p-2">
                     <button
-                    onClick={()=>handleProfileView(user?.userId)}
+                      onClick={() => handleProfileView(user?.userId)}
                       className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
-                     
                     >
-                     View Profile
+                      View Profile
                     </button>
-                   
                   </td>
                   <td className="p-2">
                     <button
@@ -407,10 +414,8 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                     >
                       {user.isSuspended ? "Unsuspend" : "Suspend"}
                     </button>
-                  
                   </td>
                   <td className="p-2">
-                    
                     <button
                       className="bg-[#302B27] text-white py-1 px-4 rounded"
                       onClick={() => handleDelete(user?.userId)}
@@ -425,7 +430,6 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal} profile={profile} />
-
     </div>
   );
 };

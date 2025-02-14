@@ -54,7 +54,7 @@ const RegisteredEvents = ({ dark }) => {
     <div
       className={`mx-auto py-10 px-4 rounded-lg min-h-full  bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm`}
     >
-      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent py-6 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] ">
+      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] ">
         REGISTERED EVENTS
       </h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

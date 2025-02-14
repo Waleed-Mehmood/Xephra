@@ -49,7 +49,7 @@ exports.newEvent = async (req, res) => {
 
 exports.postedEvents = async (req, res) => {
   try {
-    const events = await Events.find({hosted: false});
+    const events = await Events.find({ hosted: false });
     res.status(200).json({ events });
   } catch (error) {
     console.log(error);
@@ -60,12 +60,16 @@ exports.postedEvents = async (req, res) => {
 exports.deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
+    const deletedParticipants = await Participant.deleteMany({ eventId: id });
+
     const deletedEvent = await Events.findByIdAndDelete(id);
+
     if (!deletedEvent) {
       re.status(404).json({
         message: "Event not found!",
       });
     }
+
     res
       .status(200)
       .json({ message: "Event deleted successfully", event: deletedEvent });
@@ -320,7 +324,6 @@ exports.getEventAndUsers = async (req, res) => {
   }
 };
 
-
 // Controller to mark an event as hosted
 exports.markEventAsHosted = async (req, res) => {
   try {
@@ -342,34 +345,34 @@ exports.markEventAsHosted = async (req, res) => {
   }
 };
 
-
 exports.getEventSubmissions = async (req, res) => {
-    try {
-        const { eventId } = req.params;
+  try {
+    const { eventId } = req.params;
 
-        // 1. Fetch all submissions for the given event ID
-        const submissions = await UserSubmission.find({ eventId });
+    // 1. Fetch all submissions for the given event ID
+    const submissions = await UserSubmission.find({ eventId });
 
-        if (submissions.length === 0) {
-            return res.status(404).json({ message: "No submissions found for this event." });
-        }
-
-        // 2. Extract unique user IDs from submissions
-        const userIds = [...new Set(submissions.map(sub => sub.userId))];
-        console.log("userIds:", userIds);
-
-        // 3. Fetch user profiles using `userId` (string) from the User collection
-        const users = await UserProfile.find({ userId: { $in: userIds } });
-
-        res.json({
-            eventId,
-            totalSubmissions: submissions.length,
-            submissions,
-            users
-        });
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Server Error", error: error.message });
+    if (submissions.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No submissions found for this event." });
     }
+
+    // 2. Extract unique user IDs from submissions
+    const userIds = [...new Set(submissions.map((sub) => sub.userId))];
+    console.log("userIds:", userIds);
+
+    // 3. Fetch user profiles using `userId` (string) from the User collection
+    const users = await UserProfile.find({ userId: { $in: userIds } });
+
+    res.json({
+      eventId,
+      totalSubmissions: submissions.length,
+      submissions,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
 };

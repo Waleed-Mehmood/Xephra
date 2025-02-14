@@ -54,33 +54,6 @@ const TournamentRankings = () => {
     setIsModalOpen(false);
   };
 
-    const handleEdit = (user) => {
-    setEditData(user);
-    setIsEditModalOpen(true);
-  };
-
-  const handleChange = (e) => {
-    setEditData({ ...editData, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = (user) => {
-    setIsEditModalOpen(false);
-    setEditData(null);
-    const rankingData = {
-      userId: user.userId,
-      eventId: eventId,
-      newRank: Number(user.rank),
-      score: user.score,
-    };
-    dispatch(assignEventRanking(rankingData));
-    setLoadAfterSave(!loadAfterSave)
-  };
-
-  const handleCloseModal = () => {
-    setIsEditModalOpen(false);
-    setEditData(null);
-  };
-
   if (!event) {
     return (
       <div className="text-center text-white bg-[#232122] py-16">
@@ -151,68 +124,9 @@ const TournamentRankings = () => {
                       >
                         View Profile
                       </button>
-                      <button
-                      className="ml-2 bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                      onClick={() => handleEdit(user)}
-                    >
-                      Edit
-                    </button>
                     </td>
                   </tr>
                 ))}
-                {/* Modal for Edit User */}
-                    {isEditModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 sm:p-6">
-                      <div className="bg-[#232122] p-6 rounded-lg shadow-lg w-full sm:w-3/4 md:w-1/2 lg:w-1/3 max-w-full overflow-y-auto max-h-[90vh]">
-                        <h2 className="text-xl font-bold mb-4 text-white text-center">
-                          Edit Player
-                        </h2>
-                        <form>
-                          <div className="mb-4">
-                            <label className="block text-sm font-medium mb-2 text-white">
-                              Rank
-                            </label>
-                            <input
-                              type="number"
-                              name="rank"
-                              value={editData.rank}
-                              onChange={handleChange}
-                              className="w-full p-2 border-none rounded-md bg-[#393939] text-white"
-                            />
-                          </div>
-                          <div className="mb-4">
-                            <label className="block text-sm font-medium mb-2 text-white">
-                              Score
-                            </label>
-                            <input
-                              type="number"
-                              name="score"
-                              value={editData.score}
-                              onChange={handleChange}
-                              className="w-full p-2 border-none rounded-md bg-[#393939] text-white"
-                            />
-                          </div>
-
-                          <div className="flex justify-end space-x-4">
-                            <button
-                              type="button"
-                              onClick={() => handleSave(editData)}
-                              className="bg-green-500 text-white px-4 py-2 rounded w-full sm:w-auto"
-                            >
-                              Save
-                            </button>
-                            <button
-                              type="button"
-                              onClick={handleCloseModal}
-                              className="bg-gray-500 text-white px-4 py-2 rounded w-full sm:w-auto"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  )}
               </tbody>
             </table>
           ) : (
