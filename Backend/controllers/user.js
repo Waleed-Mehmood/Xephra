@@ -320,3 +320,19 @@ exports.getHostedEvents = async (req, res) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+
+exports.getProfileExisting = async (req, res)=>{
+  try {
+    const { userId } = req.params;
+    const userProfile = await UserProfile.findOne({ userId });
+
+    if (userProfile) {
+      return res.json({ exists: true });
+    } else {
+      return res.json({ exists: false });
+    }
+
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}

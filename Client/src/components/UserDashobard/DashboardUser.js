@@ -5,14 +5,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { getEvents, getEventsByUserId } from "../../redux/features/eventsSlice";
 import Loading from "../../utils/Loading/Loading";
 import { getTopRanking } from "../../redux/features/rankingSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { checkUserProfile } from "../../redux/features/userSlice";
 
 const DashboardUser = ({ dark }) => {
   const dispatch = useDispatch();
   const { loading, events, event, participants } = useSelector(
     (state) => state.events
   );
-    const { topranks } = useSelector((state) => state.ranking);
-  
+  const { profileExists } = useSelector((state) => state.user);
+
+  const { topranks } = useSelector((state) => state.ranking);
+
   const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
 
   useEffect(() => {
@@ -22,9 +27,32 @@ const DashboardUser = ({ dark }) => {
     }
   }, [dispatch, event]);
 
-    useEffect(() => {
-      dispatch(getTopRanking());
-    }, []);
+  useEffect(() => {
+    if (userId) {
+      dispatch(checkUserProfile(userId));
+    }
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (profileExists === false) {
+      toast.warn(
+        "Your profile is not set up yet. Please complete your profile.",
+        {
+          position: "top-right",
+          className:
+            "bg-yellow-500 text-white font-medium p-4 rounded-lg shadow-lg",
+          progressClassName: "bg-yellow-300",
+          autoClose: false,
+        }
+      );
+    }
+  }, [profileExists]);
+
+  console.log("profile exist", profileExists);
+
+  useEffect(() => {
+    dispatch(getTopRanking());
+  }, []);
 
   const sortedUpcomingEvents = [...events].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
@@ -33,8 +61,6 @@ const DashboardUser = ({ dark }) => {
   const sortedRegisteredEvents = [...participants].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
-
-
 
   const rankings = [
     {
@@ -129,7 +155,6 @@ const DashboardUser = ({ dark }) => {
   const maxWightedScore = Math.max(
     ...topranks.map((user) => user.weightedScore)
   );
-
 
   return (
     <div className="container mx-auto p-4">
@@ -307,6 +332,7 @@ const DashboardUser = ({ dark }) => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
