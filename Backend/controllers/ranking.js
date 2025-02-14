@@ -286,7 +286,7 @@ exports.getTopRanking= async (req, res) => {
 }
 }
   
-};
+
 
 exports.getAllUsersRanking = async (req, res) => {
   try {
