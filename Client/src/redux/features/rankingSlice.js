@@ -14,7 +14,7 @@ export const postRankingApproval = createAsyncThunk(
       formData.append("gameName", games.gameName);
       formData.append("rank", games.rank);
       formData.append("score", games.score);
-      formData.append("screenshot", games.screenshot); 
+      formData.append("screenshot", games.screenshot);
 
       const response = await axios.post(`${apiUrl}/rank/approval`, formData, {
         headers: {
@@ -29,7 +29,6 @@ export const postRankingApproval = createAsyncThunk(
   }
 );
 
-
 // Fetch user submissions (GET request) by userId
 export const fetchUserSubmissions = createAsyncThunk(
   "ranking/fetchUserSubmissions",
@@ -43,38 +42,38 @@ export const fetchUserSubmissions = createAsyncThunk(
   }
 );
 
-
 // delete user ranking approval by userId and eventIt
-  export const deleteUserSubmission = createAsyncThunk(
-    "ranking/deleteUserSubmission", 
-    async ({userId, eventId}, {rejectWithValue})=>{
-      try {
-        const response = await axios.delete(`${apiUrl}/rank/approvaldelete`, {
-          data: { userId, eventId } 
-        });
-        return response.data;
-      } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
+export const deleteUserSubmission = createAsyncThunk(
+  "ranking/deleteUserSubmission",
+  async ({ userId, eventId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/rank/approvaldelete`, {
+        data: { userId, eventId },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-  )
+  }
+);
 
-
-  // thunk for event ranking approval and user stats updation
- export const assignEventRanking = createAsyncThunk(
-    'ranking/assignRank',
-    async (rankingData , {rejectWithValue})=>{
-      try {
-        const response = await axios.post(`${apiUrl}/rank/assign-rank`, rankingData);
-        return response.data;
-      } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
+// thunk for event ranking approval and user stats updation
+export const assignEventRanking = createAsyncThunk(
+  "ranking/assignRank",
+  async (rankingData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/rank/assign-rank`,
+        rankingData
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-  )
+  }
+);
 
-
-  // Async Thunk for fetching event submissions
+// Async Thunk for fetching event submissions
 export const fetchEventSubmissions = createAsyncThunk(
   "ranking/fetchEventSubmissions",
   async (eventId, { rejectWithValue }) => {
@@ -89,13 +88,15 @@ export const fetchEventSubmissions = createAsyncThunk(
   }
 );
 
-
-  // Async Thunk for Declining Submission
+// Async Thunk for Declining Submission
 export const declineSubmission = createAsyncThunk(
   "submission/declineSubmission",
   async ({ userId, eventId }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/rank/decline-submission`, { userId, eventId });
+      const response = await axios.post(`${apiUrl}/rank/decline-submission`, {
+        userId,
+        eventId,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -103,7 +104,20 @@ export const declineSubmission = createAsyncThunk(
   }
 );
 
+// aysnc thunk for getting top 5 ranks
 
+export const getTopRanking = createAsyncThunk(
+  "ranking/getTopRanking",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/rank/gettopranks`);
+      return response.data.mixedData;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 const rankingSlice = createSlice({
   name: "ranking",
@@ -113,6 +127,7 @@ const rankingSlice = createSlice({
     message: null,
     rankings: { submissions: [], users: [] },
     submissions: [],
+    topranks: [],
     userStats: null,
     error: null,
   },
@@ -122,7 +137,7 @@ const rankingSlice = createSlice({
     },
     resetMessage: (state) => {
       state.message = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -157,12 +172,16 @@ const rankingSlice = createSlice({
       .addCase(deleteUserSubmission.fulfilled, (state, action) => {
         state.loading = false;
         state.submissions = state.submissions.filter(
-          (submission) => !(submission.userId === action.meta.arg.userId && submission.eventId === action.meta.arg.eventId)
+          (submission) =>
+            !(
+              submission.userId === action.meta.arg.userId &&
+              submission.eventId === action.meta.arg.eventId
+            )
         );
       })
       .addCase(deleteUserSubmission.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Failed to delete submission.';
+        state.error = action.payload || "Failed to delete submission.";
       })
 
       .addCase(assignEventRanking.pending, (state) => {
@@ -170,11 +189,11 @@ const rankingSlice = createSlice({
       })
       .addCase(assignEventRanking.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload.data; 
-        state.userStats = action.payload.userStats; 
+        state.data = action.payload.data;
+        state.userStats = action.payload.userStats;
         state.message = action.payload.message;
       })
-         .addCase(assignEventRanking.rejected, (state, action) => {
+      .addCase(assignEventRanking.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
@@ -207,9 +226,21 @@ const rankingSlice = createSlice({
       .addCase(declineSubmission.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getTopRanking.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getTopRanking.fulfilled, (state, action) => {
+        state.loading = false;
+        state.topranks = action.payload;
+      })
+      .addCase(getTopRanking.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearRankings, resetMessage  } = rankingSlice.actions;
+export const { clearRankings, resetMessage } = rankingSlice.actions;
 export default rankingSlice.reducer;

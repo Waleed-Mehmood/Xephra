@@ -1,4 +1,4 @@
-import {React, useEffect} from "react";
+import { React, useEffect } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -10,8 +10,9 @@ import {
 } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
-
-
+import { getTopRanking } from "../../redux/features/rankingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../utils/Loading/Loading";
 
 // Register the required Chart.js components
 ChartJS.register(
@@ -24,24 +25,21 @@ ChartJS.register(
 );
 
 const RankingBoard = ({ dark }) => {
+  const dispatch = useDispatch();
+  const { topranks, loading, error } = useSelector((state) => state.ranking);
 
-  const users = [
-    { name: "Player1", rank: 1, score: 920, progress: 85 },
-    { name: "Player2", rank: 2, score: 870, progress: 75 },
-    { name: "Player3", rank: 3, score: 810, progress: 70 },
-    { name: "Player4", rank: 4, score: 750, progress: 65 },
-    { name: "Player5", rank: 5, score: 700, progress: 60 },
-  ];
+  useEffect(() => {
+    dispatch(getTopRanking());
+  }, [dispatch]);
+  // console.log("top ranks", topranks);
 
-  // Extract top 10 users or fewer
-  const topUsers = users.slice(0, 10);
 
   const barChartData = {
-    labels: topUsers.map((user) => user.name),
+    labels: topranks.map((user) => user?.userProfile?.fullName),
     datasets: [
       {
         label: "Scores",
-        data: topUsers.map((user) => user.score),
+        data: topranks.map((user) => user?.weightedScore),
         backgroundColor: "#854951",
         borderWidth: 1,
       },
@@ -79,6 +77,14 @@ const RankingBoard = ({ dark }) => {
     ],
   });
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  const maxWightedScore = Math.max(
+    ...topranks.map((user) => user.weightedScore)
+  );
+
   return (
     <div className="min-h-screen p-8 bg-[#69363f18] bg-opacity-[.06] shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">
@@ -86,13 +92,54 @@ const RankingBoard = ({ dark }) => {
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Top Players Section */}
+     
         <div className="bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] shadow-md rounded-lg p-6">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
             Top Players
           </h2>
           <div>
-            {users.map((user, index) => (
+            {topranks && topranks.length > 0
+              ? topranks.map((user, index) => {
+                  const progress =
+                    (user?.weightedScore / maxWightedScore) * 100;
+                  console.log("progress", progress);
+                  return (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between border-b py-4 border-[#854951]"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-[#F7E8E8] rounded-full">
+                          <span className="text-base lg:text-lg font-bold text-[#854951]">
+                            #{index + 1}
+                          </span>
+                        </div>
+                        <div>
+                          <h3 className="text-sm lg:text-lg font-medium">
+                            {user?.userProfile?.fullName}
+                          </h3>
+                          <p className="text-xs lg:text-sm text-[#622D37]">
+                            Points: {user?.weightedScore}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-16">
+                        <Doughnut
+                          data={doughnutData(progress)}
+                          options={{
+                            cutout: "80%",
+                            plugins: {
+                              tooltip: { enabled: false },
+                            },
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
+
+            {/* {users.map((user, index) => (
               <div
                 key={index}
                 className="flex items-center justify-between border-b py-4 border-[#854951]"
@@ -124,7 +171,7 @@ const RankingBoard = ({ dark }) => {
                   />
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
 

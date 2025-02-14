@@ -9,4 +9,5 @@ router.delete('/approvaldelete', userApprovalDelete );
 router.post('/assign-rank', assignEventRanking);
 router.post('/decline-submission', declineRanking);
 router.get('/gettopranks', getTopRanking);
+
 module.exports = router;

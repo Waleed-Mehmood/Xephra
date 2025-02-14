@@ -194,6 +194,8 @@ exports.declineRanking= async(req, res)=>{
     })
   }
 }
+
+
 exports.getTopRanking= async (req, res) => {
   try {
     // Get top 5 users based on weightedScore in descending order
