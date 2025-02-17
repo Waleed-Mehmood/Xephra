@@ -130,7 +130,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           <h1 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
             Welcome Admin!
           </h1>
-          <h2 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-l from-[#8a6e3b] via-[#d1a759] to-[#ffecb2] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl">
+          <h2 className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-clip-text text-transparent mt-7 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl ${dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]" : "text-white"}`}>
             Manage and Monitor all the Gaming Events and Rankings Efficiently.
           </h2>
         </div>
@@ -138,7 +138,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* Analytics & Stats Dashboard Section */}
       <div
-        className={`bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm`}
+        className={`p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -177,11 +177,20 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </div>
         </div>
 
-        {/* Main Section */}
-        <div className="grid grid-cols-12 gap-6 mt-8">
-          {/* Events Section */}
-          <div
-            className={`col-span-12 lg:col-span-9 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
+
+      {/* Main Section */}
+      <div className="grid grid-cols-12 gap-6 mt-8">
+        {/* Events Section */}
+        <div
+          className={`col-span-12 lg:col-span-9 backdrop-blur-sm p-4 rounded shadow-2xl shadow-gray-950 ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
+        >
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
+            } `}
+
           >
             <h2
               className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -213,36 +222,37 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                       </div>
                     </div>
                   </div>
-                </Link>
-              ))}
-            </Slider>
-            <h2
-              className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-6 ${
-                dark
-                  ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                  : "text-white"
-              } `}
-            >
-              Completed Events
-            </h2>
-            <Slider {...settings}>
-              {events.map((event) => (
-                <Link
-                  to={`/eventadmin/${event?._id}`}
-                  key={event._id}
-                  className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
-                >
-                  <div className="relative rounded-lg shadow flex flex-col h-full min-h-full hover:scale-105 transition duration-200 ">
-                    <img
-                      src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
-                      alt={event.title}
-                      className="h-60 w-full object-cover rounded "
-                    />
-                    <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
-                      <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
-                        {event.title}
-                      </h3>
-                    </div>
+
+                </div>
+              </Link>
+            ))}
+          </Slider>
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold mt-2 mb-4 ${
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
+            } `}
+          >
+            Completed Events
+          </h2>
+          <Slider {...settings}>
+            {events.map((event) => (
+              <Link
+                to={`/eventadmin/${event?._id}`}
+                key={event._id}
+                className="flex-none p-1 flex flex-col h-full  min-h-[200px]"
+              >
+                <div className="relative rounded-lg shadow flex flex-col h-full min-h-full hover:scale-105 transition duration-200 ">
+                  <img
+                    src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
+                    alt={event.title}
+                    className="h-60 w-full object-cover rounded "
+                  />
+                  <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/100 to-[#00000020] p-3">
+                    <h3 className="text-white text-lg font-bold drop-shadow-2xl [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)]">
+                      {event.title}
+                    </h3>
                   </div>
                 </Link>
               ))}
@@ -281,9 +291,10 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                             className={`font-bold lg:text-lg sm:text-base ${
                               dark
                                 ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                                : "text-white"
-                            } `}
-                          >
+
+                                : "text-[#D3D3D3]"
+                            }`}
+
                             {user?.userProfile?.fullName}
                           </p>
                           <div className="flex items-center space-x-2">
@@ -306,60 +317,98 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
                             </div>
                           </div>
                         </div>
-                      </li>
-                    );
-                  })
-                : "Currently we don't have top 5 players"}
-            </ul>
-            <Link
-              to="/dashboard/allranking"
-              className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
-                dark
-                  ? "bg-[#4f463f] hover:bg-[#8b796b]"
-                  : "bg-[#854951] hover:bg-[#A15D66]"
-              }  `}
-            >
-              See All
-            </Link>
-          </div>
+
+                      </div>
+                    </li>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
+          </ul>
+          <Link
+            to="/dashboard/allranking"
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
+              dark
+                ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"
+                : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#854951]"
+            }  `}
+          >
+            See All
+          </Link>
+
         </div>
 
-        {/* User Management Section */}
-        <div
-          className={`mt-8 backdrop-blur-sm bg-[#69363f18] bg-opacity-[.02] p-4 rounded shadow-2xl shadow-gray-950 `}
-        >
-          <div className="flex justify-between items-center mb-4">
-            <h2
-              className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${
-                dark
-                  ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                  : "text-white"
-              }`}
-            >
-              Manage Users
-            </h2>
-            <Link
-              to="/dashboard/users"
-              className={`hover:scale-125 text-sm ${
-                dark
-                  ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
-                  : "text-white"
-              }`}
-            >
-              See All
-            </Link>
-          </div>
-          <div className="overflow-x-auto sm:overflow-x-hidden">
-            <table className="min-w-full bg-[#232122] rounded shadow text-white">
-              <thead>
-                <tr className="bg-[#2c2c2c] ">
-                  <th className="p-2 text-left">Name</th>
-                  <th className="p-2 text-left">Email</th>
-                  <th className="p-2 text-left">Role</th>
-                  <th className="p-2 text-left">Created At</th>
-                  <th className="p-2 text-left">Profile</th>
-                  <th className="p-2 text-left">Suspension Status</th>
-                  <th className="p-2 text-left">Actions</th>
+
+      {/* User Management Section */}
+      <div
+        className={`mt-8 backdrop-blur-sm p-4 rounded shadow-2xl shadow-gray-950 ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h2
+            className={`lg:text-2xl md:text-xl sm:text-lg font-bold ${
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
+                : "text-white"
+            }`}
+          >
+            Manage Users
+          </h2>
+          <Link
+            to="/dashboard/users"
+            className={`text-sm ${
+              dark
+                ? "drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-[19px]"
+                : "text-white"
+            }`}
+          >
+            See All
+          </Link>
+        </div>
+        <div className="overflow-x-auto sm:overflow-x-hidden">
+          <table className="min-w-full bg-[#232122] rounded shadow text-white">
+            <thead>
+              <tr className="bg-[#2c2c2c] ">
+                <th className="p-2 text-left">Name</th>
+                <th className="p-2 text-left">Email</th>
+                <th className="p-2 text-left">Role</th>
+                <th className="p-2 text-left">Created At</th>
+                <th className="p-2 text-left">Profile</th>
+                <th className="p-2 text-left">Suspension Status</th>
+                <th className="p-2 text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="border-[#393939] hover:bg-[#3a3a3a] transition duration-300">
+              {users.slice(0, 3).map((user) => (
+                <tr key={user?._id}>
+                  <td className="p-2">{user?.name}</td>
+                  <td className="p-2">{user?.email}</td>
+                  <td className="p-2">{user?.role}</td>
+                  <td className="p-2">
+                    {new Date(user?.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="p-2">
+                    <button
+                      onClick={() => handleProfileView(user?.userId)}
+                      className="bg-[#be9929] hover:bg-[#99952a] text-white py-1 px-4 rounded mr-2"
+                    >
+                      View Profile
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    <button
+                      className="bg-[#854951] hover:bg-[#A15D66] text-white py-1 px-4 rounded mr-2"
+                      onClick={() => handleSuspend(user?.userId)}
+                    >
+                      {user.isSuspended ? "Unsuspend" : "Suspend"}
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    <button
+                      className="bg-[#cf2c2c] hover:bg-[#aa2a2a] text-white py-1 px-4 rounded"
+                      onClick={() => handleDelete(user?.userId)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               </thead>
               <tbody className="border-[#393939] hover:bg-[#3a3a3a] transition duration-300">
