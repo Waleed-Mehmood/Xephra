@@ -65,7 +65,9 @@ const NewEvents = ({ setActiveMenu, dark }) => {
 
   return (
     <div
-      className={`mx-auto py-10 px-4 rounded-lg   bg-[#492f3418] bg-opacity-[.03] shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm `}
+      className={`mx-auto py-10 px-4 rounded-lg shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm ${
+        dark
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}
     >
       <h2 className="text-[48px] font-bold text-[#b6a99a] mb-6 text-center drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent">
         Create New Tournament
@@ -176,8 +178,8 @@ const NewEvents = ({ setActiveMenu, dark }) => {
             type="submit"
             className={`text-[#C9B796] px-10 py-3 rounded-md transition ${
               dark
-                ? "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#49413C]"
-                : "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-[#A15D66]"
+                ? "bg-[#302B27] border-[1px] border-[#C9B796] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:text-black"
+                : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] border-[1px] border-[#C9B796] text-black hover:bg-[#A15D66]"
             } `}
           >
             Create Event

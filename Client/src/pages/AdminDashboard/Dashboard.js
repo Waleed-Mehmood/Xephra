@@ -54,10 +54,10 @@ function Sidebar({ onMenuClick, dark }) {
       </ul>
       <div className="px-6 my-6">
         <button
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
-              ? " active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
+              : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
           }`}
         >
           Chat System
@@ -70,7 +70,7 @@ function Sidebar({ onMenuClick, dark }) {
           className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
             dark
               ? "bg-[#854951] active:bg-[#A15D66]"
-              : "bg-[#854951] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              : "text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#A15D66] active:bg-[#8b796b]"
           }`}
         >
           <TbLogout2
@@ -146,9 +146,8 @@ function Dashboard() {
 
   return (
     <div
-    style={{ backgroundImage: "url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')" }}
     className={`flex h-full bg-opacity-0 bg-cover bg-fixed relative 
-      ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
+      ${dark ? "bg-[url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')]" : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""}`}
   >
     <div className="absolute inset-x-0 bottom-0 h-full bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-75"></div>

@@ -89,7 +89,9 @@ const RankingBoard = ({ dark }) => {
   );
 
   return (
-    <div className="min-h-screen p-8 bg-[#69363f18] bg-opacity-[.06] shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm">
+    <div className={`min-h-screen p-8 shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm ${
+      dark
+        ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}>
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">
         Ranking Board
       </h1>
@@ -100,6 +102,9 @@ const RankingBoard = ({ dark }) => {
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
             Top Players
           </h2>
+          <div className="flex justify-end">
+              <Link to="/userdashboard/allranking">See All</Link>
+            </div>
           <div>
             {topranks && topranks.length > 0
               ? topranks.map((user, index) => {

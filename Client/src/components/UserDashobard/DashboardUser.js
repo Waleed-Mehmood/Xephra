@@ -181,7 +181,7 @@ const DashboardUser = ({ dark }) => {
       <div className="grid grid-cols-12 gap-6 mt-8">
         {/* Events Section */}
         <div className={`col-span-12 lg:col-span-9 }`}>
-          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.02]" : "bg-[#232122]"}`}>
+          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}>
             <h2
               className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-3xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center`}
             >
@@ -220,7 +220,7 @@ const DashboardUser = ({ dark }) => {
             </Slider>
           </div>
 
-          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.02]" : "bg-[#232122]"}`}>
+          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}>
             <h2
               className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2`}
             >
@@ -264,7 +264,7 @@ const DashboardUser = ({ dark }) => {
         </div>
         {/* Rankings Section */}
         <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#292622e3]" : "bg-[#232122]"}`}
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
         >
           <h2
             className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
