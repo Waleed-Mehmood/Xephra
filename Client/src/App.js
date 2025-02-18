@@ -19,6 +19,7 @@ import AllUserRankingBoard from "./components/AdminDashobard/AllUserRankingBoard
 import EventDetailUserDashboard from "./components/UserDashobard/EventDetailUserDashboard";
 import TournamentRankings from "./components/UserDashobard/TournamentRankings";
 import AllUserRankingUser from "./components/UserDashobard/AllUserRankingUser";
+import ChatSystem from "./components/UserDashobard/ChatSystem";
 
 export default function App() {
   const PrivateRoute = ({ children }) => {
@@ -37,6 +38,14 @@ export default function App() {
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route
+          path="/userdashboard/chats"
+          element={
+            <PrivateRoute>
+              <ChatSystem />{" "}
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <PrivateRoute>
@@ -52,6 +61,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+         
         <Route path="/eventadmin/:eventId" element={<EventDetailAdmin />} />
         <Route path="/eventuser/:eventId" element={<EventDetailUser />} />
         <Route
