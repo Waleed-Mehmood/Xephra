@@ -49,7 +49,7 @@ const Signup = () => {
         backgroundImage: `url(${bgImage})`,
       }}
     >
-      <div className="w-full max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg mx-4">
+      <div className="w-auto sm:w-full sm:mx-3 max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg" style={{ margin: "0 20px" }}>
         <h1 className="text-3xl font-bold mb-6 text-center font-playfair">Sign Up</h1>
 
         <form className="space-y-4" onSubmit={HandleFormSubmit}>

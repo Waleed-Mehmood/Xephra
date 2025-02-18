@@ -148,7 +148,7 @@ function Dashboard() {
   return (
     <div
       className={`flex h-full  
-      ${dark ? "bg-[url('https://images.ctfassets.net/w5r1fvmogo3f/4UqXpuijA7dp2mMXP2vDtH/ccebdeee7f7853f2b4de8637d31c92cc/ghost_2f2b6b7fdfe84fc4b4778313255fb676.png')]" : "bg-[url('https://wallpapercat.com/w/full/f/b/6/1501928-3840x2160-desktop-4k-action-adventure-game-background.jpg')]"} 
+      ${dark ? "bg-[url('https://4kwallpapers.com/images/wallpapers/kratos-god-of-war-2880x1800-10280.jpg')]" : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
       bg-cover bg-center relative`}
     >
