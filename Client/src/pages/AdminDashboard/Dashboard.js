@@ -146,9 +146,8 @@ function Dashboard() {
 
   return (
     <div
-    style={{ backgroundImage: "url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')" }}
     className={`flex h-full bg-opacity-0 bg-cover bg-fixed relative 
-      ${dark ? "bg-[#b7ab95]" : "bg-[#7C736B]"} 
+      ${dark ? "bg-[url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')]" : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""}`}
   >
     <div className="absolute inset-x-0 bottom-0 h-full bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-75"></div>
