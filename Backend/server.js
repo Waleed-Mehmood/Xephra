@@ -24,7 +24,7 @@ const corsOptions = {
   allowedHeaders: "Content-Type,Authorization", // Allowed headers
 };
 
-app.use(cors(corsOptions));
+app.use(cors(corsOptions)); 
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.urlencoded({ extended: true }));
