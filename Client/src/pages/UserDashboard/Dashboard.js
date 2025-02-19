@@ -189,7 +189,7 @@ function Dashboard() {
           profile={profile}
         />
 
-        <main className="flex-1 p-0 md:p-6 min-h-screen">
+        <main className="flex-1 p-0 md:px-4 min-h-screen">
           {renderContent()}
         </main>
       </div>
