@@ -26,61 +26,61 @@ function Sidebar({ onMenuClick, dark }) {
   };
 
   return (
-    <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5 bg-transparent">
-        <img src={logo} className="h-13 w-44" alt="Flowbite Logo" />
+    <div className="py-4 text-gray-500 dark:text-gray-400  pl-6  fixed top-0 left-0 h-screen w-64 ">
+      <a className="flex items-center space-x-3 rtl:space-x-reverse ms-5 bg-transparent mb-3">
+        <img src={logo} className="h-8 w-32" alt="Flowbite Logo" />
       </a>
-      <ul className="mt-6">
-        {menuItems.map((item, index) => (
-          <li
-            key={item.key}
-            className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#854951] text-[#D4AD66] hover:text-white"
-            onClick={() => onMenuClick(item.key)}
-          >
-            <span
-              className={`absolute inset-y-0 left-0 w-1
-              }`}
-              aria-hidden="true"
-            />
-            <a
-              className={`inline-flex items-center w-full text-sm font-semibold ${
-                dark ? "" : "text-white"
-              } transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
+
+      <div className="bg-[#292622] bg-opacity-60   flex flex-col h-full  justify-between items-start rounded">
+        <ul className="mt-6  w-full">
+          {menuItems.map((item, index) => (
+            <li
+              key={item.key}
+              className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#a3676f] text-[#D4AD66] hover:text-white"
+              onClick={() => onMenuClick(item.key)}
             >
-              {item.icon}
-              <span className="ml-4">{item.name}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="px-6 my-6">
-        <button
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
-            dark
-              ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
-              : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
-          }`}
-        >
-          Chat System
-          <span className="ml-2" aria-hidden="true"></span>
-        </button>
-      </div>
-      <div className="px-6 my-6">
-        <button
-          onClick={logoutSubmit}
-          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]  transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
-            dark
-              ? "bg-[#854951] active:bg-[#A15D66]"
-              : "text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#A15D66] active:bg-[#8b796b]"
-          }`}
-        >
-          <TbLogout2
-            className="ms-2"
-            style={{ fontSize: 18, marginRight: 4 }}
-          />
-          Log out
-          <span className="ml-2" aria-hidden="true"></span>
-        </button>
+              <span
+                className={`absolute inset-y-0 left-0 w-1
+              }`}
+                aria-hidden="true"
+              />
+              <a
+                className={`inline-flex items-center w-full text-sm font-semibold ${
+                  dark ? "" : "text-white"
+                } transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
+              >
+                <span className="ml-4">{item.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-col justify-center items-center pb-10  w-full">
+          <div className="px-6 my-2">
+            <button
+              className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+                dark
+                  ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
+                  : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
+              }`}
+            >
+              Chat System
+              <span className="ml-2" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div className="px-6 my-2">
+            <button
+              onClick={logoutSubmit}
+              className={`flex items-center justify-center w-full px-8 py-2 text-sm font-medium leading-5 text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]  transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+                dark
+                  ? "bg-[#854951] active:bg-[#A15D66]"
+                  : "text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#A15D66] active:bg-[#8b796b]"
+              }`}
+            >
+              Log out
+              <span className="ml-2" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -148,17 +148,24 @@ function Dashboard() {
   return (
     <div
       className={`flex h-full  
-      ${dark ? "bg-[url('https://4kwallpapers.com/images/wallpapers/kratos-god-of-war-2880x1800-10280.jpg')]" : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"} 
+      ${
+        dark
+          ? "bg-[url('https://4kwallpapers.com/images/wallpapers/kratos-god-of-war-2880x1800-10280.jpg')]"
+          : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"
+      } 
       ${isSideMenuOpen ? "overflow-hidden" : ""} 
       bg-cover bg-center relative`}
     >
-      <div className={`absolute inset-x-0 bottom-0 h-2/4 z-10 pointer-events-none opacity-7 0 ${dark ? "bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)]": ""}`}></div>
+      <div
+        className={`absolute inset-x-0 bottom-0 h-2/4 z-10 pointer-events-none opacity-7 0 ${
+          dark
+            ? "bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)]"
+            : ""
+        }`}
+      ></div>
       <div className="absolute inset-0 bg-cover bg-center backdrop-blur-md opacity-40 z-0"></div>{" "}
-    
       <aside
-        className={`z-20 w-64 overflow-y-auto ${
-          dark ? "bg-[#292622] bg-opacity-85" : "bg-[#232122]"
-        } hidden md:block flex-shrink-0`}
+        className={`z-20 w-64 overflow-y-auto hidden md:block flex-shrink-0  `}
       >
         <Sidebar dark={dark} onMenuClick={setActiveMenu} />
       </aside>
