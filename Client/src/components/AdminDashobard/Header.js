@@ -17,7 +17,7 @@ export default function Header({
 
 
   return (
-    <header className={`z-10 py-4 shadow-md`}>
+    <header className={`z-10 py-4`}>
          <div className="container flex items-center justify-between h-full px-6 mx-auto text-white dark:text-white">
            {/* Menu Button */}
            <button
@@ -55,7 +55,7 @@ export default function Header({
              <Link>
                <div
                  className="flex flex-row justify-center items-center"
-                 onClick={() => onMenuClick("userProfile")}
+                 onClick={() => onMenuClick("adminProfile")}
                >
                  <p className="me-2">
                    {profile?.username ? profile?.username : "username"}

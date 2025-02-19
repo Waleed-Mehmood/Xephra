@@ -14,7 +14,7 @@ export default function Header({
   profile,
 }) {
   return (
-    <header className={`z-10 py-4 shadow-md`}>
+    <header className={`z-10 py-4`}>
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-white dark:text-white">
         {/* Menu Button */}
         <button

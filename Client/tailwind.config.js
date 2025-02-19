@@ -23,6 +23,7 @@ module.exports = {
         montserrat: ['Montserrat', 'sans-serif'],
         oldStandard: ['Old Standard TT', 'serif'],
         playfair: ['Playfair Display', 'serif'],
+        Poppins:['Poppins'],
       },
 
     },

@@ -125,7 +125,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
   return (
     <div className="container mx-auto p-4">
       {/* Hero Section for Admin */}
-      <div className="relative bg-cover bg-center h-64">
+      <div className="relative bg-cover bg-center h-56">
         <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white mt-20 ">
         <h1 className="drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#e5b967] via-[#d1a759] to-[#f9f9f9] bg-clip-text text-transparent  w-1/2 text-5xl lg:text-[3.6rem] md:text-6xl sm:text-6xl sm:w-full font-bold">
             Welcome Admin!
@@ -138,7 +138,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
 
       {/* Analytics & Stats Dashboard Section */}
       <div
-        className={`p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
+        className={`p-4 rounded shadow-2xl shadow-gray-950  mt-8  backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#2321223d]"}`}
       >
         <h2
           className={`lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 ${
@@ -250,7 +250,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           </div>
 
           {/* Rankings Section */}
-          <div
+          {/* <div
             className={`col-span-12 lg:col-span-3 p-4 rounded shadow  ${
               dark ? "bg-[#292622e3]" : "bg-[#232122]"
             } `}
@@ -321,7 +321,86 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           >
             See All
           </Link>
-          </div>
+          </div> */}
+           <div
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${
+            dark ? "bg-[#292622c4] " : "bg-[#292622c4]"
+          }`}
+        >
+          <h2
+            className={`font-montserrat drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
+          >
+            User Rankings
+          </h2>
+          <ul>
+            {topranks && topranks.length > 0
+              ? topranks.map((user, index) => {
+                  const progress =
+                    (user?.weightedScore / maxWightedScore) * 100;
+                  return (
+                    <li key={user.id} className="flex items-center mb-4">
+                      {/* Ensure the image does not shrink */}
+                      <div className="flex-shrink-0">
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                          alt={user.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="flex-1 min-w-0 ml-4">
+                        {/* Name and Rank in One Line */}
+                        <div className="flex items-center justify-between text-xs whitespace-nowrap overflow-hidden">
+                          {/* Allow Name to Shrink but Not Rank */}
+                          <p
+                            className={`font-bold truncate flex-1 ${
+                              dark ? "text-[#C9B796]" : "text-[#C9B796]"
+                            }`}
+                          >
+                            {user?.userProfile?.fullName}
+                          </p>
+
+                          {/* Ensure Rank is Fully Visible at the End */}
+                          <p
+                            className={`ml-2 flex-shrink-0 ${
+                              dark
+                                ? "bg-gradient-to-r text-[#C9B796]"
+                                : "text-[#C9B796]"
+                            }`}
+                          >
+                            Rank {index + 1}
+                          </p>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className="w-full bg-[#69363F] h-2 rounded">
+                            <div
+                              className={`h-2 rounded ${
+                                dark ? "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] " : "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] "
+                              }`}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })
+              : "Currently we don't have top 5 players"}
+          </ul>
+          <Link
+            to="/userdashboard/allranking"
+            className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
+              dark
+                ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"
+                : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] hover:bg-[#854951]"
+            }`}
+          >
+            See All
+          </Link>
+        </div>
         </div>
 
         {/* User Management Section */}
