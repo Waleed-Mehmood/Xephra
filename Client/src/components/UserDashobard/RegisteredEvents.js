@@ -20,7 +20,7 @@ const TournamentCard = (tournament) => {
       <Link to={`/eventuser/${event?._id}`}>
         <p className="text-[#C9B796] text-lg font-bold mt-1">{event?.game}</p>
         <p className="text-[#C9B796] mt-2  line-clamp-3">{event?.description}</p>
-        <p className="bg-[#302A27] font-bold px-2 w-1/2">{event?.date}</p>
+        <p className="bg-[#302A27] text-[#C9B796] font-bold px-2 w-1/2">{event?.date}</p>
         <div className="mt-4 flex justify-between items-center">
           <span className="text-xl font-bold text-[#D4AD66]">
             PKR: {event?.prizePool}
