@@ -14,6 +14,31 @@ import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../redux/features/profileSlice";
 import CompletedEvents from "../../components/AdminDashobard/CompletedEvents";
 import RankingBoard from "../../components/AdminDashobard/RankingBoard";
+import bgLight from "../../assets/background/Dashboard.png";
+import bgDark from "../../assets/background/dashboard-dark-mode.png";
+import bgUpcomingLight from "../../assets/background/upcoming-events-light.png";
+import bgUpcomingDark from "../../assets/background/upcoming-events-dark.png";
+import bgRegisteredLight from "../../assets/background/registered-events-light.png";
+import bgRegisteredDark from "../../assets/background/registered-events-dark.png";
+import bgRankingBoardLight from "../../assets/background/ranking-board-light.png";
+import bgRankingBoardDark from "../../assets/background/ranking-board-dark.png";
+import bgCompletedEventsLight from "../../assets/background/completed-events-light.png";
+import bgCompletedEventsDark from "../../assets/background/completed-events-dark.png";
+import bgRankingApprovalLight from "../../assets/background/ranking-approval-light.png";
+import bgRankingApprovalDark from "../../assets/background/ranking-approval-dark.png";
+import bgProfileLight from "../../assets/background/profile-light.png";
+import bgProfileDark from "../../assets/background/profile-dark.png";
+
+const backgroundImages = {
+  dashboard: { light: bgLight, dark: bgDark },
+  postedEvents: { light: bgUpcomingLight, dark: bgUpcomingDark },
+  newEvents: { light: bgRegisteredLight, dark: bgRegisteredDark },
+  rankingBoard: { light: bgRankingBoardLight, dark: bgRankingBoardDark },
+  CompletedEvents: { light: bgCompletedEventsLight, dark: bgCompletedEventsDark },
+  rankingApproval: { light: bgRankingApprovalLight, dark: bgRankingApprovalDark },
+  adminProfile: { light: bgProfileLight, dark: bgProfileDark },
+};
+
 // Sidebar component
 function Sidebar({ onMenuClick, dark }) {
   const navigate = useNavigate();
@@ -123,6 +148,8 @@ function Dashboard() {
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen);
   const toggleTheme = () => setDark(!dark);
 
+  const backgroundImage = backgroundImages[activeMenu]?.[dark ? "light" : "dark"] || bgLight;
+
   const renderContent = () => {
     switch (activeMenu) {
       case "dashboard":
@@ -147,8 +174,8 @@ function Dashboard() {
   return (
     <div
     className={`flex h-full bg-opacity-0 bg-cover bg-fixed relative 
-      ${dark ? "bg-[url('https://4kwallpapers.com/images/wallpapers/arthur-morgan-red-dead-redemption-2-rockstar-games-2880x1800-9051.jpg')]" : "bg-[url('https://wallpaper.forfun.com/fetch/48/4890f6961acf2a1fb28d0f7e247e6900.jpeg')]"} 
       ${isSideMenuOpen ? "overflow-hidden" : ""}`}
+      style={{ backgroundImage: `url(${backgroundImage})` }}
   >
     <div className="absolute inset-x-0 bottom-0 h-full bg-[linear-gradient(180deg,rgba(105,54,63,0)_-11.96%,#69363F_43.44%,#69363F_88.04%)] z-10 pointer-events-none opacity-75"></div>
     <div className="absolute inset-0 bg-cover bg-center backdrop-blur-sm opacity-10 z-0"></div>
