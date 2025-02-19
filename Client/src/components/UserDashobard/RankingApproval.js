@@ -79,14 +79,18 @@ const RankingApproval = ({ dark }) => {
   return (
     <div className={`rounded-lg p-6 mx-auto text-center min-h-full shadow-2xl shadow-gray-950 backdrop-blur-sm  ${
         dark
-          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}>
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#492f3418] bg-opacity-[.06]"}`}>
       <h1
-        className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-6 font-['Press_Start_2P'] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent ${
+        className={`text-[2.5rem] sm:text-2xl md:text-[2.5rem] lg:text-5xl font-semibold mb-6 font-[Montserrat] drop-shadow-[2px_2px_3px_rgba(0,0,0,0.7)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent ${
           dark ? "" : "text-[#232122]"
         }`}
       >
         User Game Entry
       </h1>
+      <div className={` ${
+                  dark ? "bg-[#0000007D]" : "bg-[#69363F66]"
+                } rounded-lg p-5 z-50 backdrop-blur-lg`}
+                >
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
@@ -235,7 +239,7 @@ const RankingApproval = ({ dark }) => {
         </table>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 ">
         {submissions.length === 0 && !loading && <p className="text-[#C9B796]">No submissions found.</p>}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
           {submissions.map((submission) => (
@@ -300,6 +304,7 @@ const RankingApproval = ({ dark }) => {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );
