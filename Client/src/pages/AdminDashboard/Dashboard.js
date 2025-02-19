@@ -44,9 +44,7 @@ function Sidebar({ onMenuClick, dark }) {
                     aria-hidden="true"
                   />
                   <a
-                    className={`inline-flex items-center w-full text-sm font-semibold ${
-                      dark ? "" : "text-white"
-                    } transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
+                    className={`inline-flex items-center w-full text-sm font-semibold transition-colors duration-150  dark:hover:text-gray-200 dark:text-gray-100`}
                   >
                     <span className="ml-4">{item.name}</span>
                   </a>
