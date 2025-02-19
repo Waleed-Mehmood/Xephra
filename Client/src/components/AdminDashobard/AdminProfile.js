@@ -135,6 +135,7 @@ const AdminProfile = ({ dark, profile }) => {
   console.log("profileData", profileData);
   return (
     <div
+    className="p-4"
       // className={`${styles.userProfile} ${
       //   dark ? "bg-[#69363F]" : "bg-[#232122]"
       // }`}

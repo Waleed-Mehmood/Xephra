@@ -19,8 +19,8 @@ const TournamentCard = (tournament) => {
       <div className="p-4">
       <Link to={`/eventuser/${event?._id}`}>
         <p className="text-[#C9B796] text-lg font-bold mt-1">{event?.game}</p>
-        <p className="bg-[#302A27] font-bold px-2 w-1/2">{event?.date}</p>
         <p className="text-[#C9B796] mt-2  line-clamp-3">{event?.description}</p>
+        <p className="bg-[#302A27] font-bold px-2 w-1/2">{event?.date}</p>
         <div className="mt-4 flex justify-between items-center">
           <span className="text-xl font-bold text-[#D4AD66]">
             PKR: {event?.prizePool}
@@ -54,10 +54,10 @@ const RegisteredEvents = ({ dark }) => {
     <div
       className={`mx-auto py-10 px-4 rounded-lg min-h-full shadow-2xl shadow-gray-950 drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] backdrop-blur-sm ${
         dark
-          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}
+          ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#492f3418] bg-opacity-[.06]"}`}
     >
-      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] ">
-        REGISTERED EVENTS
+      <h2 className="text-[2.5rem] font-semibold font-montserrat text-center mb-8 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent drop-shadow-[3px_3px_10px_rgba(0,0,0,0.6)] ">
+        Registered Events
       </h2>
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {participants.length ===0 ? <p className="text-red-500 text-xl lg:text-2xl">No Registered Events! </p> : 
