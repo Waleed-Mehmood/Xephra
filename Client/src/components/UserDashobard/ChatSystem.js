@@ -112,10 +112,10 @@ const ChatSystem = () => {
             {/* Menu Button - Only visible on small screens */}
             <button
               onClick={toggleSideMenu}
-              className="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-white"
+              className="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-white text-white relative"
               aria-label="Menu"
             >
-              <BsFillMenuButtonWideFill className="text-white" />
+              <BsFillMenuButtonWideFill className="text-white " />  <span className="pl-0 text-xl font-bold absolute -bottom-0 left-[23px]">Chats</span>
             </button>
           </div>
 
@@ -166,7 +166,7 @@ const ChatSystem = () => {
               <input
                 type="text"
                 placeholder="Search"
-                className={`w-full pl-12  bg-[#C9B79670] text-white px-4 py-2 rounded-full focus:outline-none backdrop-blur-md }`}
+                className={`w-full pl-12  bg-[#C9B79670] text-white px-4 py-2 rounded-full focus:outline-2 focus:outline-white backdrop-blur-md }`}
               />
             </div>
 
@@ -217,7 +217,7 @@ const ChatSystem = () => {
               <div className="flex flex-col h-full">
                 {/* Chat Header */}
                 <div
-                  className=" p-4"
+                  className=" p-4 rounded-t-lg"
                   style={{
                     background:
                       "linear-gradient(92.98deg, #D19F43 12%, #B2945C 31.11%, #C9B796 45.88%, #B39867 64.16%, #D5AD66 81.74%, #D19F43 92.26%)",
