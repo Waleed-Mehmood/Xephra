@@ -185,7 +185,7 @@ const ChatSystem = () => {
                     <span className="text-white text-sm">{group.name[0]}</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-white font-medium">{group.name}</h3>
+                    <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
                     <p className="text-neutral-400 text-sm truncate">
                       {group.message}
                     </p>
@@ -207,7 +207,7 @@ const ChatSystem = () => {
 
           {/* Chat Area */}
           <div
-            className={`flex-1 ml-32 ${
+            className={`flex-1 ml-32 pr-4 ${
               settings?.dark
                 ? "bg-[#69363F17] bg-opacity-[.06]"
                 : "bg-[##69363F17] bg-opacity-[0.5]"
