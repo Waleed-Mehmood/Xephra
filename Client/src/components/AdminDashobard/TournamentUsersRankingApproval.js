@@ -99,7 +99,7 @@ const TournamentUsersRankingApproval = () => {
             {event?.title} Submissions
           </h1>
           <Link
-            to={`/tournamentrankings/${eventId}`}
+            to={`/dashboard/tournamentrankings/${eventId}`}
             className="mt-4 inline-block bg-[#69363F] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#894b5c] hover:scale-105"
           >
             Users Ranking
