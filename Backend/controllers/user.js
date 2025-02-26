@@ -322,17 +322,25 @@ exports.joinEvent = async (req, res) => {
 
     const participant = new Participant({ userId, eventId });
     await participant.save();
-
-    // Find the existing chat group for this event
-    const chatGroup = await ChatGroup.findOne({ eventId });
-
+    const event = await Events.findById(eventId);
+    console.log(event);
+    if (!event || !event.chatGroupId) {
+      console.error(`Event not found or no chatGroupId for event: ${eventId}`);
+      return res.status(500).json({ message: "Chat group information not found!" });
+    }
+    const chatGroup = await ChatGroup.findById(event.chatGroupId);
+    
     if (!chatGroup) {
-      console.error(`Chat group not found for event: ${eventId}`);
+      console.error(`Chat group not found with ID: ${event.chatGroupId}`);
       return res.status(500).json({ message: "Chat group not found!" });
     }
-
-    // Check if user is already in the chat group
-    if (!chatGroup.users.includes(userId)) {
+    
+    // Convert IDs to strings for consistent comparison
+    const userIdStr = userId.toString();
+    const chatGroupUserIds = chatGroup.users.map(id => id.toString());
+    
+    // Add user to chat group if not already a member
+    if (!chatGroupUserIds.includes(userIdStr)) {
       chatGroup.users.push(userId);
       await chatGroup.save();
     }
