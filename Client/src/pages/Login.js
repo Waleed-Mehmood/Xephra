@@ -31,6 +31,10 @@ const Login = () => {
       }
     });
   };
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
 
   if (loading) {
     return <Loading />;
@@ -89,7 +93,7 @@ const Login = () => {
           <span className="px-3 text-gray-400 text-sm">OR</span>
           <div className="border-t border-gray-700 flex-grow"></div>
         </div>
-        <button className="w-full font-montserrat bg-white text-gray-900 font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
+        <button onClick={handleGoogleLogin} className="w-full font-montserrat bg-white text-gray-900 font-bold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"

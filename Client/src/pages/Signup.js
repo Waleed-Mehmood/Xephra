@@ -38,6 +38,10 @@ const Signup = () => {
     }
   }, [token, navigate]);
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -120,7 +124,7 @@ const Signup = () => {
           <span className="border-t border-gray-700 w-1/4"></span>
         </div>
 
-        <button className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
+        <button onClick={handleGoogleLogin} className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
           <svg
             className="w-5 h-5 mr-2"
             xmlns="http://www.w3.org/2000/svg"

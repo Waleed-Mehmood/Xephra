@@ -19,6 +19,7 @@ import AllUserRankingBoard from "./components/AdminDashobard/AllUserRankingBoard
 import EventDetailUserDashboard from "./components/UserDashobard/EventDetailUserDashboard";
 import TournamentRankings from "./components/UserDashobard/TournamentRankings";
 import AllUserRankingUser from "./components/UserDashobard/AllUserRankingUser";
+import GoogleSuccess from "./components/GoogleSuccess";
 
 export default function App() {
   const PrivateRoute = ({ children }) => {
@@ -33,7 +34,7 @@ export default function App() {
         <Route path="*" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="*" element={<Home />} /> */}
+        <Route path="/google-success" element={<GoogleSuccess />} />
         <Route path="/forget" element={<ForgetPassword />} />
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route
