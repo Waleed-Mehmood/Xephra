@@ -8,10 +8,11 @@ const Participant = require("../models/Participant");
 const { default: mongoose } = require("mongoose");
 const UserSubmission = require("../models/UserSubmission");
 const UserProfile = require("../models/UserProfile");
+const ChatGroup = require('../models/ChatGroup');
 
 exports.newEvent = async (req, res) => {
   try {
-    const { title, game, date, time, description, prizePool, rules } = req.body;
+    const { title, game, date, time, description, prizePool, rules, adminId  } = req.body;
     const image = req.file ? `uploads/${req.file.filename}` : null;
 
     if (
@@ -27,6 +28,18 @@ exports.newEvent = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
+
+    // Step 1: Create a Chat Group for the Event
+    const chatGroup = new ChatGroup({
+      name: `${title} Chat Group`,
+      description: `This is the official chat group for the event: ${title}.`,
+      users: [adminId] // Admin is added to the chat group automatically
+    });
+
+    const savedChatGroup = await chatGroup.save();
+
+
+    // Step 2: Create the Event and link the chat group
     const newEvent = new Events({
       title,
       game,
@@ -36,12 +49,15 @@ exports.newEvent = async (req, res) => {
       image,
       prizePool,
       rules,
+      chatGroupId: savedChatGroup._id // Link Chat Group ID to Event
     });
 
     await newEvent.save();
-    res
-      .status(201)
-      .json({ message: "Event created successfully", event: newEvent });
+    res.status(201).json({
+      message: "Event and chat group created successfully",
+      event: newEvent,
+      chatGroup: savedChatGroup
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal server error" });
@@ -61,7 +77,17 @@ exports.postedEvents = async (req, res) => {
 exports.deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
+    // Find the event first to get chatGroupId before deletion
+    const event = await Events.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found!" });
+    }
+
     const deletedParticipants = await Participant.deleteMany({ eventId: id });
+    // Delete associated ChatGroup
+    if (event.chatGroupId) {
+      await ChatGroup.findByIdAndDelete(event.chatGroupId);
+    }
 
     const deletedEvent = await Events.findByIdAndDelete(id);
 

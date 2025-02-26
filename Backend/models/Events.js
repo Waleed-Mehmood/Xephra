@@ -10,6 +10,7 @@ const EventSchema = new mongoose.Schema({
   prizePool: { type: Number, required: true,min: 0 },
   rules: { type: String, required: true },
   hosted: { type: Boolean, required: true,default: false },
+  chatGroupId: { type: mongoose.Schema.Types.ObjectId, ref: "ChatGroup", required: true }, // Link to chat group
 },{ timestamps: true, strict: false });
 
 module.exports = mongoose.model("Event", EventSchema);
