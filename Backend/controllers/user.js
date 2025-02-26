@@ -3,6 +3,7 @@
  const Events = require("../models/Events");
 const { default: mongoose } = require("mongoose");
 const Participant = require("../models/Participant");
+const ChatGroup = require("../models/ChatGroup");
 
 
 // POST: Create a new user profile
@@ -264,6 +265,41 @@ exports.upcomingEvents = async (req, res) => {
 };
 
 
+// exports.joinEvent = async (req, res) => {
+//   try {
+//     const { userId, eventId } = req.body;
+//     if (!mongoose.Types.ObjectId.isValid(eventId)) {
+//       return res.status(400).json({
+//         message: "Invalid eventId format",
+//       });
+//     }
+
+//     const existingParticipant = await Participant.findOne({
+//       userId,
+//       eventId,
+//     });
+
+//     if (existingParticipant) {
+//       return res.status(400).json({
+//         message: "User already registered for this event!",
+//       });
+//     }
+
+//     const participant = new Participant({ userId, eventId });
+//     await participant.save();
+
+//     res.status(201).json({
+//       message: "User registered successfully",
+//       participant,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//     });
+//   }
+// };
+
+
 exports.joinEvent = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
@@ -287,16 +323,32 @@ exports.joinEvent = async (req, res) => {
     const participant = new Participant({ userId, eventId });
     await participant.save();
 
+    // Find the existing chat group for this event
+    const chatGroup = await ChatGroup.findOne({ eventId });
+
+    if (!chatGroup) {
+      console.error(`Chat group not found for event: ${eventId}`);
+      return res.status(500).json({ message: "Chat group not found!" });
+    }
+
+    // Check if user is already in the chat group
+    if (!chatGroup.users.includes(userId)) {
+      chatGroup.users.push(userId);
+      await chatGroup.save();
+    }
+
     res.status(201).json({
-      message: "User registered successfully",
+      message: "User registered successfully and added to chat group",
       participant,
     });
+
   } catch (error) {
     res.status(500).json({
       error,
     });
   }
 };
+
 
 exports.getEvents = async (req, res) => {
   try {

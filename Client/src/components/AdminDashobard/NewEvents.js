@@ -45,6 +45,15 @@ const NewEvents = ({ setActiveMenu, dark }) => {
     formDataToSubmit.append("rules", formData.rules);
     formDataToSubmit.append("image", formData.image);
 
+    // Get adminId from localStorage
+    const adminData = JSON.parse(localStorage.getItem("user"));
+    const adminId = adminData?.UserId;
+    
+    // Append adminId to FormData
+    if (adminId) {
+        formDataToSubmit.append("adminId", adminId);
+    }
+
     dispatch(createEvent(formDataToSubmit));
     setFormData({
       title: "",
