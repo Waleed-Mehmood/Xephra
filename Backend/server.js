@@ -1,6 +1,7 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const http = require("http"); 
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 dotenv.config(); // Load environment variables
@@ -10,10 +11,14 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const rankingRoutes = require('./routes/rankingRoutes');
 const upload = require("./config/multerConfig");
+const socketSetup = require("./Socket/index"); // 
+
 
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
@@ -25,7 +30,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(express.urlencoded({ extended: true }));
 
@@ -45,7 +49,10 @@ app.get("/", (req, res) => {
   res.send("Game Events API");
 });
 
+// Setup Socket.io
+socketSetup(server);
+
 // Start server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

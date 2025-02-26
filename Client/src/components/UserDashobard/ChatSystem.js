@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../redux/features/userSlice";
 import { IoMoonSharp } from "react-icons/io5";
@@ -18,7 +19,9 @@ const ChatSystem = () => {
   const navigate = useNavigate();
 
   const [activeChat, setActiveChat] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+
   const [settings, setSettings] = useState(() => {
     const savedSettings = localStorage.getItem("settings");
     return savedSettings
@@ -26,6 +29,7 @@ const ChatSystem = () => {
       : { dark: false, isSideMenuOpen: false };
   });
   const sideMenuRef = useRef(null);
+  const socket = useRef(null);
 
   const toggleSideMenu = () => {
     const newSettings = {
@@ -41,6 +45,26 @@ const ChatSystem = () => {
     setSettings(newSettings);
     localStorage.setItem("settings", JSON.stringify(newSettings));
   };
+
+  //All Use Effects
+
+  useEffect(() => {
+    if (activeChat) {
+      socket.current.emit("joinChat", activeChat.name);
+    }
+  }, [activeChat]);
+
+  useEffect(() => {
+    socket.current = io("http://localhost:5000"); // Replace with your backend URL
+
+    socket.current.on("receiveMessage", (data) => {
+      setMessages((prevMessages) => [...prevMessages, data]); // Update UI when a new message is received
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -58,6 +82,30 @@ const ChatSystem = () => {
     return () => document.removeEventListener("mousedown", closeSideMenu);
   }, []);
 
+  //Send Message on send Button Pressed
+
+  const sendMessage = () => {
+    if (message.trim()) {
+      const newMessage = {
+        senderId: userId,
+        text: message,
+        time: new Date().toLocaleTimeString(),
+      };
+
+      // Emit message to the backend
+      socket.current.emit("sendMessage", {
+        chatGroupId: activeChat.name,
+        message: newMessage,
+      });
+
+      // Update local state for instant UI update
+      setMessages((prev) => [...prev, newMessage]);
+
+      setMessage(""); // Clear input field
+    }
+  };
+
+  //Static DATA FOR GROUPS AND MESSAGES
   const groups = [
     {
       name: "Counter Strike",
@@ -76,7 +124,7 @@ const ChatSystem = () => {
       ],
     },
     {
-      name: "Counter Strike",
+      name: "Counter Fire",
       message: "Message will show here",
       time: "9:52pm",
       members: 6,
@@ -115,7 +163,10 @@ const ChatSystem = () => {
               className="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-white text-white relative"
               aria-label="Menu"
             >
-              <BsFillMenuButtonWideFill className="text-white " />  <span className="pl-0 text-xl font-bold absolute -bottom-0 left-[23px]">Chats</span>
+              <BsFillMenuButtonWideFill className="text-white " />{" "}
+              <span className="pl-0 text-xl font-bold absolute -bottom-0 left-[23px]">
+                Chats
+              </span>
             </button>
           </div>
 
@@ -125,7 +176,11 @@ const ChatSystem = () => {
               className="p-2 text-white rounded-full focus:outline-none hover:bg-gray-400 dark:text-gray-300 dark:hover:bg-gray-700"
               aria-label="Toggle Dark Mode"
             >
-              {settings?.dark ? <ImBrightnessContrast className="text-[#C9B796]" /> : <IoMoonSharp  className="text-[#C9B796]"/>}
+              {settings?.dark ? (
+                <ImBrightnessContrast className="text-[#C9B796]" />
+              ) : (
+                <IoMoonSharp className="text-[#C9B796]" />
+              )}
             </button>
 
             {/* Notifications Icon */}
@@ -277,9 +332,17 @@ const ChatSystem = () => {
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && sendMessage()} // Send on Enter key
                       placeholder="Type a message..."
                       className="flex-1 bg-[#333333D4] text-white px-4 pl-9 py-3 rounded-full focus:outline-none"
                     />
+
+                    <button
+                      onClick={sendMessage}
+                      className="bg-[#D19F43] p-3 rounded-full"
+                    >
+                      Send
+                    </button>
                   </div>
                 </div>
               </div>
@@ -291,11 +354,15 @@ const ChatSystem = () => {
                     alt="XEPHRA"
                     className="mx-auto mb-4 w-1/3 h-auto"
                   />
-                  <h2 className=" text-4xl font-bold mb-2" style={{
-    background: "linear-gradient(90deg, #D19F43 4.4%, #B2945C 24.9%, #C9B796 42.9%, #B39867 55.9%, #D5AD66 89%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  }} >
+                  <h2
+                    className=" text-4xl font-bold mb-2"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #D19F43 4.4%, #B2945C 24.9%, #C9B796 42.9%, #B39867 55.9%, #D5AD66 89%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }}
+                  >
                     Select a chat to start messaging
                   </h2>
                 </div>
