@@ -15,6 +15,7 @@ const {
   getProfileExisting,
   getUserChatGroups,
   getMessages,
+  getOlderMessages,
 } = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
@@ -35,5 +36,6 @@ router.get("/events/hosted", getHostedEvents);
 router.get('/profile-exit/:userId', getProfileExisting);
 
 router.get("/messages/:chatGroupId", getMessages);
+router.get("/getOlderMessages/:chatGroupId", getOlderMessages);
 
 module.exports = router;

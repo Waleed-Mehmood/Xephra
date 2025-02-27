@@ -360,22 +360,45 @@ exports.joinEvent = async (req, res) => {
 
 exports.getMessages = async (req, res) => {
   try {
-      const { chatGroupId } = req.params;
-      console.log(chatGroupId);
-     
-     ;
-
-      const messages = await MessageModel.find({ chatGroupId: new mongoose.Types.ObjectId(chatGroupId) })
-          .sort({ time: -1 }) // Latest messages first
-      console.log(messages);
-
-      res.status(200).json({messages });
+    const { chatGroupId } = req.params;
+    
+    const messages = await MessageModel.find({ chatGroupId: new mongoose.Types.ObjectId(chatGroupId) })
+      .sort({ createdAt: 1 }) // Oldest messages first for proper chronological display
+      .limit(100) // Limit to prevent overwhelming the client
+    
+    res.status(200).json({ messages });
   } catch (error) {
-      console.error("Error fetching messages:", error);
-      res.status(500).json({ success: false, error: "Internal server error" });
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 };
 
+// Add endpoint to fetch older messages (for pagination)
+exports.getOlderMessages = async (req, res) => {
+  try {
+    const { chatGroupId } = req.params;
+    const { before } = req.query; // timestamp or message ID to get messages before
+    
+    let query = { chatGroupId: new mongoose.Types.ObjectId(chatGroupId) };
+    
+    // If 'before' parameter is provided, add it to the query
+    if (before) {
+      query.createdAt = { $lt: new Date(before) };
+    }
+    
+    const messages = await MessageModel.find(query)
+      .sort({ createdAt: -1 }) // Latest first
+      .limit(20) // Fetch 20 messages per request
+      .sort({ createdAt: 1 }); // Then sort back to oldest first for client display
+    
+    const hasMore = messages.length === 20;
+    
+    res.status(200).json({ messages, hasMore });
+  } catch (error) {
+    console.error("Error fetching older messages:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
 
 exports.getUserChatGroups = async (req, res) => {
   try {

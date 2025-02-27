@@ -16,8 +16,9 @@ const MessageSchema = new mongoose.Schema({
     required: true,
   },
   time: {
-    type: Date,
-    default: Date.now,
+    weekday: { type: String, required: true }, // Ensure weekday name is stored
+    hour: { type: Number, required: true },
+    minute: { type: Number, required: true },
   },
 });
 

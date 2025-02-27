@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../redux/features/userSlice";
-import { getUserChatGroups, setActiveChat, fetchMessages } from "../../redux/features/ChatsSlice";
+import { getUserChatGroups, setActiveChat, fetchMessages, addMessage, fetchOlderMessages } from "../../redux/features/ChatsSlice";
 import { IoMoonSharp } from "react-icons/io5";
 import { ImBrightnessContrast } from "react-icons/im";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
@@ -11,18 +11,28 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/xephra logo-01.png";
 import { CiSearch } from "react-icons/ci";
 import { TiAttachment } from "react-icons/ti";
+import { IoChevronUp } from "react-icons/io5";
 
 const ChatSystem = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.user);
-  const { chatGroups, loading, activeChat, messages, hasMore } = useSelector((state) => state.chatGroups);
+  const { chatGroups, loading, activeChat, messages, hasMore, oldestMessageTimestamp, messagesLoading } = useSelector((state) => state.chatGroups);
   const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData?.UserId;
   const navigate = useNavigate();
-  console.log("messages", messages);
-
+  
   const [message, setMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  
+  const messagesContainerRef = useRef(null);
+  const sideMenuRef = useRef(null);
+  const socket = useRef(null);
+  const isInitialLoad = useRef(true);
+  
+  // Track new messages for sidebar indicators
+  const [unreadMessages, setUnreadMessages] = useState({});
 
   const [settings, setSettings] = useState(() => {
     const savedSettings = localStorage.getItem("settings");
@@ -30,8 +40,6 @@ const ChatSystem = () => {
       ? JSON.parse(savedSettings)
       : { dark: false, isSideMenuOpen: false };
   });
-  const sideMenuRef = useRef(null);
-  const socket = useRef(null);
 
   const toggleSideMenu = () => {
     const newSettings = {
@@ -48,33 +56,144 @@ const ChatSystem = () => {
     localStorage.setItem("settings", JSON.stringify(newSettings));
   };
 
+  // Improved scroll to bottom function
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      const scrollHeight = messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTop = scrollHeight;
+    }
+  };
+
+  // Check if user is near bottom of chat
+  const isNearBottom = () => {
+    const container = messagesContainerRef.current;
+    if (!container) return false;
+    
+    return container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+  };
+
+  // Load older messages
+  const loadMoreMessages = () => {
+    if (activeChat && !messagesLoading && hasMore) {
+      setIsLoadingMore(true);
+      dispatch(fetchOlderMessages({
+        chatGroupId: activeChat._id,
+        before: oldestMessageTimestamp
+      })).finally(() => setIsLoadingMore(false));
+    }
+  };
+
   // Set active chat
   const handleSelectChat = (chatGroup) => {
-    
+    isInitialLoad.current = true;
     dispatch(setActiveChat(chatGroup));
-    console.log(chatGroup._id) ;
-    dispatch(fetchMessages(chatGroup._id)); 
+    dispatch(fetchMessages(chatGroup._id));
     
-    socket.current.emit("joinChat", chatGroup._id);
+    // Clear unread indicator for this chat
+    if (unreadMessages[chatGroup._id]) {
+      setUnreadMessages(prev => ({...prev, [chatGroup._id]: 0}));
+    }
+    
+    if (socket.current && socketConnected) {
+      socket.current.emit("joinChat", chatGroup._id);
+    }
   };
+
+  // Helper to format message time for sorting
+  const getMessageTime = (msg) => {
+    if (!msg.time) return 0;
+    return new Date().setHours(msg.time.hour, msg.time.minute, 0, 0);
+  };
+
+  // Sort messages by time before displaying
+  const sortedMessages = [...messages].sort((a, b) => {
+    return getMessageTime(a) - getMessageTime(b);
+  });
 
   // Filter chat groups based on search term
   const filteredChatGroups = chatGroups.filter((group) =>
     group.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Send message handler - updated with better timing
+  const sendMessage = () => {
+    if (!message.trim() || !activeChat || !socketConnected) {
+      return;
+    }
+
+    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const now = new Date();
+    
+    const newMessage = {
+      senderId: userId,
+      text: message,
+      time: {
+        weekday: weekdays[now.getDay()],
+        hour: now.getHours(),
+        minute: now.getMinutes()
+      }
+    };
+
+    // Emit message to the backend
+    socket.current.emit("sendMessage", {
+      chatGroupId: activeChat._id,
+      message: newMessage,
+    });
+
+    setMessage(""); // Clear input field
+    
+    // Add a small timeout to ensure the new message has been added to the DOM
+    setTimeout(() => {
+      scrollToBottom();
+    }, 200);
+  };
+
   // Socket setup and message handling
   useEffect(() => {
+    // Create socket connection
     socket.current = io("http://localhost:5000"); // Replace with your backend URL
+    
+    socket.current.on("connect", () => {
+      console.log("Socket connected:", socket.current.id);
+      setSocketConnected(true);
+      
+      // Join active chat room if one is selected
+      if (activeChat) {
+        socket.current.emit("joinChat", activeChat._id);
+      }
+    });
 
-    // socket.current.on("receiveMessage", (data) => {
-    //   dispatch(addMessage(data)); // Dispatch to Redux when receiving a message
-    // });
+    socket.current.on("receiveMessage", (data) => {
+      console.log("Received message:", data);
+      dispatch(addMessage(data));
+      
+      // Update unread message counter for this chat group
+      if (activeChat?._id !== data.chatGroupId) {
+        setUnreadMessages(prev => ({
+          ...prev, 
+          [data.chatGroupId]: (prev[data.chatGroupId] || 0) + 1
+        }));
+      } else {
+        // If this is the active chat, check if we should scroll
+        if (isNearBottom()) {
+          setTimeout(() => {
+            scrollToBottom();
+          }, 200);
+        }
+      }
+    });
+
+    socket.current.on("connect_error", (error) => {
+      console.error("Socket connection error:", error);
+      setSocketConnected(false);
+    });
 
     return () => {
-      socket.current.disconnect();
+      if (socket.current) {
+        socket.current.disconnect();
+      }
     };
-  }, [dispatch]);
+  }, [dispatch, activeChat]);
 
   // Fetch profile and chat groups on mount
   useEffect(() => {
@@ -83,6 +202,37 @@ const ChatSystem = () => {
       dispatch(getUserChatGroups(userId));
     }
   }, [dispatch, userId]);
+
+  // Improved scroll effect
+  useEffect(() => {
+    if (messages.length > 0) {
+      if (isInitialLoad.current) {
+        // On initial load, always scroll to bottom after a short delay
+        setTimeout(() => {
+          scrollToBottom();
+          isInitialLoad.current = false;
+        }, 300);
+      } else if (!isLoadingMore && isNearBottom()) {
+        // When new messages arrive (but not when loading older ones)
+        // and user is already near the bottom
+        setTimeout(() => {
+          scrollToBottom();
+        }, 200);
+      }
+    }
+  }, [messages]);
+
+  // Handle scroll to load more messages
+  const handleScroll = () => {
+    if (messagesContainerRef.current) {
+      const { scrollTop } = messagesContainerRef.current;
+      
+      // Load more messages when user scrolls near the top
+      if (scrollTop < 50 && !messagesLoading && hasMore && !isLoadingMore) {
+        loadMoreMessages();
+      }
+    }
+  };
 
   // Close side menu when clicking outside
   useEffect(() => {
@@ -95,23 +245,10 @@ const ChatSystem = () => {
     return () => document.removeEventListener("mousedown", closeSideMenu);
   }, []);
 
-  // Send message handler
-  const sendMessage = () => {
-    if (message.trim() && activeChat) {
-      const newMessage = {
-        senderId: userId,
-        text: message,
-        time: new Date().toLocaleTimeString(),
-      };
-
-      // Emit message to the backend
-      socket.current.emit("sendMessage", {
-        chatGroupId: activeChat._id,
-        message: newMessage,
-      });
-
-      setMessage(""); // Clear input field
-    }
+  // Format time for display
+  const formatTime = (time) => {
+    if (!time) return "";
+    return `${time.hour}:${time.minute.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -225,7 +362,7 @@ const ChatSystem = () => {
                     onClick={() => handleSelectChat(group)}
                     className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
                       activeChat?._id === group._id ? "bg-neutral-700/70" : ""
-                    }`}
+                    } relative`}
                   >
                     <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
                       <span className="text-white text-sm">{group.name?.[0] || "G"}</span>
@@ -239,6 +376,13 @@ const ChatSystem = () => {
                     <span className="text-neutral-500 text-xs">
                       {group.lastMessage?.time || ""}
                     </span>
+                    
+                    {/* New message indicator */}
+                    {unreadMessages[group._id] > 0 && (
+                      <div className="absolute top-2 right-2 bg-[#D19F43] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                        {unreadMessages[group._id]}
+                      </div>
+                    )}
                   </div>
                 ))
               )}
@@ -290,27 +434,47 @@ const ChatSystem = () => {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {messages.map((msg, index) => (
-                    <div
-                      key={index}
-                      className={`flex ${
-                        msg.senderId === userId ? "justify-end" : "justify-start"
-                      }`}
-                    >
+                <div 
+                  ref={messagesContainerRef} 
+                  className="flex-1 overflow-y-auto p-4 space-y-4" 
+                  onScroll={handleScroll}
+                >
+                  {/* Loading indicator for older messages */}
+                  {messagesLoading && (
+                    <div className="text-center p-2 text-white">
+                      <div className="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div> Loading older messages...
+                    </div>
+                  )}
+                  
+                  {/* Group messages by date */}
+                  {sortedMessages.length === 0 ? (
+                    <div className="text-center text-white p-4">
+                      No messages yet. Start the conversation!
+                    </div>
+                  ) : (
+                    sortedMessages.map((msg, index) => (
                       <div
-                        className={`max-w-md p-3 rounded-lg ${
-                          msg.senderId === userId ? "bg-[#D4AD66]" : "bg-[#C9B796]"
+                        key={index}
+                        className={`flex ${
+                          msg.senderId === userId ? "justify-end" : "justify-start"
                         }`}
                       >
-                        <p className="text-[#69363F] text-sm font-semibold mb-1">
-                          {msg.senderId === userId ? "You" : msg.sender?.name || "User"}
-                        </p>
-                        <p className="text-[#1b1b1b]">{msg.text}</p>
-                        <p className="text-[#000000] text-xs mt-1">{msg.time}</p>
+                        <div
+                          className={`max-w-md p-3 rounded-lg ${
+                            msg.senderId === userId ? "bg-[#D4AD66]" : "bg-[#C9B796]"
+                          }`}
+                        >
+                          <p className="text-[#69363F] text-sm font-semibold mb-1">
+                            {msg.senderId === userId ? "You" : msg.sender?.name || "User"}
+                          </p>
+                          <p className="text-[#1b1b1b]">{msg.text}</p>
+                          <p className="text-[#000000] text-xs mt-1">
+                            {msg.time?.weekday}, {formatTime(msg.time)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
 
                 {/* Message Input */}
@@ -329,8 +493,9 @@ const ChatSystem = () => {
                     <button
                       onClick={sendMessage}
                       className="bg-[#D19F43] p-3 rounded-full"
+                      disabled={!socketConnected}
                     >
-                      Send
+                      <span className="px-2">Send</span>
                     </button>
                   </div>
                 </div>
