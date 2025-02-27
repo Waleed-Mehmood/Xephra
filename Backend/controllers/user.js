@@ -4,6 +4,7 @@
 const { default: mongoose } = require("mongoose");
 const Participant = require("../models/Participant");
 const ChatGroup = require("../models/ChatGroup");
+const MessageModel = require("../models/Message");
 
 
 // POST: Create a new user profile
@@ -357,7 +358,71 @@ exports.joinEvent = async (req, res) => {
   }
 };
 
+exports.getMessages = async (req, res) => {
+  try {
+      const { chatGroupId } = req.params;
+      console.log(chatGroupId);
+     
+     ;
 
+      const messages = await MessageModel.find({ chatGroupId: new mongoose.Types.ObjectId(chatGroupId) })
+          .sort({ time: -1 }) // Latest messages first
+      console.log(messages);
+
+      res.status(200).json({messages });
+  } catch (error) {
+      console.error("Error fetching messages:", error);
+      res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+
+exports.getUserChatGroups = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    
+    if (!userId) {
+      return res.status(400).json({
+        message: "User ID is required",
+      });
+    }
+
+    // Find all participants entries for this user
+    const participants = await Participant.find({ userId });
+    
+    if (!participants.length) {
+      return res.status(200).json({
+        chatGroups: [],
+        message: "User is not participating in any events"
+      });
+    }
+
+    // Get all event IDs the user is participating in
+    const eventIds = participants.map(participant => participant.eventId);
+    
+    // Find all events with these IDs to get their chat group IDs
+    const events = await Events.find({ _id: { $in: eventIds } });
+    
+    const chatGroupIds = events
+      .filter(event => event.chatGroupId) 
+      .map(event => event.chatGroupId);
+    
+    // Find all chat groups
+    const chatGroups = await ChatGroup.find({ _id: { $in: chatGroupIds } })
+
+    return res.status(200).json({
+      chatGroups,
+      message: "Chat groups fetched successfully"
+    });
+    
+  } catch (error) {
+    console.error("Error fetching user chat groups:", error);
+    return res.status(500).json({
+      message: "Failed to fetch chat groups",
+      error: error.message
+    });
+  }
+};
 exports.getEvents = async (req, res) => {
   try {
     const { userId } = req.body;

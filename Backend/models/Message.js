@@ -2,13 +2,13 @@ const mongoose = require("mongoose");
 
 const MessageSchema = new mongoose.Schema({
   chatGroupId: {
-    type: String,
-    //ref: "ChatGroup", // Reference to a Chat Group (if you have one)
+    type: mongoose.Schema.Types.ObjectId, // Store as ObjectId
+    ref: "ChatGroup", 
     required: true,
   },
   senderId: {
     type: String,
-    //ref: "User", // Reference to User
+    ref: "User", // Reference to User
     required: true,
   },
   text: {

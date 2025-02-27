@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../redux/features/userSlice";
+import { getUserChatGroups, setActiveChat, fetchMessages } from "../../redux/features/ChatsSlice";
 import { IoMoonSharp } from "react-icons/io5";
 import { ImBrightnessContrast } from "react-icons/im";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
@@ -14,13 +15,14 @@ import { TiAttachment } from "react-icons/ti";
 const ChatSystem = () => {
   const dispatch = useDispatch();
   const { profile } = useSelector((state) => state.user);
+  const { chatGroups, loading, activeChat, messages, hasMore } = useSelector((state) => state.chatGroups);
   const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData?.UserId;
   const navigate = useNavigate();
+  console.log("messages", messages);
 
-  const [activeChat, setActiveChat] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [settings, setSettings] = useState(() => {
     const savedSettings = localStorage.getItem("settings");
@@ -46,32 +48,43 @@ const ChatSystem = () => {
     localStorage.setItem("settings", JSON.stringify(newSettings));
   };
 
-  //All Use Effects
+  // Set active chat
+  const handleSelectChat = (chatGroup) => {
+    
+    dispatch(setActiveChat(chatGroup));
+    console.log(chatGroup._id) ;
+    dispatch(fetchMessages(chatGroup._id)); 
+    
+    socket.current.emit("joinChat", chatGroup._id);
+  };
 
-  useEffect(() => {
-    if (activeChat) {
-      socket.current.emit("joinChat", activeChat.name);
-    }
-  }, [activeChat]);
+  // Filter chat groups based on search term
+  const filteredChatGroups = chatGroups.filter((group) =>
+    group.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
+  // Socket setup and message handling
   useEffect(() => {
     socket.current = io("http://localhost:5000"); // Replace with your backend URL
 
-    socket.current.on("receiveMessage", (data) => {
-      setMessages((prevMessages) => [...prevMessages, data]); // Update UI when a new message is received
-    });
+    // socket.current.on("receiveMessage", (data) => {
+    //   dispatch(addMessage(data)); // Dispatch to Redux when receiving a message
+    // });
 
     return () => {
       socket.current.disconnect();
     };
-  }, []);
+  }, [dispatch]);
 
+  // Fetch profile and chat groups on mount
   useEffect(() => {
     if (userId) {
       dispatch(getProfile(userId));
+      dispatch(getUserChatGroups(userId));
     }
   }, [dispatch, userId]);
 
+  // Close side menu when clicking outside
   useEffect(() => {
     const closeSideMenu = (e) => {
       if (sideMenuRef.current && !sideMenuRef.current.contains(e.target)) {
@@ -82,10 +95,9 @@ const ChatSystem = () => {
     return () => document.removeEventListener("mousedown", closeSideMenu);
   }, []);
 
-  //Send Message on send Button Pressed
-
+  // Send message handler
   const sendMessage = () => {
-    if (message.trim()) {
+    if (message.trim() && activeChat) {
       const newMessage = {
         senderId: userId,
         text: message,
@@ -94,43 +106,13 @@ const ChatSystem = () => {
 
       // Emit message to the backend
       socket.current.emit("sendMessage", {
-        chatGroupId: activeChat.name,
+        chatGroupId: activeChat._id,
         message: newMessage,
       });
-
-      // Update local state for instant UI update
-      setMessages((prev) => [...prev, newMessage]);
 
       setMessage(""); // Clear input field
     }
   };
-
-  //Static DATA FOR GROUPS AND MESSAGES
-  const groups = [
-    {
-      name: "Counter Strike",
-      message: "Message will show here",
-      time: "9:52pm",
-      members: 6,
-      messages: [
-        { sender: "Wajid", text: "Hey There!", time: "8:30pm" },
-        { sender: "Rayan", text: "How are you doing?", time: "8:32pm" },
-        { sender: "Dawood", text: "Hello!!", time: "8:35pm" },
-        {
-          sender: "Username",
-          text: "I am fine and how are you?",
-          time: "8:37pm",
-        },
-      ],
-    },
-    {
-      name: "Counter Fire",
-      message: "Message will show here",
-      time: "9:52pm",
-      members: 6,
-      messages: [{ sender: "Wajid", text: "Hey There!", time: "8:30pm" }],
-    },
-  ];
 
   return (
     <div className="flex flex-col h-screen">
@@ -146,9 +128,9 @@ const ChatSystem = () => {
         <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
       </div>
 
-      <div className="relative z-10 flex flex-col h-screen ">
+      <div className="relative z-10 flex flex-col h-screen">
         {/* Header */}
-        <div className={`flex justify-between items-center mb-0 m-0 p-4  `}>
+        <div className={`flex justify-between items-center mb-0 m-0 p-4`}>
           <div className="flex items-center space-x-2">
             {/* Logo - Always visible on large screens */}
             <img
@@ -163,7 +145,7 @@ const ChatSystem = () => {
               className="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-white text-white relative"
               aria-label="Menu"
             >
-              <BsFillMenuButtonWideFill className="text-white " />{" "}
+              <BsFillMenuButtonWideFill className="text-white" />{" "}
               <span className="pl-0 text-xl font-bold absolute -bottom-0 left-[23px]">
                 Chats
               </span>
@@ -221,7 +203,9 @@ const ChatSystem = () => {
               <input
                 type="text"
                 placeholder="Search"
-                className={`w-full pl-12  bg-[#C9B79670] text-white px-4 py-2 rounded-full focus:outline-2 focus:outline-white backdrop-blur-md }`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-12 bg-[#C9B79670] text-white px-4 py-2 rounded-full focus:outline-2 focus:outline-white backdrop-blur-md`}
               />
             </div>
 
@@ -230,24 +214,34 @@ const ChatSystem = () => {
               Groups
             </div>
             <div className="flex-1 space-y-2 overflow-y-auto">
-              {groups.map((group, index) => (
-                <div
-                  key={index}
-                  onClick={() => setActiveChat(group)}
-                  className="flex items-center space-x-3 p-3 rounded-lg cursor-pointer  backdrop-blur-md hover:bg-neutral-700/50"
-                >
-                  <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm">{group.name[0]}</span>
+              {loading ? (
+                <div className="text-white text-center p-4">Loading chat groups...</div>
+              ) : filteredChatGroups.length === 0 ? (
+                <div className="text-white text-center p-4">No chat groups found</div>
+              ) : (
+                filteredChatGroups.map((group) => (
+                  <div
+                    key={group._id}
+                    onClick={() => handleSelectChat(group)}
+                    className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
+                      activeChat?._id === group._id ? "bg-neutral-700/70" : ""
+                    }`}
+                  >
+                    <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm">{group.name?.[0] || "G"}</span>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
+                      <p className="text-neutral-400 text-sm truncate">
+                        {group.lastMessage?.text || "No messages yet"}
+                      </p>
+                    </div>
+                    <span className="text-neutral-500 text-xs">
+                      {group.lastMessage?.time || ""}
+                    </span>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
-                    <p className="text-neutral-400 text-sm truncate">
-                      {group.message}
-                    </p>
-                  </div>
-                  <span className="text-neutral-500 text-xs">{group.time}</span>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             {/* Dashboard Button */}
@@ -272,7 +266,7 @@ const ChatSystem = () => {
               <div className="flex flex-col h-full">
                 {/* Chat Header */}
                 <div
-                  className=" p-4 rounded-t-lg"
+                  className="p-4 rounded-t-lg"
                   style={{
                     background:
                       "linear-gradient(92.98deg, #D19F43 12%, #B2945C 31.11%, #C9B796 45.88%, #B39867 64.16%, #D5AD66 81.74%, #D19F43 92.26%)",
@@ -281,18 +275,15 @@ const ChatSystem = () => {
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
                       <span className="text-yellow-600 font-bold">
-                        {activeChat.name[0]}
+                        {activeChat.name?.[0] || "G"}
                       </span>
                     </div>
                     <div>
                       <h2 className="text-[#331A1F] text-3xl drop-shadow-lg font-bold">
                         {activeChat.name}
                       </h2>
-                      <p
-                        className="text-[#331A1F] drop-shadow-lg text-lg font-semibold
-                        "
-                      >
-                        {activeChat.members} Members
+                      <p className="text-[#331A1F] drop-shadow-lg text-lg font-semibold">
+                        {activeChat.users?.length || 0} Members
                       </p>
                     </div>
                   </div>
@@ -300,25 +291,23 @@ const ChatSystem = () => {
 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                  {activeChat.messages.map((msg, index) => (
+                  {messages.map((msg, index) => (
                     <div
                       key={index}
                       className={`flex ${
-                        index % 2 === 0 ? "justify-start" : "justify-end"
+                        msg.senderId === userId ? "justify-end" : "justify-start"
                       }`}
                     >
                       <div
                         className={`max-w-md p-3 rounded-lg ${
-                          index % 2 === 0 ? "bg-[#C9B796]" : "bg-[#D4AD66]"
+                          msg.senderId === userId ? "bg-[#D4AD66]" : "bg-[#C9B796]"
                         }`}
                       >
                         <p className="text-[#69363F] text-sm font-semibold mb-1">
-                          {msg.sender}
+                          {msg.senderId === userId ? "You" : msg.sender?.name || "User"}
                         </p>
                         <p className="text-[#1b1b1b]">{msg.text}</p>
-                        <p className="text-[#000000] text-xs mt-l mr-0">
-                          {msg.time}
-                        </p>
+                        <p className="text-[#000000] text-xs mt-1">{msg.time}</p>
                       </div>
                     </div>
                   ))}
@@ -332,7 +321,7 @@ const ChatSystem = () => {
                       type="text"
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && sendMessage()} // Send on Enter key
+                      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                       placeholder="Type a message..."
                       className="flex-1 bg-[#333333D4] text-white px-4 pl-9 py-3 rounded-full focus:outline-none"
                     />
@@ -355,7 +344,7 @@ const ChatSystem = () => {
                     className="mx-auto mb-4 w-1/3 h-auto"
                   />
                   <h2
-                    className=" text-4xl font-bold mb-2"
+                    className="text-4xl font-bold mb-2"
                     style={{
                       background:
                         "linear-gradient(90deg, #D19F43 4.4%, #B2945C 24.9%, #C9B796 42.9%, #B39867 55.9%, #D5AD66 89%)",

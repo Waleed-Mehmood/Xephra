@@ -14,15 +14,15 @@ const socketSetup = (server) => {
 
     socket.on("sendMessage", async ({ chatGroupId, message }) => {
         console.log("Received message:", message);
-    
-        // Save message in MongoDB
-        // const newMessage = new MessageModel({
-        //   chatGroupId,
-        //   senderId: message.senderId,
-        //   text: message.text,
-        //   time: message.time,
-        // });
-        // await newMessage.save();
+        const messageTime = new Date();
+        //Save message in MongoDB
+        const newMessage = new MessageModel({
+          chatGroupId,
+          senderId: message.senderId,
+          text: message.text,
+          time: messageTime,
+        });
+        await newMessage.save();
     
         // Broadcast message to all users in the group
         io.to(chatGroupId).emit("receiveMessage", message);
