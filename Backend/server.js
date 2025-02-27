@@ -1,6 +1,7 @@
 // server.js
 const express = require("express");
 const cors = require("cors");
+const http = require("http"); 
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 dotenv.config(); // Load environment variables
@@ -10,10 +11,15 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const rankingRoutes = require('./routes/rankingRoutes');
 const upload = require("./config/multerConfig");
+
+const socketSetup = require("./Socket/index"); // 
+
 const passport = require('./config/passport');
 const app = express();
 const port = process.env.PORT || 5000;
 require("dotenv").config();
+
+const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
@@ -23,6 +29,7 @@ const corsOptions = {
   methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
   allowedHeaders: "Content-Type,Authorization", // Allowed headers
 };
+
 
 app.use(cors(corsOptions)); 
 app.use(passport.initialize());
@@ -46,7 +53,10 @@ app.get("/", (req, res) => {
   res.send("Game Events API");
 });
 
+// Setup Socket.io
+socketSetup(server);
+
 // Start server
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

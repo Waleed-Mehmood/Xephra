@@ -3,6 +3,8 @@
  const Events = require("../models/Events");
 const { default: mongoose } = require("mongoose");
 const Participant = require("../models/Participant");
+const ChatGroup = require("../models/ChatGroup");
+const MessageModel = require("../models/Message");
 
 
 // POST: Create a new user profile
@@ -264,6 +266,41 @@ exports.upcomingEvents = async (req, res) => {
 };
 
 
+// exports.joinEvent = async (req, res) => {
+//   try {
+//     const { userId, eventId } = req.body;
+//     if (!mongoose.Types.ObjectId.isValid(eventId)) {
+//       return res.status(400).json({
+//         message: "Invalid eventId format",
+//       });
+//     }
+
+//     const existingParticipant = await Participant.findOne({
+//       userId,
+//       eventId,
+//     });
+
+//     if (existingParticipant) {
+//       return res.status(400).json({
+//         message: "User already registered for this event!",
+//       });
+//     }
+
+//     const participant = new Participant({ userId, eventId });
+//     await participant.save();
+
+//     res.status(201).json({
+//       message: "User registered successfully",
+//       participant,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       error,
+//     });
+//   }
+// };
+
+
 exports.joinEvent = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
@@ -286,11 +323,34 @@ exports.joinEvent = async (req, res) => {
 
     const participant = new Participant({ userId, eventId });
     await participant.save();
+    const event = await Events.findById(eventId);
+    console.log(event);
+    if (!event || !event.chatGroupId) {
+      console.error(`Event not found or no chatGroupId for event: ${eventId}`);
+      return res.status(500).json({ message: "Chat group information not found!" });
+    }
+    const chatGroup = await ChatGroup.findById(event.chatGroupId);
+    
+    if (!chatGroup) {
+      console.error(`Chat group not found with ID: ${event.chatGroupId}`);
+      return res.status(500).json({ message: "Chat group not found!" });
+    }
+    
+    // Convert IDs to strings for consistent comparison
+    const userIdStr = userId.toString();
+    const chatGroupUserIds = chatGroup.users.map(id => id.toString());
+    
+    // Add user to chat group if not already a member
+    if (!chatGroupUserIds.includes(userIdStr)) {
+      chatGroup.users.push(userId);
+      await chatGroup.save();
+    }
 
     res.status(201).json({
-      message: "User registered successfully",
+      message: "User registered successfully and added to chat group",
       participant,
     });
+
   } catch (error) {
     res.status(500).json({
       error,
@@ -298,6 +358,94 @@ exports.joinEvent = async (req, res) => {
   }
 };
 
+exports.getMessages = async (req, res) => {
+  try {
+    const { chatGroupId } = req.params;
+    
+    const messages = await MessageModel.find({ chatGroupId: new mongoose.Types.ObjectId(chatGroupId) })
+      .sort({ createdAt: 1 }) // Oldest messages first for proper chronological display
+      .limit(100) // Limit to prevent overwhelming the client
+    
+    res.status(200).json({ messages });
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+// Add endpoint to fetch older messages (for pagination)
+exports.getOlderMessages = async (req, res) => {
+  try {
+    const { chatGroupId } = req.params;
+    const { before } = req.query; // timestamp or message ID to get messages before
+    
+    let query = { chatGroupId: new mongoose.Types.ObjectId(chatGroupId) };
+    
+    // If 'before' parameter is provided, add it to the query
+    if (before) {
+      query.createdAt = { $lt: new Date(before) };
+    }
+    
+    const messages = await MessageModel.find(query)
+      .sort({ createdAt: -1 }) // Latest first
+      .limit(20) // Fetch 20 messages per request
+      .sort({ createdAt: 1 }); // Then sort back to oldest first for client display
+    
+    const hasMore = messages.length === 20;
+    
+    res.status(200).json({ messages, hasMore });
+  } catch (error) {
+    console.error("Error fetching older messages:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+exports.getUserChatGroups = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    
+    if (!userId) {
+      return res.status(400).json({
+        message: "User ID is required",
+      });
+    }
+
+    // Find all participants entries for this user
+    const participants = await Participant.find({ userId });
+    
+    if (!participants.length) {
+      return res.status(200).json({
+        chatGroups: [],
+        message: "User is not participating in any events"
+      });
+    }
+
+    // Get all event IDs the user is participating in
+    const eventIds = participants.map(participant => participant.eventId);
+    
+    // Find all events with these IDs to get their chat group IDs
+    const events = await Events.find({ _id: { $in: eventIds } });
+    
+    const chatGroupIds = events
+      .filter(event => event.chatGroupId) 
+      .map(event => event.chatGroupId);
+    
+    // Find all chat groups
+    const chatGroups = await ChatGroup.find({ _id: { $in: chatGroupIds } })
+
+    return res.status(200).json({
+      chatGroups,
+      message: "Chat groups fetched successfully"
+    });
+    
+  } catch (error) {
+    console.error("Error fetching user chat groups:", error);
+    return res.status(500).json({
+      message: "Failed to fetch chat groups",
+      error: error.message
+    });
+  }
+};
 exports.getEvents = async (req, res) => {
   try {
     const { userId } = req.body;

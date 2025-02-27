@@ -4,6 +4,7 @@ import profileSlice from './features/profileSlice';
 import eventsReducer from "./features/eventsSlice";
 import userReducer from "./features/userSlice";
 import rankingSlice from './features/rankingSlice';
+import chatGroupsReducer from "./features/ChatsSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     profile: profileSlice,
     events: eventsReducer,
     user: userReducer,
-    ranking: rankingSlice
+    ranking: rankingSlice,
+    chatGroups: chatGroupsReducer,
 }
 });
 

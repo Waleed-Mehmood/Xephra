@@ -10,7 +10,7 @@ import RankingBoard from "../../components/UserDashobard/RankingBoard";
 import RankingApproval from "../../components/UserDashobard/RankingApproval";
 import { TbLogout2 } from "react-icons/tb";
 import { logout } from "../../redux/features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../redux/features/userSlice";
 import CompletedEvents from "../../components/UserDashobard/CompletedEvents";
@@ -77,17 +77,20 @@ function Sidebar({ onMenuClick, dark }) {
           ))}
         </ul>
         <div className="flex flex-col justify-center items-center pb-10  w-full">
-          <div className="px-6 my-2">
-            <button
-              className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple 
-                  text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
-                 
-              `}
-            >
-              Chat System
-              <span className="ml-2" aria-hidden="true"></span>
-            </button>
-          </div>
+            <div className="px-6 my-6">
+        <Link to={"/userdashboard/chats"}>
+        <button
+          className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple ${
+            dark
+              ? " text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
+              : "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#8b796b] text-black"
+          }`}
+        >
+          Chat System
+          <span className="ml-2" aria-hidden="true"></span>
+        </button>
+        </Link>
+      </div>
           <div className="px-6 my-2">
             <button
               onClick={logoutSubmit}
@@ -100,6 +103,7 @@ function Sidebar({ onMenuClick, dark }) {
               <span className="ml-2" aria-hidden="true"></span>
             </button>
           </div>
+          
         </div>
       </div>
     </div>
@@ -140,6 +144,9 @@ function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [dark, setDark] = useState(true);
+
+  localStorage.setItem('settings', JSON.stringify({ dark, isSideMenuOpen }));
+
 
   const toggleSideMenu = () => setIsSideMenuOpen(!isSideMenuOpen);
   const toggleTheme = () => setDark(!dark);

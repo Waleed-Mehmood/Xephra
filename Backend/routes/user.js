@@ -12,7 +12,10 @@ const {
   joinEvent,
   getEvents,
   getHostedEvents,
-  getProfileExisting
+  getProfileExisting,
+  getUserChatGroups,
+  getMessages,
+  getOlderMessages,
 } = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
@@ -26,8 +29,13 @@ router.patch("/usersuspend/:userId", suspendUser);
 router.get("/upcomingevents", upcomingEvents);
 
 router.post("/event-join", joinEvent);
+router.get("/user-chat-groups", getUserChatGroups);
+
 router.post("/registered-events", getEvents);
 router.get("/events/hosted", getHostedEvents);
 router.get('/profile-exit/:userId', getProfileExisting);
+
+router.get("/messages/:chatGroupId", getMessages);
+router.get("/getOlderMessages/:chatGroupId", getOlderMessages);
 
 module.exports = router;
