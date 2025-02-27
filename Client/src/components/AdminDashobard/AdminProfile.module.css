@@ -64,9 +64,9 @@ label {
   color: white;
   padding: 12px;
   font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #b3b3b3;
-  background-color: #1313138d;
+  /* border-radius: 8px;
+  border: 1px solid #b3b3b3; */
+  background-color: #331A1FC9;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
@@ -75,7 +75,7 @@ label {
 .userProfileForm .userProfiletextarea {
   color: white !important;
   background-color: #1313138d !important;
-  border: 1px solid #b3b3b3 !important;
+  /* border: 1px solid #b3b3b3 !important; */
 }
 
 textarea {
@@ -134,4 +134,9 @@ input[type="number"] {
   margin-left: 20px;
   font-weight: bold;
   color: #e0bf7c;
+}
+@media (max-width: 600px) {
+  .profileForm {
+    margin-left: 8px;
+  }
 }

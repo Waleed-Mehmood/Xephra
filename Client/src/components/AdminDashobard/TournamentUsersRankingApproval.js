@@ -92,14 +92,14 @@ const TournamentUsersRankingApproval = () => {
   };
 
   return (
-    <div className="bg-[#B7AB95] min-h-screen p-8 flex justify-center">
+    <div className="bg-[url('https://wallpapercave.com/wp/wp2227274.jpg')] min-h-screen p-8 flex justify-center">
       <div className="container mx-auto bg-[#232122] p-6 rounded-lg shadow-lg">
         <div className="flex flex-row justify-between  items-center p-3 mb-3">
           <h1 className="text-3xl md:text-4xl font-bold  text-white text-center">
             {event?.title} Submissions
           </h1>
           <Link
-            to={`/tournamentrankings/${eventId}`}
+            to={`/dashboard/tournamentrankings/${eventId}`}
             className="mt-4 inline-block bg-[#69363F] text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:bg-[#894b5c] hover:scale-105"
           >
             Users Ranking

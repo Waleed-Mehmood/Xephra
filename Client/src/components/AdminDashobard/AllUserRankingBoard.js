@@ -87,18 +87,18 @@ const AllUserRankingBoard = ({ dark }) => {
                     className="bg-[#87544178] shadow-md rounded-lg p-4 sm:p-6 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4"
                   >
                     <img
-                      src={`${process.env.REACT_APP_BACKEND}/${item.userProfile.profileImage}`}
-                      alt={item.userProfile.fullName}
+                      src={`${process.env.REACT_APP_BACKEND}/${item?.userProfile?.profileImage}`}
+                      alt={item?.userProfile?.fullName}
                       className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover"
                     />
                     <div className="flex flex-col sm:flex-row justify-between items-center w-full space-y-4 sm:space-y-0 sm:space-x-4">
                       <div className="text-center sm:text-left flex flex-col md:flex-row space-y-2">
                        <div >
                        <h2 className="text-lg sm:text-xl font-bold text-gray-800">
-                          {item.userProfile.fullName}
+                          {item?.userProfile?.fullName}
                         </h2>
                         <p className="text-sm sm:text-base text-black">
-                          Total Points: {item.weightedScore}
+                          Total Points: {item?.weightedScore}
                         </p>
                         <p className="text-sm sm:text-base text-black">
                           Rank: {ind + 1}

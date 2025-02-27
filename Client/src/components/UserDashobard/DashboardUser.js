@@ -48,8 +48,6 @@ const DashboardUser = ({ dark }) => {
     }
   }, [profileExists]);
 
-  console.log("profile exist", profileExists);
-
   useEffect(() => {
     dispatch(getTopRanking());
   }, []);
@@ -61,44 +59,6 @@ const DashboardUser = ({ dark }) => {
   const sortedRegisteredEvents = [...participants].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
-
-  const rankings = [
-    {
-      id: 1,
-      name: "Player 1",
-      rank: 90,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQklBSe2monSAS1cBms7tDarsAdheQa0J-9Ow&s",
-    },
-    {
-      id: 2,
-      name: "Player 2",
-      rank: 80,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFH9aDM4CsWt5f1we4gCSHvQQzDKcs924yZ8IhkCVldVQI3Lt6vAWDDOlerW3SswqIBrI&usqp=CAU",
-    },
-    {
-      id: 3,
-      name: "Player 3",
-      rank: 70,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvXcLBAnNaG9u_juSWT6vyOeW1Q3N3xh0QWA&s",
-    },
-    {
-      id: 4,
-      name: "Player 4",
-      rank: 65,
-      image:
-        "https://static.vecteezy.com/system/resources/thumbnails/005/076/598/small/cool-boy-mask-mascot-esports-logo-illustration-free-vector.jpg",
-    },
-    {
-      id: 5,
-      name: "Player 5",
-      rank: 60,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-o_mCwda3jaLH9vAcEJFNm7HV0dZTuFifMA&s",
-    },
-  ];
 
   const settings1 = {
     dots: false,
@@ -157,33 +117,39 @@ const DashboardUser = ({ dark }) => {
   );
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-1 ">
       {/* Hero Section */}
-      <div
-        className="relative bg-cover bg-center h-64"
-        // style={{
-        //   backgroundImage:
-        //     "url('https://www.amd.com/content/dam/amd/en/images/photography/lifestyle/1536834-female-gamer.jpg')",
-        // }}
-      >
-        <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white lg:mt-4">
-          <h1 className="bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent w-1/2 text-2xl lg:text-[3.6rem] md:text-5xl sm:text-6xl sm:w-full font-bold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.7)]">
+      <div className="relative bg-cover bg-center h-64">
+        <div className=" w-full absolute inset-0  bg-opacity-50 text-left text-white lg:mt-1">
+          <h1
+            className="bg-gradient-to-r from-[#D19f43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] text-transparent bg-clip-text sm:w-full font-bold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.7)]
+          font-montserrat font-bold text-[30px] text-center md:text-start md:text-[45px] sm:leading-[50.9px] sm:tracking-[-5%]
+          "
+          >
             Welcome to the<br></br> Gaming <br />
             Dashboard
           </h1>
-          <h2 className={`bg-clip-text text-transparent mt-2 lg:text-2xl md:text-2xl md:text-wrap sm:text-xl drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] ${dark ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d]" : "text-white"}`}>
+          <h2
+            className={`bg-clip-text text-transparent mt-2  md:text-wrap sm:text-xl drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] font-montserrat font-bold text-[10px] text-center sm:text-start sm:text-[15px] leading-[34.9px] ${
+              dark ? "bg-[#D4AD66]" : "text-white"
+            }`}
+          >
             Stay updated with upcoming events and your ranking progress.
           </h2>
         </div>
       </div>
 
       {/* Main Section */}
-      <div className="grid grid-cols-12 gap-6 mt-8">
+      <div className="grid grid-cols-12 gap-6">
         {/* Events Section */}
         <div className={`col-span-12 lg:col-span-9 }`}>
-          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}>
+          <div
+            className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 backdrop-blur-sm ${
+              dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#2321225d]"
+            }`}
+          >
             <h2
-              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-3xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center`}
+              className={`font-montserrat drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-3xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center`}
             >
               Upcoming Events
             </h2>
@@ -204,7 +170,7 @@ const DashboardUser = ({ dark }) => {
                       <img
                         src={`${process.env.REACT_APP_BACKEND}/${event.image}`}
                         alt={event.title}
-                        className="h-60 w-full object-cover"
+                        className="h-48 w-full object-cover"
                       />
 
                       {/* Title overlay */}
@@ -220,9 +186,13 @@ const DashboardUser = ({ dark }) => {
             </Slider>
           </div>
 
-          <div className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}>
+          <div
+            className={`p-4 rounded shadow-2xl shadow-gray-950 pb-10 mt-5 backdrop-blur-sm ${
+              dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#2321225d]"
+            }`}
+          >
             <h2
-              className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2`}
+              className={` font-montserrat drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent text-center lg:text-3xl md:text-xl sm:text-lg font-bold mb-8 mt-2`}
             >
               Registered Events
             </h2>
@@ -246,7 +216,7 @@ const DashboardUser = ({ dark }) => {
                       <img
                         src={`${process.env.REACT_APP_BACKEND}/${event?.eventId?.image}`}
                         alt={event.title}
-                        className="h-60 w-full object-cover rounded"
+                        className="h-48 w-full object-cover rounded"
                       />
 
                       {/* Title overlay */}
@@ -264,10 +234,12 @@ const DashboardUser = ({ dark }) => {
         </div>
         {/* Rankings Section */}
         <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${dark ? "bg-[#69363f18] bg-opacity-[.06]" : "bg-[#232122]"}`}
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${
+            dark ? "bg-[#292622c4] " : "bg-[#292622c4]"
+          }`}
         >
           <h2
-            className={`drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
+            className={`font-montserrat drop-shadow-[2px_2px_3px_rgba(0,0,0,0.6)] lg:text-2xl md:text-xl sm:text-lg font-bold mb-4 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent`}
           >
             User Rankings
           </h2>
@@ -278,36 +250,47 @@ const DashboardUser = ({ dark }) => {
                     (user?.weightedScore / maxWightedScore) * 100;
                   return (
                     <li key={user.id} className="flex items-center mb-4">
-                      <img
-                        src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
-                        alt={user.name}
-                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                      />
-                      <div className="flex-1">
-                        <p
-                          className={`font-bold lg:text-lg sm:text-base ${
-                            dark
-                              ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                              : "text-white"
-                          } `}
-                        >
-                          {user?.userProfile?.fullName}
-                        </p>
-                        <div className="flex items-center space-x-2">
+                      {/* Ensure the image does not shrink */}
+                      <div className="flex-shrink-0">
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND}/${user?.userProfile?.profileImage}`}
+                          alt={user.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      </div>
+
+                      {/* Content Section */}
+                      <div className="flex-1 min-w-0 ml-4">
+                        {/* Name and Rank in One Line */}
+                        <div className="flex items-center justify-between text-xs whitespace-nowrap overflow-hidden">
+                          {/* Allow Name to Shrink but Not Rank */}
                           <p
-                            className={`text-sm ${
-                              dark
-                                ? "bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent"
-                                : "text-[#D3D3D3]"
-                            } `}
+                            className={`font-bold truncate flex-1 ${
+                              dark ? "text-[#C9B796]" : "text-[#C9B796]"
+                            }`}
                           >
-                            Rank: {index + 1}
+                            {user?.userProfile?.fullName}
                           </p>
-                          <div className="w-full bg-gray-200 h-2 rounded">
+
+                          {/* Ensure Rank is Fully Visible at the End */}
+                          <p
+                            className={`ml-2 flex-shrink-0 ${
+                              dark
+                                ? "bg-gradient-to-r text-[#C9B796]"
+                                : "text-[#C9B796]"
+                            }`}
+                          >
+                            Rank {index + 1}
+                          </p>
+                        </div>
+
+                        {/* Progress Bar */}
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className="w-full bg-[#69363F] h-2 rounded">
                             <div
                               className={`h-2 rounded ${
-                                dark ? "bg-[#A15D66]" : "bg-[#A15D66]"
-                              } `}
+                                dark ? "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] " : "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] "
+                              }`}
                               style={{ width: `${progress}%` }}
                             ></div>
                           </div>

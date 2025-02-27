@@ -38,6 +38,10 @@ const Signup = () => {
     }
   }, [token, navigate]);
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -49,7 +53,7 @@ const Signup = () => {
         backgroundImage: `url(${bgImage})`,
       }}
     >
-      <div className="w-full max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg mx-4">
+      <div className="w-auto sm:w-full sm:mx-3 max-w-sm md:max-w-md p-6 sm:p-8 bg-[#69363F] bg-opacity-90 rounded-lg shadow-lg" style={{ margin: "0 20px" }}>
         <h1 className="text-3xl font-bold mb-6 text-center font-playfair">Sign Up</h1>
 
         <form className="space-y-4" onSubmit={HandleFormSubmit}>
@@ -120,7 +124,7 @@ const Signup = () => {
           <span className="border-t border-gray-700 w-1/4"></span>
         </div>
 
-        <button className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
+        <button onClick={handleGoogleLogin} className="w-full font-montserrat py-2 px-4 flex items-center justify-center bg-[#9b6d49] hover:bg-[#bf9c74] rounded font-bold focus:outline-none focus:ring-2 focus:ring-[#B7A692]">
           <svg
             className="w-5 h-5 mr-2"
             xmlns="http://www.w3.org/2000/svg"

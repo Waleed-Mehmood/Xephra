@@ -89,9 +89,9 @@ const RankingBoard = ({ dark }) => {
   );
 
   return (
-    <div className={`min-h-screen p-8 shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm ${
+    <div className={`min-h-screen p-8 shadow-2xl shadow-gray-950 rounded-xl backdrop-blur-sm bg-[#492f3418] bg-opacity-[.06] ${
       dark
-        ? "bg-[#492f3418] bg-opacity-[.06]":"bg-[#232122]"}`}>
+        ? "":""}`}>
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] bg-clip-text text-transparent">
         Ranking Board
       </h1>
@@ -99,9 +99,12 @@ const RankingBoard = ({ dark }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
      
         <div className="bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] shadow-md rounded-lg p-6">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]" style={{ textShadow: "4px 4px 8px rgba(0, 0, 0, 0.5)" }}>
             Top Players
           </h2>
+          <div className="flex justify-end">
+              <Link to="/dashboard/allranking">See All</Link>
+            </div>
           <div>
             {topranks && topranks.length > 0
               ? topranks.map((user, index) => {
@@ -110,33 +113,33 @@ const RankingBoard = ({ dark }) => {
                   return (
                     <div
                       key={index}
-                      className="flex items-center justify-between border-b py-4 border-[#854951]"
+                      className="flex items-center justify-between py-4"
                     >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center bg-[#F7E8E8] rounded-full">
-                          <span className="text-base lg:text-lg font-bold text-[#854951]">
+                      <div className="flex w-full items-center space-x-4">
+                        <div className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center">
+                          <span className="text-base lg:text-2xl font-bold text-[#622D37]" style={{ textShadow: "4px 4px 8px rgba(0, 0, 0, 0.5)" }}>
                             #{index + 1}
                           </span>
                         </div>
-                        <div>
-                          <h3 className="text-sm lg:text-lg font-medium">
-                            {user?.userProfile?.fullName}
-                          </h3>
-                          <p className="text-xs lg:text-sm text-[#622D37]">
-                            Points: {user?.weightedScore}
-                          </p>
+                        <div className="flex flex-col w-full">
+                          <div className="flex items-center justify-between w-full">
+                            <h3 className="text-sm lg:text-lg font-medium" style={{ textShadow: "4px 4px 8px rgba(0, 0, 0, 0.5)" }}>
+                              {user?.userProfile?.fullName}
+                            </h3>
+                            <div>
+                              <p className="text-xs lg:text-lg text-black">
+                                Score: {user?.weightedScore}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div
+                              className="bg-[#622D37] h-2 rounded-full transition-all duration-300 text-center text-xs font-bold text-white"
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="w-16">
-                        <Doughnut
-                          data={doughnutData(progress)}
-                          options={{
-                            cutout: "80%",
-                            plugins: {
-                              tooltip: { enabled: false },
-                            },
-                          }}
-                        />
                       </div>
                     </div>
                   );
@@ -149,7 +152,7 @@ const RankingBoard = ({ dark }) => {
 
         {/* Scores Overview Section */}
         <div className="bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] to-[#D4AD66] shadow-md rounded-lg p-6">
-          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4 text-center text-[#622D37]" style={{ textShadow: "4px 4px 8px rgba(0, 0, 0, 0.5)" }}>
             Scores Overview
           </h2>
           <Bar data={barChartData} options={barChartOptions} />
