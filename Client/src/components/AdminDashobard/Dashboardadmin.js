@@ -391,7 +391,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
               : "Currently we don't have top 5 players"}
           </ul>
           <Link
-            to="/userdashboard/allranking"
+            to="/dashboard/allranking"
             className={`text-white font-semibold py-2 px-4 rounded mt-4 block text-center ${
               dark
                 ? "bg-[#854951] hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] text-white hover:text-black"

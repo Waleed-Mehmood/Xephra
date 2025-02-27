@@ -1,25 +1,26 @@
-import { React, useEffect } from "react";
+import { React, Suspense, lazy } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./pages/Home";
-import Signup from "./pages/Signup";
-import ForgetPassword from "./pages/ForgetPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Dashboard from "./pages/AdminDashboard/Dashboard";
-import UserDashboard from "./pages/UserDashboard/Dashboard";
-import Login from "./pages/Login";
-import UserProfile from "./components/UserDashobard/UserProfile";
-import Users from "./components/AdminDashobard/Users";
-import TournamentRanking from "./components/AdminDashobard/TournamentRanking";
-import EventDetailAdmin from "./components/AdminDashobard/EventDetailAdmin";
-import EventDetailUser from "./components/UserDashobard/EventDetailUser";
-import TournamentUsersRankingApproval from "./components/AdminDashobard/TournamentUsersRankingApproval";
-import AllUserRankingBoard from "./components/AdminDashobard/AllUserRankingBoard";
-import EventDetailUserDashboard from "./components/UserDashobard/EventDetailUserDashboard";
-import TournamentRankings from "./components/UserDashobard/TournamentRankings";
-import AllUserRankingUser from "./components/UserDashobard/AllUserRankingUser";
-import GoogleSuccess from "./components/GoogleSuccess";
+
+import Loading from "./utils/Loading/Loading";
+const Signup = lazy(() => import("./pages/Signup"));
+const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Dashboard = lazy(() => import("./pages/AdminDashboard/Dashboard"));
+const UserDashboard = lazy(() => import("./pages/UserDashboard/Dashboard"));
+const Login = lazy(() => import("./pages/Login"));
+const Users = lazy(() => import("./components/AdminDashobard/Users"));
+const TournamentRanking = lazy(() => import("./components/AdminDashobard/TournamentRanking"));
+const EventDetailAdmin = lazy(() => import("./components/AdminDashobard/EventDetailAdmin"));
+const EventDetailUser = lazy(() => import("./components/UserDashobard/EventDetailUser"));
+const TournamentUsersRankingApproval = lazy(() => import("./components/AdminDashobard/TournamentUsersRankingApproval"));
+const AllUserRankingBoard = lazy(() => import("./components/AdminDashobard/AllUserRankingBoard"));
+const EventDetailUserDashboard = lazy(() => import("./components/UserDashobard/EventDetailUserDashboard"));
+const TournamentRankings = lazy(() => import("./components/UserDashobard/TournamentRankings"));
+const AllUserRankingUser = lazy(() => import("./components/UserDashobard/AllUserRankingUser"));
+const GoogleSuccess = lazy(() => import("./components/GoogleSuccess"));
+const Home = lazy(() => import("./pages/Home"));
 
 export default function App() {
   const PrivateRoute = ({ children }) => {
@@ -29,6 +30,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+    <Suspense fallback={<Loading />} >
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<Home />} />
@@ -78,6 +80,7 @@ export default function App() {
           element={<TournamentUsersRankingApproval />}
         />
       </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

@@ -103,7 +103,7 @@ const RankingBoard = ({ dark }) => {
             Top Players
           </h2>
           <div className="flex justify-end">
-              <Link to="/userdashboard/allranking">See All</Link>
+              <Link to="/dashboard/allranking">See All</Link>
             </div>
           <div>
             {topranks && topranks.length > 0
