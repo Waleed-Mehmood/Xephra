@@ -16,10 +16,14 @@ import {
   createProfile,
   getProfile,
 } from "../../redux/features/userSlice";
+import {
+  fetchUserRank
+} from "../../redux/features/rankingSlice";
 import Loading from "../../utils/Loading/Loading";
 
 const UserProfile = ({ dark, profile }) => {
   const { loading } = useSelector((state) => state.profile);
+  const { userrank } = useSelector((state) => state.ranking);
   const dispatch = useDispatch();
 
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -49,6 +53,7 @@ const UserProfile = ({ dark, profile }) => {
   useEffect(() => {
     if (userId) {
       dispatch(getProfile(userId)); // Fetch the profile if userId exists
+      dispatch(fetchUserRank(userId));
     }
   }, [dispatch, userId]);
 
@@ -183,7 +188,7 @@ const UserProfile = ({ dark, profile }) => {
       <div className="  bg-gradient-to-r from-[#D19F43] via-[#B2945C] via-[#C9B796] via-[#B39867] via-[#D4AD66] to-[#D19F43] p-0 shadow-lg mb-6 relative h-48 rounded-t-xl">
   {/* Rank Display */}
   <div className="absolute top-4 right-6 font-montserrat text-white text-3xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
-    Rank: {profileData.rank || 73}
+    Rank: {userrank || "NA"}
   </div>
 
   {/* Profile Image Container */}

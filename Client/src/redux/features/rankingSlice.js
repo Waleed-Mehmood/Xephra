@@ -143,6 +143,16 @@ export const getTopRanking = createAsyncThunk(
   }
 );
 
+
+export const fetchUserRank = createAsyncThunk('ranking/fetchUserRank', async (userId, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${apiUrl}/rank/user-rank?userId=${userId}`);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data || 'Error fetching rank');
+    }
+});
+
 const rankingSlice = createSlice({
   name: "ranking",
   initialState: {
@@ -153,6 +163,7 @@ const rankingSlice = createSlice({
     submissions: [],
     topranks: [],
     users: [],
+    userrank: null,
     userStats: null,
     error: null,
   },
@@ -289,7 +300,19 @@ const rankingSlice = createSlice({
       .addCase(fetchUserStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchUserRank.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+    })
+    .addCase(fetchUserRank.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userrank = action.payload.rank;
+    })
+    .addCase(fetchUserRank.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    });
   },
 });
 
