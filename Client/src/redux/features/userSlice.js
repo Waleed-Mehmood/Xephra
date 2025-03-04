@@ -12,7 +12,7 @@ export const createProfile = createAsyncThunk(
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        }, { withCredentials: true }
       );
       return response.data;
     } catch (error) {
@@ -27,7 +27,7 @@ export const getProfile = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${apiUrl}/user/profile/${userId}`,
+        `${apiUrl}/user/profile/${userId}`, { withCredentials: true }
       );
       return response.data; // Profile data
     } catch (error) {
@@ -45,7 +45,7 @@ export const updateProfile = createAsyncThunk(
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        }, { withCredentials: true }
       );
       console.log("Update Response:", response.data);
       return response.data;
@@ -60,7 +60,7 @@ export const checkUserProfile = createAsyncThunk(
   'user/checkUserProfile',
   async (userId , {rejectWithValue}) => {
     try {
-      const response = await axios.get(`${apiUrl}/user/profile-exit/${userId}`);
+      const response = await axios.get(`${apiUrl}/user/profile-exit/${userId}`, { withCredentials: true });
       return response.data.exists;
     } catch (error) {
       return rejectWithValue(error.response?.data);

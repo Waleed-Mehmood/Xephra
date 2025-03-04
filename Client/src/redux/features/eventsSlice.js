@@ -9,7 +9,8 @@ export const createEvent = createAsyncThunk(
   "events/createEvent",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/admin/newevent`, formData, {
+      const response = await axios.post(`${apiUrl}/admin/newevent`, formData,
+        { withCredentials: true } , {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -26,7 +27,7 @@ export const getEvents = createAsyncThunk(
   "events/getEvents",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/postedevents`);
+      const response = await axios.get(`${apiUrl}/admin/postedevents`, { withCredentials: true });
       return response.data.events;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -39,7 +40,7 @@ export const deleteEventById = createAsyncThunk(
   "events/deleteEventById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${apiUrl}/admin/delete/${id}`);
+      const response = await axios.delete(`${apiUrl}/admin/delete/${id}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -53,7 +54,7 @@ export const editEvent = createAsyncThunk(
     try {
       const response = await axios.patch(
         `${apiUrl}/admin/eventedit/${id}`,
-        updatedData
+        updatedData, { withCredentials: true }
       );
       return response.data.event;
     } catch (error) {
@@ -66,7 +67,7 @@ export const getEventById = createAsyncThunk(
   "events/getEventById",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/event/${id}`);
+      const response = await axios.get(`${apiUrl}/admin/event/${id}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data);
@@ -82,7 +83,7 @@ export const joinEvent = createAsyncThunk(
       const response = await axios.post(`${apiUrl}/user/event-join`, {
         userId,
         eventId,
-      });
+      }, { withCredentials: true });
       return response.data;
     } catch (error) {
       console.log("error",error);
@@ -96,7 +97,7 @@ export const getEventsByUserId = createAsyncThunk(
   'events/getEventsByUserId',
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/user/registered-events`, { userId }); // Assuming '/api/events' is the endpoint
+      const response = await axios.post(`${apiUrl}/user/registered-events`, { userId }, { withCredentials: true }); // Assuming '/api/events' is the endpoint
       return response.data.events;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
@@ -108,7 +109,7 @@ export const fetchEventUsers = createAsyncThunk(
   "eventUsers/fetchEventUsers",
   async (eventId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/event-users/${eventId}`);
+      const response = await axios.get(`${apiUrl}/admin/event-users/${eventId}`, { withCredentials: true });
       return response.data.participantsData;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -121,7 +122,7 @@ export const markEventAsHosted = createAsyncThunk(
   async (eventId, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
-        `${apiUrl}/admin/events/${eventId}/host`
+        `${apiUrl}/admin/events/${eventId}/host`, { withCredentials: true }
       );
       return response.data.event;
     } catch (error) {
@@ -133,7 +134,7 @@ export const markEventAsHosted = createAsyncThunk(
 export const fetchHostedTournaments = createAsyncThunk(
   "events/fetchHostedTournaments",
   async () => {
-    const response = await axios.get(`${apiUrl}/user/events/hosted`);
+    const response = await axios.get(`${apiUrl}/user/events/hosted`, { withCredentials: true });
     return response.data;
   }
 );

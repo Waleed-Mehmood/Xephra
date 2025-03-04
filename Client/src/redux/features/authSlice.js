@@ -10,7 +10,8 @@ export const signUpUser = createAsyncThunk(
     try {
       const response = await axios.post(
          `${apiUrl}/auth/signup`,
-        userData
+        userData,
+        { withCredentials: true } 
       );
       return response.data;
     } catch (error) {
@@ -26,7 +27,8 @@ export const LoginUser = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/auth/login`,
-        userData
+        userData,
+        { withCredentials: true } 
       );
       return response.data;
     } catch (error) {
@@ -42,7 +44,8 @@ export const forgotPassword = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/auth/forgot`,
-        email
+        email,
+        { withCredentials: true } 
       );
       return response.data;
     } catch (error) {
@@ -58,7 +61,8 @@ export const resetPassword = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/auth/reset/${token}`,
-        { newPassword }
+        { newPassword },
+        { withCredentials: true } 
       );
       return response.data;
     } catch (error) {

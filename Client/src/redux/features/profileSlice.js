@@ -9,7 +9,7 @@ export const createProfile = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/admin/createProfile`,
-        formData,
+        formData, { withCredentials: true },
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
@@ -26,7 +26,7 @@ export const getProfile = createAsyncThunk(
   "profile/getProfile",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/profile/${userId}`);
+      const response = await axios.get(`${apiUrl}/admin/profile/${userId}`, { withCredentials: true });
       return response.data; // Profile data
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch profile");
@@ -43,7 +43,7 @@ export const updateProfile = createAsyncThunk(
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        }, { withCredentials: true }
       );
       console.log("Update Response:", response.data);
       return response.data;
@@ -59,7 +59,7 @@ export const getAllUsers = createAsyncThunk(
   "profile/getAllUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios(`${apiUrl}/user/getusers`);
+      const response = await axios(`${apiUrl}/user/getusers`, { withCredentials: true });
       return response.data.users;
     } catch (error) {
       return rejectWithValue(error.response?.data || "An error occurred");
@@ -72,7 +72,7 @@ export const deleteUser = createAsyncThunk(
   "profile/deleteUser",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`${apiUrl}/user/user/${userId}`);
+      const response = await axios.delete(`${apiUrl}/user/user/${userId}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -88,7 +88,7 @@ export const suspendUser = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
-        `${apiUrl}/user/usersuspend/${userId}`
+        `${apiUrl}/user/usersuspend/${userId}`, { withCredentials: true }
       );
       return { userId, ...response.data };
     } catch (error) {
@@ -106,7 +106,7 @@ export const getUser = createAsyncThunk(
   "profile/getUser",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/user/user/${userId}`);
+      const response = await axios.get(`${apiUrl}/user/user/${userId}`, { withCredentials: true });
       return response.data;
     } catch (error) {
       return error.response?.data?.message || "Failed to get user profile";
@@ -118,7 +118,7 @@ export const gettotaluserandevents = createAsyncThunk(
   "profile/gettotaluserandevents",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios(`${apiUrl}/admin/gettotalusersandevents`);
+      const response = await axios(`${apiUrl}/admin/gettotalusersandevents`, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "An error occurred");
