@@ -158,7 +158,7 @@ const ChatSystem = () => {
             loading={loading}
             unreadMessages={unreadMessages}
             handleSelectChat={(group) => {
-              const { setActiveChat, fetchMessages } = require("../redux/features/ChatsSlice");
+              const { setActiveChat, fetchMessages, fetchSingleMessages } = require("../redux/features/ChatsSlice");
               
               // First, leave any current chat room
               if (activeChat && window.socket && socketConnected) {
@@ -166,7 +166,14 @@ const ChatSystem = () => {
               }
               
               dispatch(setActiveChat(group));
-              dispatch(fetchMessages(group._id));
+              
+              // Conditional fetch - different method for admin support chat
+              if (group.isAdminChat) {
+                console.log(group._id);
+                dispatch(fetchSingleMessages(group._id));
+              } else {
+                dispatch(fetchMessages(group._id));
+              }
               
               // Clear unread indicator for this chat
               if (unreadMessages[group._id]) {
