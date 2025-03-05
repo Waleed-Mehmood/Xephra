@@ -1,11 +1,13 @@
- const UserProfile = require("../models/UserProfile");
- const User = require("../models/User");
- const Events = require("../models/Events");
+const UserProfile = require("../models/UserProfile");
+const User = require("../models/User");
+const Events = require("../models/Events");
 const { default: mongoose } = require("mongoose");
 const Participant = require("../models/Participant");
 const ChatGroup = require("../models/ChatGroup");
 const MessageModel = require("../models/Message");
-
+const AdminChat = require("../models/AdminChatGroup");
+const AdminMessageModel = require("../models/AdminMessage");
+const AdminMessage = require("../models/AdminMessage");
 
 // POST: Create a new user profile
 exports.createProfile = async (req, res) => {
@@ -265,7 +267,6 @@ exports.upcomingEvents = async (req, res) => {
   }
 };
 
-
 // exports.joinEvent = async (req, res) => {
 //   try {
 //     const { userId, eventId } = req.body;
@@ -300,7 +301,6 @@ exports.upcomingEvents = async (req, res) => {
 //   }
 // };
 
-
 exports.joinEvent = async (req, res) => {
   try {
     const { userId, eventId } = req.body;
@@ -327,19 +327,21 @@ exports.joinEvent = async (req, res) => {
     console.log(event);
     if (!event || !event.chatGroupId) {
       console.error(`Event not found or no chatGroupId for event: ${eventId}`);
-      return res.status(500).json({ message: "Chat group information not found!" });
+      return res
+        .status(500)
+        .json({ message: "Chat group information not found!" });
     }
     const chatGroup = await ChatGroup.findById(event.chatGroupId);
-    
+
     if (!chatGroup) {
       console.error(`Chat group not found with ID: ${event.chatGroupId}`);
       return res.status(500).json({ message: "Chat group not found!" });
     }
-    
+
     // Convert IDs to strings for consistent comparison
     const userIdStr = userId.toString();
-    const chatGroupUserIds = chatGroup.users.map(id => id.toString());
-    
+    const chatGroupUserIds = chatGroup.users.map((id) => id.toString());
+
     // Add user to chat group if not already a member
     if (!chatGroupUserIds.includes(userIdStr)) {
       chatGroup.users.push(userId);
@@ -350,7 +352,6 @@ exports.joinEvent = async (req, res) => {
       message: "User registered successfully and added to chat group",
       participant,
     });
-
   } catch (error) {
     res.status(500).json({
       error,
@@ -361,11 +362,13 @@ exports.joinEvent = async (req, res) => {
 exports.getMessages = async (req, res) => {
   try {
     const { chatGroupId } = req.params;
-    
-    const messages = await MessageModel.find({ chatGroupId: new mongoose.Types.ObjectId(chatGroupId) })
+
+    const messages = await MessageModel.find({
+      chatGroupId: new mongoose.Types.ObjectId(chatGroupId),
+    })
       .sort({ createdAt: 1 }) // Oldest messages first for proper chronological display
-      .limit(100) // Limit to prevent overwhelming the client
-    
+      .limit(100); // Limit to prevent overwhelming the client
+
     res.status(200).json({ messages });
   } catch (error) {
     console.error("Error fetching messages:", error);
@@ -378,21 +381,21 @@ exports.getOlderMessages = async (req, res) => {
   try {
     const { chatGroupId } = req.params;
     const { before } = req.query; // timestamp or message ID to get messages before
-    
+
     let query = { chatGroupId: new mongoose.Types.ObjectId(chatGroupId) };
-    
+
     // If 'before' parameter is provided, add it to the query
     if (before) {
       query.createdAt = { $lt: new Date(before) };
     }
-    
+
     const messages = await MessageModel.find(query)
       .sort({ createdAt: -1 }) // Latest first
       .limit(20) // Fetch 20 messages per request
       .sort({ createdAt: 1 }); // Then sort back to oldest first for client display
-    
+
     const hasMore = messages.length === 20;
-    
+
     res.status(200).json({ messages, hasMore });
   } catch (error) {
     console.error("Error fetching older messages:", error);
@@ -400,10 +403,36 @@ exports.getOlderMessages = async (req, res) => {
   }
 };
 
+exports.getAdminUserChatGroups = async (req, res) => {
+  try {
+    const { userId } = req.query;  
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Find chat group where the admin has the given userId
+    const privateChat = await AdminChat.findOne({ userId: userId }); // ✅ Await the query
+
+    if (!privateChat) {
+      return res.status(404).json({ message: "Chat group not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ privateChat, message: "Chat groups fetched successfully" });
+  } catch (error) {
+    console.error("Error fetching user chat groups:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch chat groups", error: error.message });
+  }
+};
+
 exports.getUserChatGroups = async (req, res) => {
   try {
     const { userId } = req.query;
-    
+
     if (!userId) {
       return res.status(400).json({
         message: "User ID is required",
@@ -412,37 +441,36 @@ exports.getUserChatGroups = async (req, res) => {
 
     // Find all participants entries for this user
     const participants = await Participant.find({ userId });
-    
+
     if (!participants.length) {
       return res.status(200).json({
         chatGroups: [],
-        message: "User is not participating in any events"
+        message: "User is not participating in any events",
       });
     }
 
     // Get all event IDs the user is participating in
-    const eventIds = participants.map(participant => participant.eventId);
-    
+    const eventIds = participants.map((participant) => participant.eventId);
+
     // Find all events with these IDs to get their chat group IDs
     const events = await Events.find({ _id: { $in: eventIds } });
-    
+
     const chatGroupIds = events
-      .filter(event => event.chatGroupId) 
-      .map(event => event.chatGroupId);
-    
+      .filter((event) => event.chatGroupId)
+      .map((event) => event.chatGroupId);
+
     // Find all chat groups
-    const chatGroups = await ChatGroup.find({ _id: { $in: chatGroupIds } })
+    const chatGroups = await ChatGroup.find({ _id: { $in: chatGroupIds } });
 
     return res.status(200).json({
       chatGroups,
-      message: "Chat groups fetched successfully"
+      message: "Chat groups fetched successfully",
     });
-    
   } catch (error) {
     console.error("Error fetching user chat groups:", error);
     return res.status(500).json({
       message: "Failed to fetch chat groups",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -458,7 +486,6 @@ exports.getEvents = async (req, res) => {
   }
 };
 
-
 // Get only hosted events
 exports.getHostedEvents = async (req, res) => {
   try {
@@ -469,7 +496,7 @@ exports.getHostedEvents = async (req, res) => {
   }
 };
 
-exports.getProfileExisting = async (req, res)=>{
+exports.getProfileExisting = async (req, res) => {
   try {
     const { userId } = req.params;
     const userProfile = await UserProfile.findOne({ userId });
@@ -479,8 +506,76 @@ exports.getProfileExisting = async (req, res)=>{
     } else {
       return res.json({ exists: false });
     }
-
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }
-}
+};
+
+exports.getSingleMessages = async (req, res) => {
+  try {
+    const { chatGroupId } = req.params;
+    if (!chatGroupId) {
+      return res.status(400).json({ message: "ChatGroupId is required" });
+    }
+
+    const ObjectId = new mongoose.Types.ObjectId(chatGroupId);
+    const messages = await AdminMessage.find({ chatGroupId: ObjectId }).sort(
+      { createdAt: 1 }
+    );
+    res.status(200).json({ messages });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+
+exports.getAdminUserSingleChats = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "Admin ID is required" });
+    }
+
+    // Find all chat groups where adminId matches
+    const chatGroups = await AdminChat.find({ adminId });
+
+    // Fetch user profiles for each chat group
+    const chatGroupsWithUsers = await Promise.all(
+      chatGroups.map(async (group) => {
+        const userProfile = await UserProfile.findOne({ userId: group.userId }).select("profileImage username").lean();
+
+        return {
+          ...group._doc,  // Spread existing group data
+          userProfile: userProfile || null,  // Attach user profile (null if not found)
+        };
+      })
+    );
+
+    res.status(200).json({ chatGroups: chatGroupsWithUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getGroupsForAdmin = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "Admin ID is required" });
+    }
+
+    // Find chat groups where adminId exists inside the users array
+    const chatGroups = await ChatGroup.find({ users: adminId });
+
+    res.status(200).json({ chatGroups });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};

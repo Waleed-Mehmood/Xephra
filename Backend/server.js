@@ -26,9 +26,9 @@ app.use(cookieParser());
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:3000", 
-  // origin: "https://xephra.vercel.app", 
-  // origin: "https://xephra.net", // Allow only your frontend
+  // origin: "http://localhost:3000", 
+   origin: "https://xephra.vercel.app", 
+  //origin: "https://xephra.net", // Allow only your frontend
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
   credentials: true, // **Required for JWT authentication**

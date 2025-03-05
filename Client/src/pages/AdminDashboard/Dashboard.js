@@ -10,7 +10,7 @@ import AdminProfile from "../../components/AdminDashobard/AdminProfile";
 import { TbLogout2 } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getProfile } from "../../redux/features/profileSlice";
 import CompletedEvents from "../../components/AdminDashobard/CompletedEvents";
 import RankingBoard from "../../components/AdminDashobard/RankingBoard";
@@ -84,6 +84,7 @@ function Sidebar({ onMenuClick, dark }) {
         </ul>
         <div className="flex flex-col justify-center items-center pb-10  w-full">
           <div className="px-6 my-2">
+            <Link to="/dashboard/chats">
             <button
               className={`flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border-2 border-[#C9B796] rounded-lg focus:outline-none focus:shadow-outline-purple 
                   text-[#C9B796] hover:text-black hover:bg-gradient-to-r from-[#D19F43] via-[#d1a759] to-[#eb9a0d] active:bg-[#A15D66]"
@@ -93,6 +94,7 @@ function Sidebar({ onMenuClick, dark }) {
               Chat System
               <span className="ml-2" aria-hidden="true"></span>
             </button>
+            </Link>
           </div>
           <div className="px-6 my-2">
             <button

@@ -23,7 +23,7 @@ const TournamentRankings = lazy(() => import("./components/UserDashobard/Tournam
 const AllUserRankingUser = lazy(() => import("./components/UserDashobard/AllUserRankingUser"));
 const GoogleSuccess = lazy(() => import("./components/GoogleSuccess"));
 const Home = lazy(() => import("./pages/Home"));
-const ChatSystem = lazy(() => import("./components/UserDashobard/ChatSystem"));
+const ChatSystem = lazy(() => import("./components/ChatSystem"));
 
 
 export default function App() {
@@ -45,6 +45,14 @@ export default function App() {
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route
           path="/userdashboard/chats"
+          element={
+            <PrivateRoute>
+              <ChatSystem />{" "}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard/chats"
           element={
             <PrivateRoute>
               <ChatSystem />{" "}

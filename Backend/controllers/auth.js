@@ -3,6 +3,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const AdminChatGroup = require("../models/AdminChatGroup")
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -26,7 +27,7 @@ exports.signup = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email is already exists" });
+      return res.status(400).json({ error: "Email already exists" });
     }
 
     const newUser = new User({
@@ -37,6 +38,24 @@ exports.signup = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
+    
+    // Find an admin user to create a chat group with
+    const admin = await User.findOne({ role: "admin" });
+    
+    if (admin) {
+      // Generate a unique chat group ID
+      const chatGroupId = `chat_${savedUser._id}_${admin._id}_${Date.now()}`;
+      
+      // Create a new admin chat group
+      const newAdminChatGroup = new AdminChatGroup({
+        chatGroupId,
+        userId: savedUser.userId.toString(),
+        adminId: admin.userId.toString(),
+      });
+      
+      await newAdminChatGroup.save();
+    }
+    
     const token = generateToken(savedUser);
 
     res.status(201).json({
@@ -44,12 +63,13 @@ exports.signup = async (req, res) => {
       token,
       user: {
         name: savedUser.name,
-        UserId: savedUser.UserId,
+        UserId: savedUser.UserId || savedUser._id, // Ensure UserId is available
         email: savedUser.email,
         role: savedUser.role,
       },
     });
   } catch (error) {
+    console.error("Signup error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
