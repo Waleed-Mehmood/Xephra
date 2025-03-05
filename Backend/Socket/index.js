@@ -8,6 +8,7 @@ const AdminMessageModel = require("../models/AdminMessage");
       cors: {
       // origin: "https://xephra.net", // Update with your frontend URL
         origin: "https://xephra.vercel.app",
+        // origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
       },
