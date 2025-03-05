@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { RiAdminLine } from "react-icons/ri";
+import { getAdminUserChatGroup } from "../../redux/features/ChatsSlice"
+import { useDispatch } from "react-redux";
 
 const Sidebar = ({
   sideMenuRef,
@@ -14,18 +16,41 @@ const Sidebar = ({
   unreadMessages,
   handleSelectChat,
 }) => {
+  const dispatch = useDispatch();
   // Handle admin chat selection
-  const handleAdminChatSelect = () => {
-    // This should open the admin chat
-    // You can define the adminChat object here or access it from your backend
-    const adminChat = {
-      _id: "67c69a1d86b44cbbb2d99658",
-      name: "Admin Support",
-      isAdminChat: true,
-      lastMessage: { text: "Contact admin for support" }
-    };
-    
-    handleSelectChat(adminChat);
+  const handleAdminChatSelect = async () => {
+   
+    // Retrieve userId from local storage
+    const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
+    console.log(userId);
+    if (userId) {
+      try {
+        const resultAction = await dispatch(getAdminUserChatGroup(userId));
+        
+        if (getAdminUserChatGroup.fulfilled.match(resultAction)) {
+          // If the fetch is successful, select the admin chat
+          const adminChat = {
+            _id: resultAction.payload._id || "admin-chat",
+            name: "Admin Support",
+            isAdminChat: true,
+            lastMessage: resultAction.payload.lastMessage || { text: "Contact admin for support" }
+          };
+          
+          handleSelectChat(adminChat);
+        } else {
+          // Handle error case
+          console.error("Failed to fetch admin chat", resultAction.payload);
+          // Optionally show an error toast or message to the user
+        }
+      } catch (error) {
+        console.error("Error selecting admin chat", error);
+        // Handle any unexpected errors
+      }
+    } else {
+      // Handle case where userId is not found in local storage
+      console.error("No user ID found in local storage");
+      // Optionally show an error message to the user
+    }
   };
 
   return (

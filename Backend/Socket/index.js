@@ -37,10 +37,10 @@ const socketSetup = (server) => {
     
         // Check if the chat group belongs to an admin
         const isAdminChat = await AdminChatGroupModel.exists({ _id: chatGroupId });
-       
+        console.log("isAdminChat" ,isAdminChat);
     
         if (isAdminChat) {
-          console.log("isAdminChat" ,isAdminChat);
+         
           const newMessage = new AdminMessageModel({
             chatGroupId,
             senderId: message.senderId,
