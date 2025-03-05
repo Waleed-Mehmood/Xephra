@@ -7,6 +7,7 @@ const ChatGroup = require("../models/ChatGroup");
 const MessageModel = require("../models/Message");
 const AdminChat = require("../models/AdminChatGroup");
 const AdminMessageModel = require("../models/AdminMessage");
+const AdminMessage = require("../models/AdminMessage");
 
 // POST: Create a new user profile
 exports.createProfile = async (req, res) => {
@@ -404,26 +405,29 @@ exports.getOlderMessages = async (req, res) => {
 
 exports.getAdminUserChatGroups = async (req, res) => {
   try {
-    const { userId } = req.query;  
-    
+    const { userId } = req.query;
+
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
     // Find chat group where the admin has the given userId
-    const privateChat = await AdminChat.findOne({ userId: userId });  // ✅ Await the query
+    const privateChat = await AdminChat.findOne({ userId: userId }); // ✅ Await the query
 
     if (!privateChat) {
       return res.status(404).json({ message: "Chat group not found" });
     }
 
-    return res.status(200).json({ privateChat, message: "Chat groups fetched successfully" });
+    return res
+      .status(200)
+      .json({ privateChat, message: "Chat groups fetched successfully" });
   } catch (error) {
     console.error("Error fetching user chat groups:", error);
-    return res.status(500).json({ message: "Failed to fetch chat groups", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch chat groups", error: error.message });
   }
 };
-
 
 exports.getUserChatGroups = async (req, res) => {
   try {
@@ -504,5 +508,25 @@ exports.getProfileExisting = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+exports.getSingleMessages = async (req, res) => {
+  try {
+    const { chatGroupId } = req.params;
+    if (!chatGroupId) {
+      return res.status(400).json({ message: "ChatGroupId is required" });
+    }
+
+    const ObjectId = new mongoose.Types.ObjectId(chatGroupId);
+    const messages = await AdminMessage.find({ chatGroupId: ObjectId }).sort(
+      { createdAt: 1 }
+    );
+    res.status(200).json({ messages });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };
