@@ -561,3 +561,21 @@ exports.getAdminUserSingleChats = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getGroupsForAdmin = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "Admin ID is required" });
+    }
+
+    // Find chat groups where adminId exists inside the users array
+    const chatGroups = await ChatGroup.find({ users: adminId });
+
+    res.status(200).json({ chatGroups });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
