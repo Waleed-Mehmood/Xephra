@@ -405,7 +405,7 @@ exports.getOlderMessages = async (req, res) => {
 
 exports.getAdminUserChatGroups = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId } = req.query;  
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
