@@ -33,6 +33,19 @@ export const fetchMessages = createAsyncThunk(
     }
   }
 );
+export const getAdminUserChatGroup = createAsyncThunk(
+  "chatWithAdmin/getAdminUserChatGroup",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/AdminUserChatgroup`, {
+        params: { userId }
+      });
+      return response.data.privateChat;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
 
 // Async thunk to fetch older messages (pagination)
 export const fetchOlderMessages = createAsyncThunk(
@@ -50,10 +63,54 @@ export const fetchOlderMessages = createAsyncThunk(
   }
 );
 
+
+export const fetchSingleMessages = createAsyncThunk(
+  "chatGroups/fetchSingleMessages",
+  async (chatGroupId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/single-chat/${chatGroupId}`);
+      console.log("from slice",response.data.messages);
+      return response.data.messages; // Return only messages array
+      
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
+
+export const fetchAdminChatGroups = createAsyncThunk(
+  "chatGroups/fetchAdminChatGroups",
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/admin-chatgroups/${adminId}`);
+      return response.data.chatGroups; // Extracting chat groups array
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || "Failed to fetch chat groups");
+    }
+  }
+);
+
+// Async thunk to fetch admin user single chats
+export const fetchAdminUserSingleChats = createAsyncThunk(
+  "chatGroups/fetchAdminUserSingleChats",
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/single-allchats/${adminId}`);
+      return response.data; // Store full response, not just chatGroups
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
+
 const chatGroupsSlice = createSlice({
   name: "chatGroups",
   initialState: {
     chatGroups: [],
+    adminChatGroups: [],
+    data: null,
     loading: false,
     messagesLoading: false,
     error: null,
@@ -61,6 +118,7 @@ const chatGroupsSlice = createSlice({
     messages: [],
     hasMore: false,
     oldestMessageTimestamp: null,
+    userAdminChatGroup: null,
   },
   reducers: {
     setActiveChat: (state, action) => {
@@ -72,18 +130,8 @@ const chatGroupsSlice = createSlice({
     addMessage: (state, action) => {
       // Check if the message is for the current active chat
       if (state.activeChat && action.payload.chatGroupId === state.activeChat._id) {
-        // Check for duplicate messages to prevent duplicates
-        const isDuplicate = state.messages.some(
-          (msg) => 
-            msg.text === action.payload.text && 
-            msg.senderId === action.payload.senderId &&
-            msg.time?.minute === action.payload.time?.minute &&
-            msg.time?.hour === action.payload.time?.hour
-        );
-        
-        if (!isDuplicate) {
-          state.messages.push(action.payload);
-        }
+        // Add the message regardless of whether it's a duplicate or not
+        state.messages.push(action.payload);
       }
       
       // Update the lastMessage for the relevant chat group
@@ -92,15 +140,25 @@ const chatGroupsSlice = createSlice({
       );
       
       if (chatIndex !== -1) {
+        // Update the lastMessage with the new message
         state.chatGroups[chatIndex].lastMessage = {
           text: action.payload.text,
           time: `${action.payload.time?.hour}:${action.payload.time?.minute.toString().padStart(2, '0')}`
         };
         
         // Move this chat to the top of the list for newest first
-        const updatedGroup = state.chatGroups[chatIndex];
+        const updatedGroup = { ...state.chatGroups[chatIndex] };
         state.chatGroups.splice(chatIndex, 1);
         state.chatGroups.unshift(updatedGroup);
+      }
+    },
+    // Add a reducer for real-time updates to chat groups
+    updateChatGroupStatus: (state, action) => {
+      const { chatGroupId, status } = action.payload;
+      const chatIndex = state.chatGroups.findIndex(group => group._id === chatGroupId);
+      
+      if (chatIndex !== -1) {
+        state.chatGroups[chatIndex].status = status;
       }
     },
   },
@@ -160,9 +218,58 @@ const chatGroupsSlice = createSlice({
       .addCase(fetchOlderMessages.rejected, (state, action) => {
         state.messagesLoading = false;
         state.error = action.payload;
+      })
+      .addCase(getAdminUserChatGroup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAdminUserChatGroup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userAdminChatGroup = action.payload;
+      })
+      .addCase(getAdminUserChatGroup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchSingleMessages.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSingleMessages.fulfilled, (state, action) => {
+        state.loading = false;
+        state.messages = action.payload;
+      })
+      .addCase(fetchSingleMessages.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAdminChatGroups.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdminChatGroups.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminChatGroups = action.payload;
+      })
+      .addCase(fetchAdminChatGroups.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAdminUserSingleChats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdminUserSingleChats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload; // Store entire response
+      })
+      .addCase(fetchAdminUserSingleChats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 
-export const { setActiveChat, addMessage } = chatGroupsSlice.actions;
+export const { setActiveChat, addMessage, updateChatGroupStatus, g } = chatGroupsSlice.actions;
 export default chatGroupsSlice.reducer;
