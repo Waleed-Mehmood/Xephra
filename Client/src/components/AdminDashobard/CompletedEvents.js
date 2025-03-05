@@ -38,7 +38,7 @@ const CompletedEvents = ({ dark }) => {
           </Link>
     
           <div className="p-4">
-            <Link to={`/eventuser/${_id}`}>
+            <Link to={`/eventadmin/${_id}`}>
             <p className="text-[#C9B796] text-lg font-bold mt-1">{game}</p>
              <p className="text-[#C9B796] mt-2  line-clamp-3">{description}</p>
              <p className="text-lg text-[#C9B796] lg:w-[100%] mt-2">

@@ -6,7 +6,7 @@ const AdminMessageModel = require("../models/AdminMessage");
   const socketSetup = (server) => {
     const io = new Server(server, {
       cors: {
-//         origin: "https://xephra.net", // Update with your frontend URL
+      // origin: "https://xephra.net", // Update with your frontend URL
         origin: "https://xephra.vercel.app",
         methods: ["GET", "POST"],
         credentials: true

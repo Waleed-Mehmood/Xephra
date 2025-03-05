@@ -97,6 +97,17 @@ const AllUserRankingBoard = ({ dark }) => {
                        <h2 className="text-lg sm:text-xl font-bold text-gray-800">
                           {item?.userProfile?.fullName}
                         </h2>
+                        {/* Progress Bar */}
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className="w-full bg-[#69363F] h-2 rounded">
+                            <div
+                              className={`h-2 rounded ${
+                                dark ? "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] " : "bg-gradient-to-r from-[#AE8D52] via-[#BCA477] via-[#C6b492] via-[#B69A66] to-[#CBA766] "
+                              }`}
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                        </div>
                         <p className="text-sm sm:text-base text-black">
                           Total Points: {item?.weightedScore}
                         </p>
@@ -104,7 +115,7 @@ const AllUserRankingBoard = ({ dark }) => {
                           Rank: {ind + 1}
                         </p>
                         </div>
-                        <div className="w-16">
+                        {/* <div className="w-16">
                         <Doughnut
                           data={doughnutData(progress)}
                           options={{
@@ -114,7 +125,7 @@ const AllUserRankingBoard = ({ dark }) => {
                             },
                           }}
                         />
-                      </div>
+                      </div> */}
                       </div>
                      
                       <div className="flex justify-center sm:justify-end w-full sm:w-auto">
