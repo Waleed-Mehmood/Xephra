@@ -20,7 +20,7 @@ export const postRankingApproval = createAsyncThunk(
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      });
+      }, { withCredentials: true });
 
       return response.data;
     } catch (error) {
@@ -34,7 +34,7 @@ export const fetchUserSubmissions = createAsyncThunk(
   "ranking/fetchUserSubmissions",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/rank/submissions/${userId}`);
+      const response = await axios.get(`${apiUrl}/rank/submissions/${userId}`, { withCredentials: true });
       return response.data.data; // Extract only the data array
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -49,7 +49,7 @@ export const deleteUserSubmission = createAsyncThunk(
     try {
       const response = await axios.delete(`${apiUrl}/rank/approvaldelete`, {
         data: { userId, eventId },
-      });
+      }, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -64,7 +64,7 @@ export const assignEventRanking = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/rank/assign-rank`,
-        rankingData
+        rankingData, { withCredentials: true }
       );
       return response.data;
     } catch (error) {
@@ -79,7 +79,7 @@ export const fetchEventSubmissions = createAsyncThunk(
   async (eventId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${apiUrl}/admin/geteventssubmission/${eventId}`
+        `${apiUrl}/admin/geteventssubmission/${eventId}`, { withCredentials: true }
       );
       return response.data; // Assuming API returns an array
     } catch (error) {
@@ -96,7 +96,7 @@ export const declineSubmission = createAsyncThunk(
       const response = await axios.post(`${apiUrl}/rank/decline-submission`, {
         userId,
         eventId,
-      });
+      }, { withCredentials: true });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -110,7 +110,7 @@ export const fetchRegisteredUsersAndRankings = createAsyncThunk(
   'event/fetchRegisteredUsersAndRankings',
   async (eventId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/rank/event/${eventId}/participants`);
+      const response = await axios.get(`${apiUrl}/rank/event/${eventId}/participants`, { withCredentials: true });
       return response.data.result; 
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : error.message);
@@ -121,7 +121,7 @@ export const fetchRegisteredUsersAndRankings = createAsyncThunk(
 // Async thunk for fetching user stats
 export const fetchUserStats = createAsyncThunk('userStats/fetchUserStats', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${apiUrl}/rank/allusers-ranking`);  // Adjust the URL if needed
+    const response = await axios.get(`${apiUrl}/rank/allusers-ranking`, { withCredentials: true });  // Adjust the URL if needed
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || 'Something went wrong');
@@ -134,7 +134,7 @@ export const getTopRanking = createAsyncThunk(
   "ranking/getTopRanking",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/rank/gettopranks`);
+      const response = await axios.get(`${apiUrl}/rank/gettopranks`, { withCredentials: true });
       return response.data.mixedData;
     } catch (error) {
       console.log(error);
@@ -142,6 +142,16 @@ export const getTopRanking = createAsyncThunk(
     }
   }
 );
+
+
+export const fetchUserRank = createAsyncThunk('ranking/fetchUserRank', async (userId, { rejectWithValue }) => {
+    try {
+        const response = await axios.get(`${apiUrl}/rank/user-rank?userId=${userId}`);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data || 'Error fetching rank');
+    }
+});
 
 const rankingSlice = createSlice({
   name: "ranking",
@@ -153,6 +163,7 @@ const rankingSlice = createSlice({
     submissions: [],
     topranks: [],
     users: [],
+    userrank: null,
     userStats: null,
     error: null,
   },
@@ -289,7 +300,19 @@ const rankingSlice = createSlice({
       .addCase(fetchUserStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+      .addCase(fetchUserRank.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+    })
+    .addCase(fetchUserRank.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userrank = action.payload.rank;
+    })
+    .addCase(fetchUserRank.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    });
   },
 });
 
