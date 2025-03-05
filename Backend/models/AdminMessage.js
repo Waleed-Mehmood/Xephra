@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const AdminMessageSchema = new mongoose.Schema({
    chatGroupId: {
       type: mongoose.Schema.Types.ObjectId, // Store as ObjectId
-      ref: "AdminChatGroup", 
       required: true,
     }, // Reference to AdminChatGroup
     senderId: {

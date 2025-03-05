@@ -59,6 +59,20 @@ export const fetchOlderMessages = createAsyncThunk(
   }
 );
 
+
+export const fetchSingleMessages = createAsyncThunk(
+  "chatGroups/fetchSingleMessages",
+  async (chatGroupId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/single-chat${chatGroupId}`);
+      return response.data.messages; // Return only messages array
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
+  }
+);
+
+
 const chatGroupsSlice = createSlice({
   name: "chatGroups",
   initialState: {
@@ -180,6 +194,18 @@ const chatGroupsSlice = createSlice({
         state.userAdminChatGroup = action.payload;
       })
       .addCase(getAdminUserChatGroup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchSingleMessages.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSingleMessages.fulfilled, (state, action) => {
+        state.loading = false;
+        state.messages = action.payload;
+      })
+      .addCase(fetchSingleMessages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
