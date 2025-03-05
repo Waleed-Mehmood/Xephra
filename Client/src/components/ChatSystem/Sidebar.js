@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { CiSearch } from "react-icons/ci";
 import { RiAdminLine } from "react-icons/ri";
-import { getAdminUserChatGroup } from "../../redux/features/ChatsSlice"
-import { useDispatch } from "react-redux";
+import { getAdminUserChatGroup } from "../../redux/features/ChatsSlice";
 
 const Sidebar = ({
   sideMenuRef,
@@ -17,18 +17,26 @@ const Sidebar = ({
   handleSelectChat,
 }) => {
   const dispatch = useDispatch();
+  const [userRole, setUserRole] = useState(null);
+  const [privateChats, setPrivateChats] = useState([]);
+
+  useEffect(() => {
+    // Retrieve user information from local storage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUserRole(storedUser.role);
+    }
+  }, []);
+
   // Handle admin chat selection
   const handleAdminChatSelect = async () => {
-   
-    // Retrieve userId from local storage
     const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
-    console.log(userId);
+    
     if (userId) {
       try {
         const resultAction = await dispatch(getAdminUserChatGroup(userId));
         
         if (getAdminUserChatGroup.fulfilled.match(resultAction)) {
-          // If the fetch is successful, select the admin chat
           const adminChat = {
             _id: resultAction.payload._id || "admin-chat",
             name: "Admin Support",
@@ -38,21 +46,115 @@ const Sidebar = ({
           
           handleSelectChat(adminChat);
         } else {
-          // Handle error case
           console.error("Failed to fetch admin chat", resultAction.payload);
-          // Optionally show an error toast or message to the user
         }
       } catch (error) {
         console.error("Error selecting admin chat", error);
-        // Handle any unexpected errors
       }
-    } else {
-      // Handle case where userId is not found in local storage
-      console.error("No user ID found in local storage");
-      // Optionally show an error message to the user
     }
   };
 
+  // Render different sidebar for admin
+  if (userRole === 'admin') {
+    return (
+      <div
+        ref={sideMenuRef}
+        className={`fixed top-0 left-0 h-full w-72 z-50 transition-transform duration-300 ease-in-out
+          ${settings.isSideMenuOpen ? "translate-x-0" : "-translate-x-full"} 
+          ${settings.dark ? "bg-[#21201e52]" : "bg-[#000000]"}
+          md:relative md:translate-x-0 md:block md:ml-3 ml-0`}
+      >
+        {/* Search */}
+        <div className="relative w-[90%] m-4">
+          <CiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl z-50" />
+          <input
+            type="text"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={`w-full pl-12 bg-[#C9B79670] text-white px-4 py-2 rounded-full focus:outline-2 focus:outline-white backdrop-blur-md`}
+          />
+        </div>
+
+        {/* Private Chats Section */}
+        <div className="text-white text-2xl font-bold mb-3 ml-5">
+          Private Chats
+        </div>
+        <div className="flex-1 space-y-2 overflow-y-auto">
+          {loading ? (
+            <div className="text-white text-center p-4">Loading private chats...</div>
+          ) : privateChats.length === 0 ? (
+            <div className="text-white text-center p-4">No private chats</div>
+          ) : (
+            privateChats.map((chat) => (
+              <div
+                key={chat._id}
+                onClick={() => handleSelectChat(chat)}
+                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
+                  activeChat?._id === chat._id ? "bg-neutral-700/70" : ""
+                } relative`}
+              >
+                {/* Private chat item rendering similar to group chats */}
+                <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">{chat.name?.[0] || "P"}</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[#D19F43] font-medium">{chat.name}</h3>
+                  <p className="text-neutral-400 text-sm truncate">
+                    {chat.lastMessage?.text || "No messages yet"}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Groups Section */}
+        <div className="text-white text-2xl font-bold mb-3 ml-5">
+          Chat Groups
+        </div>
+        <div className="flex-1 space-y-2 overflow-y-auto">
+          {loading ? (
+            <div className="text-white text-center p-4">Loading chat groups...</div>
+          ) : filteredChatGroups.length === 0 ? (
+            <div className="text-white text-center p-4">No chat groups found</div>
+          ) : (
+            filteredChatGroups.map((group) => (
+              <div
+                key={group._id}
+                onClick={() => handleSelectChat(group)}
+                className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
+                  activeChat?._id === group._id ? "bg-neutral-700/70" : ""
+                } relative`}
+              >
+                {/* Existing group chat rendering */}
+                <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm">{group.name?.[0] || "G"}</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
+                  <p className="text-neutral-400 text-sm truncate">
+                    {group.lastMessage?.text || "No messages yet"}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Dashboard Button */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center">
+          <Link to={"/userdashboard"} className="w-full max-w-[100%]">
+            <button className="w-full bg-[#69363F] p-7 border-[#C9B796] border-[1px] text-[#C9B796] py-2 rounded-lg hover:bg-neutral-700/50 transition-colors backdrop-blur-m">
+              Dashboard
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Regular user sidebar (existing implementation)
   return (
     <div
       ref={sideMenuRef}
