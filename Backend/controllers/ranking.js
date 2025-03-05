@@ -323,3 +323,38 @@ exports.getAllUsersRanking = async (req, res) => {
   }
 };
 
+
+exports.getUserRank = async (req, res) => {
+  try {
+      const { userId } = req.query;
+      if (!userId) {
+          return res.status(400).json({ message: 'User ID is required' });
+      }
+
+      // Fetch all users and their weighted scores
+      const users = await UserEventStats.find({}, 'userId weightedScore');
+
+      // Sort users by weightedScore in descending order
+      users.sort((a, b) => b.weightedScore - a.weightedScore);
+
+      // Assign ranks
+      let ranks = {};
+      let rank = 1;
+      for (let i = 0; i < users.length; i++) {
+          if (i > 0 && users[i].weightedScore < users[i - 1].weightedScore) {
+              rank = i + 1;
+          }
+          ranks[users[i].userId] = rank;
+      }
+
+      // Return the rank of the requested user
+      if (ranks[userId]) {
+          return res.json({ userId, rank: ranks[userId] });
+      } else {
+          return res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+  }
+};
