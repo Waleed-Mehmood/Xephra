@@ -3,15 +3,15 @@ const MessageModel = require("../models/Message");
 const AdminChatGroupModel = require("../models/AdminChatGroup");
 const AdminMessageModel = require("../models/AdminMessage");
 
-
-const socketSetup = (server) => {
-  const io = new Server(server, {
-    cors: {
-      origin: "http://localhost:3000", // Update with your frontend URL
-      methods: ["GET", "POST"],
-      credentials: true
-    },
-  });
+  const socketSetup = (server) => {
+    const io = new Server(server, {
+      cors: {
+//         origin: "https://xephra.net", // Update with your frontend URL
+        origin: "https://xephra.vercel.app",
+        methods: ["GET", "POST"],
+        credentials: true
+      },
+    });
 
   // Keep track of online users and their socket connections
   const activeUsers = new Map(); // userId -> online status

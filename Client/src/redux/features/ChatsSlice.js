@@ -10,7 +10,9 @@ export const getUserChatGroups = createAsyncThunk(
     try {
       const response = await axios.get(`${apiUrl}/user/user-chat-groups`, {
         params: { userId }
-      });
+      },
+      { withCredentials: true } 
+    );
       return response.data.chatGroups;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -23,7 +25,8 @@ export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (chatGroupId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/user/messages/${chatGroupId}`);
+      const response = await axios.get(`${apiUrl}/user/messages/${chatGroupId}`,
+        { withCredentials: true } );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
@@ -51,7 +54,8 @@ export const fetchOlderMessages = createAsyncThunk(
     try {
       const response = await axios.get(`${apiUrl}/user/getOlderMessages/${chatGroupId}`, {
         params: { before }
-      });
+      },
+      { withCredentials: true } );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
