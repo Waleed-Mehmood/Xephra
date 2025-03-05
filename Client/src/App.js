@@ -51,6 +51,14 @@ export default function App() {
           }
         />
         <Route
+          path="/dashboard/chats"
+          element={
+            <PrivateRoute>
+              <ChatSystem />{" "}
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <PrivateRoute>

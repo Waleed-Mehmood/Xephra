@@ -530,3 +530,34 @@ exports.getSingleMessages = async (req, res) => {
     });
   }
 };
+
+
+exports.getAdminUserSingleChats = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+
+    if (!adminId) {
+      return res.status(400).json({ message: "Admin ID is required" });
+    }
+
+    // Find all chat groups where adminId matches
+    const chatGroups = await AdminChat.find({ adminId });
+
+    // Fetch user profiles for each chat group
+    const chatGroupsWithUsers = await Promise.all(
+      chatGroups.map(async (group) => {
+        const userProfile = await UserProfile.findOne({ userId: group.userId }).select("profileImage username").lean();
+
+        return {
+          ...group._doc,  // Spread existing group data
+          userProfile: userProfile || null,  // Attach user profile (null if not found)
+        };
+      })
+    );
+
+    res.status(200).json({ chatGroups: chatGroupsWithUsers });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
