@@ -8,7 +8,7 @@ const TournamentCard = (tournament) => {
   const event = tournament?.tournament?.eventId;
   return (
     <div className="bg-[#000000] rounded-lg shadow-lg overflow-hidden group transition duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl border-[0.2px] border-slate-300">
-      <Link to={`/eventuser/${event?._id}`} className="relative block w-full">
+      <Link to={`/registereventuser/${event?._id}`} className="relative block w-full">
         <img
           className="w-full h-60 object-cover"
           src={`${process.env.REACT_APP_BACKEND}/${event?.image}`}
@@ -17,7 +17,7 @@ const TournamentCard = (tournament) => {
         <h3 className="drop-shadow-2xl absolute bottom-0 left-0 w-[55%] text-2xl font-bold text-white [text-shadow:_2px_2px_4px_rgba(0,0,0,0.8)] px-4 py-2">{event?.title}</h3>
       </Link>
       <div className="p-4">
-      <Link to={`/eventuser/${event?._id}`}>
+      <Link to={`/registereventuser/${event?._id}`}>
         <p className="text-[#C9B796] text-lg font-bold mt-1">{event?.game}</p>
         <p className="text-[#C9B796] mt-2  line-clamp-3">{event?.description}</p>
         <p className="bg-[#302A27] text-[#C9B796] font-bold px-2 w-1/2">{event?.date}</p>

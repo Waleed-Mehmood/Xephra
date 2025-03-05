@@ -4,7 +4,8 @@
   const socketSetup = (server) => {
     const io = new Server(server, {
       cors: {
-        origin: "https://xephra.net", // Update with your frontend URL
+        // origin: "https://xephra.net", // Update with your frontend URL
+        origin: "http://localhost:3000", 
         methods: ["GET", "POST"],
         credentials: true
       },
