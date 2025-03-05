@@ -65,7 +65,7 @@ export const fetchSingleMessages = createAsyncThunk(
   async (chatGroupId, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${apiUrl}/user/single-chat/${chatGroupId}`);
-      console.log(response.data.messages);
+      console.log("from slice",response.data.messages);
       return response.data.messages; // Return only messages array
       
     } catch (error) {
@@ -75,10 +75,38 @@ export const fetchSingleMessages = createAsyncThunk(
 );
 
 
+export const fetchAdminChatGroups = createAsyncThunk(
+  "chatGroups/fetchAdminChatGroups",
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/admin-chatgroups/${adminId}`);
+      return response.data.chatGroups; // Extracting chat groups array
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || "Failed to fetch chat groups");
+    }
+  }
+);
+
+// Async thunk to fetch admin user single chats
+export const fetchAdminUserSingleChats = createAsyncThunk(
+  "chatGroups/fetchAdminUserSingleChats",
+  async (adminId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/single-allchats/${adminId}`);
+      return response.data; // Store full response, not just chatGroups
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "An error occurred");
+    }
+  }
+);
+
+
 const chatGroupsSlice = createSlice({
   name: "chatGroups",
   initialState: {
     chatGroups: [],
+    adminChatGroups: [],
+    data: null,
     loading: false,
     messagesLoading: false,
     error: null,
@@ -210,7 +238,32 @@ const chatGroupsSlice = createSlice({
       .addCase(fetchSingleMessages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(fetchAdminChatGroups.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdminChatGroups.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminChatGroups = action.payload;
+      })
+      .addCase(fetchAdminChatGroups.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAdminUserSingleChats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAdminUserSingleChats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.data = action.payload; // Store entire response
+      })
+      .addCase(fetchAdminUserSingleChats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 

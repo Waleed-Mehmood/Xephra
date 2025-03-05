@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CiSearch } from "react-icons/ci";
 import { RiAdminLine } from "react-icons/ri";
-import { getAdminUserChatGroup } from "../../redux/features/ChatsSlice";
+import {
+  getAdminUserChatGroup,
+  fetchAdminChatGroups,
+  fetchAdminUserSingleChats
+} from "../../redux/features/ChatsSlice";
 
 const Sidebar = ({
   sideMenuRef,
@@ -19,31 +23,90 @@ const Sidebar = ({
   const dispatch = useDispatch();
   const [userRole, setUserRole] = useState(null);
   const [privateChats, setPrivateChats] = useState([]);
+  const { adminChatGroups, data, error } = useSelector((state) => state.chatGroups);
+
+  const [adminId, setAdminId] = useState(null);
+
+  useEffect(() => {
+    if (adminId) {
+      dispatch(fetchAdminChatGroups(adminId));
+      dispatch(fetchAdminUserSingleChats(adminId));
+    }
+  }, [dispatch, adminId]);
 
   useEffect(() => {
     // Retrieve user information from local storage
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUserRole(storedUser.role);
+      if (storedUser.role === "admin") {
+        const userData = JSON.parse(localStorage.getItem("user") || "{}");
+        setAdminId(userData?.UserId);
+      }
     }
   }, []);
+
 
   // Handle admin chat selection
   const handleAdminChatSelect = async () => {
     const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
+     
     
     if (userId) {
       try {
         const resultAction = await dispatch(getAdminUserChatGroup(userId));
-        
+
         if (getAdminUserChatGroup.fulfilled.match(resultAction)) {
           const adminChat = {
             _id: resultAction.payload._id || "admin-chat",
             name: "Admin Support",
             isAdminChat: true,
-            lastMessage: resultAction.payload.lastMessage || { text: "Contact admin for support" }
+            lastMessage: resultAction.payload.lastMessage || {
+              text: "Contact admin for support",
+            },
           };
-          
+
+          handleSelectChat(adminChat);
+        } else {
+          console.error("Failed to fetch admin chat", resultAction.payload);
+        }
+      } catch (error) {
+        console.error("Error selecting admin chat", error);
+      }
+    }
+  };
+  // Handle admin chat selection
+  const handleAdminChatSelect2 = async (chat) => {
+    const userId = JSON.parse(localStorage.getItem("user"))?.UserId;
+    const userRole = JSON.parse(localStorage.getItem("user"))?.role;
+     
+    if(userRole === "admin"){
+      const adminChat = {
+        _id: chat._id,
+        name: "Admin Support",
+        isAdminChat: true,
+        lastMessage:  {
+          text: "Contact admin for support",
+        },
+      };
+
+      handleSelectChat(adminChat);
+    }
+
+    if (userId) {
+      try {
+        const resultAction = await dispatch(getAdminUserChatGroup(userId));
+
+        if (getAdminUserChatGroup.fulfilled.match(resultAction)) {
+          const adminChat = {
+            _id: resultAction.payload._id || "admin-chat",
+            name: "Admin Support",
+            isAdminChat: true,
+            lastMessage: resultAction.payload.lastMessage || {
+              text: "Contact admin for support",
+            },
+          };
+
           handleSelectChat(adminChat);
         } else {
           console.error("Failed to fetch admin chat", resultAction.payload);
@@ -54,8 +117,9 @@ const Sidebar = ({
     }
   };
 
+  console.log("data", data);
   // Render different sidebar for admin
-  if (userRole === 'admin') {
+  if (userRole === "admin") {
     return (
       <div
         ref={sideMenuRef}
@@ -82,24 +146,28 @@ const Sidebar = ({
         </div>
         <div className="flex-1 space-y-2 overflow-y-auto">
           {loading ? (
-            <div className="text-white text-center p-4">Loading private chats...</div>
-          ) : privateChats.length === 0 ? (
+            <div className="text-white text-center p-4">
+              Loading private chats...
+            </div>
+          ) : data?.chatGroups.length === 0 ? (
             <div className="text-white text-center p-4">No private chats</div>
           ) : (
-            privateChats.map((chat) => (
+            data?.chatGroups.map((chat) => (
               <div
-                key={chat._id}
-                onClick={() => handleSelectChat(chat)}
+                key={chat.chatGroupId}
+                onClick={()=>handleAdminChatSelect2(chat)}
                 className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
                   activeChat?._id === chat._id ? "bg-neutral-700/70" : ""
                 } relative`}
               >
                 {/* Private chat item rendering similar to group chats */}
                 <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm">{chat.name?.[0] || "P"}</span>
+                  <span className="text-white text-sm">
+                    <img  src={`${process.env.REACT_APP_BACKEND}/${chat?.userProfile?.profileImage}`} className="rounded-3xl" />
+                  </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-[#D19F43] font-medium">{chat.name}</h3>
+                  <h3 className="text-[#D19F43] font-medium">{chat?.userProfile?.username}</h3>
                   <p className="text-neutral-400 text-sm truncate">
                     {chat.lastMessage?.text || "No messages yet"}
                   </p>
@@ -115,11 +183,15 @@ const Sidebar = ({
         </div>
         <div className="flex-1 space-y-2 overflow-y-auto">
           {loading ? (
-            <div className="text-white text-center p-4">Loading chat groups...</div>
-          ) : filteredChatGroups.length === 0 ? (
-            <div className="text-white text-center p-4">No chat groups found</div>
+            <div className="text-white text-center p-4">
+              Loading chat groups...
+            </div>
+          ) : adminChatGroups.length === 0 ? (
+            <div className="text-white text-center p-4">
+              No chat groups found
+            </div>
           ) : (
-            filteredChatGroups.map((group) => (
+            adminChatGroups.map((group) => (
               <div
                 key={group._id}
                 onClick={() => handleSelectChat(group)}
@@ -129,7 +201,9 @@ const Sidebar = ({
               >
                 {/* Existing group chat rendering */}
                 <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm">{group.name?.[0] || "G"}</span>
+                  <span className="text-white text-sm">
+                    {group.name?.[0] || "G"}
+                  </span>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
@@ -176,7 +250,7 @@ const Sidebar = ({
       </div>
 
       {/* Admin Chat Option - Above Groups */}
-      <div 
+      <div
         onClick={handleAdminChatSelect}
         className={`flex items-center space-x-3 p-3 mx-3 mb-4 rounded-lg cursor-pointer backdrop-blur-md hover:bg-neutral-700/50 ${
           activeChat?.isAdminChat ? "bg-neutral-700/70" : ""
@@ -191,7 +265,7 @@ const Sidebar = ({
             Direct support channel
           </p>
         </div>
-        
+
         {/* New message indicator for admin chat */}
         {unreadMessages["admin-chat"] > 0 && (
           <div className="absolute top-2 right-2 bg-[#D19F43] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -201,12 +275,12 @@ const Sidebar = ({
       </div>
 
       {/* Groups */}
-      <div className="text-white text-2xl font-bold mb-3 ml-5">
-        Groups
-      </div>
+      <div className="text-white text-2xl font-bold mb-3 ml-5">Groups</div>
       <div className="flex-1 space-y-2 overflow-y-auto">
         {loading ? (
-          <div className="text-white text-center p-4">Loading chat groups...</div>
+          <div className="text-white text-center p-4">
+            Loading chat groups...
+          </div>
         ) : filteredChatGroups.length === 0 ? (
           <div className="text-white text-center p-4">No chat groups found</div>
         ) : (
@@ -219,7 +293,9 @@ const Sidebar = ({
               } relative`}
             >
               <div className="w-10 h-10 bg-neutral-700 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">{group.name?.[0] || "G"}</span>
+                <span className="text-white text-sm">
+                  {group.name?.[0] || "G"}
+                </span>
               </div>
               <div className="flex-1">
                 <h3 className="text-[#D19F43] font-medium">{group.name}</h3>
@@ -230,7 +306,7 @@ const Sidebar = ({
               <span className="text-neutral-500 text-xs">
                 {group.lastMessage?.time || ""}
               </span>
-              
+
               {/* New message indicator */}
               {unreadMessages[group._id] > 0 && (
                 <div className="absolute top-2 right-2 bg-[#D19F43] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
