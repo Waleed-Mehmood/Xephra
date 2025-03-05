@@ -11,7 +11,7 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const rankingRoutes = require('./routes/rankingRoutes');
 const upload = require("./config/multerConfig");
-
+const cookieParser = require("cookie-parser");
 const socketSetup = require("./Socket/index"); // 
 
 const passport = require('./config/passport');
@@ -22,16 +22,21 @@ require("dotenv").config();
 const server = http.createServer(app);
 
 // Middleware
+app.use(cookieParser());
 app.use(express.json());
+
 const corsOptions = {
-  origin: "http://localhost:3000", 
+  // origin: "http://localhost:3000", 
   // origin: "https://xephra.vercel.app", 
-  methods: "GET,POST,PUT,DELETE,PATCH", // Allowed methods
-  allowedHeaders: "Content-Type,Authorization", // Allowed headers
+  origin: "https://xephra.net", // Allow only your frontend
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+  credentials: true, // **Required for JWT authentication**
 };
 
 
 app.use(cors(corsOptions)); 
+
 app.use(passport.initialize());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
