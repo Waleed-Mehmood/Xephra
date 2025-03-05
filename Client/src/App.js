@@ -22,7 +22,7 @@ const TournamentRankings = lazy(() => import("./components/UserDashobard/Tournam
 const AllUserRankingUser = lazy(() => import("./components/UserDashobard/AllUserRankingUser"));
 const GoogleSuccess = lazy(() => import("./components/GoogleSuccess"));
 const Home = lazy(() => import("./pages/Home"));
-const ChatSystem = lazy(() => import("./components/UserDashobard/ChatSystem"));
+const ChatSystem = lazy(() => import("./components/ChatSystem"));
 
 
 export default function App() {
