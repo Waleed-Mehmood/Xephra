@@ -5,7 +5,7 @@ const MessageInput = ({ message, setMessage, sendMessage, socketConnected }) => 
   return (
     <div className="p-4">
       <div className="flex items-center space-x-2 relative">
-        <TiAttachment className="text-white absolute left-4 text-2xl" />
+        {/* <TiAttachment className="text-white absolute left-4 text-2xl" /> */}
         <input
           type="text"
           value={message}

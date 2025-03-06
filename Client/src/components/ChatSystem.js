@@ -73,42 +73,42 @@ const ChatSystem = () => {
   });
 
   // Send message handler
-  const sendMessage = () => {
-    if (!message.trim() || !activeChat || !socketConnected) {
-      return;
-    }
-
-    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const now = new Date();
-    
-    const newMessage = {
-      senderId: userId,
-      text: message,
-      time: {
-        timestamp: now,
-        weekday: weekdays[now.getDay()],
-        hour: now.getHours(),
-        minute: now.getMinutes()
+    const sendMessage = () => {
+      if (!message.trim() || !activeChat || !socketConnected) {
+        return;
       }
+
+      const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const now = new Date();
+      
+      const newMessage = {
+        senderId: userId,
+        text: message,
+        time: {
+          timestamp: now,
+          weekday: weekdays[now.getDay()],
+          hour: now.getHours(),
+          minute: now.getMinutes()
+        }
+      };
+
+      // Use the socketSendMessage function from the hook
+      socketSendMessage(activeChat._id, newMessage);
+      setMessage(""); // Clear input field
+      
+      // Scroll to bottom after sending
+      setTimeout(() => {
+        scrollToBottom();
+      }, 200);
     };
 
-    // Use the socketSendMessage function from the hook
-    socketSendMessage(activeChat._id, newMessage);
-    setMessage(""); // Clear input field
-    
-    // Scroll to bottom after sending
-    setTimeout(() => {
-      scrollToBottom();
-    }, 200);
-  };
-
-  // Fetch profile and chat groups on mount
-  useEffect(() => {
-    if (userId) {
-      dispatch(getProfile(userId));
-      dispatch(getUserChatGroups(userId));
-    }
-  }, [dispatch, userId]);
+    // Fetch profile and chat groups on mount
+    useEffect(() => {
+      if (userId) {
+        dispatch(getProfile(userId));
+        dispatch(getUserChatGroups(userId));
+      }
+    }, [dispatch, userId]);
 
   // Close side menu when clicking outside
   useEffect(() => {

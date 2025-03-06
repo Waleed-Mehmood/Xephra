@@ -2,6 +2,7 @@ import React from "react";
 import { formatTime } from "./formatTime";
 
 const MessageList = ({ messages, messagesContainerRef, handleScroll, userId }) => {
+  console.log(messages);
   // Helper to format message time for sorting
   const getMessageTime = (msg) => {
     if (!msg.time?.timestamp) return 0;
@@ -36,7 +37,7 @@ const MessageList = ({ messages, messagesContainerRef, handleScroll, userId }) =
               }`}
             >
               <p className="text-[#69363F] text-sm font-semibold mb-1">
-                {msg.senderId === userId ? "You" : msg.sender?.name || "User"}
+                {msg.senderId === userId ? msg?.username : msg.sender?.name || msg?.username}
               </p>
               <p className="text-[#1b1b1b]">{msg.text}</p>
               <p className="text-[#000000] text-xs mt-1">

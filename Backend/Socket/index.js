@@ -7,8 +7,8 @@ const AdminMessageModel = require("../models/AdminMessage");
     const io = new Server(server, {
       cors: {
       // origin: "https://xephra.net", // Update with your frontend URL
-        origin: "https://xephra.vercel.app",
-        // origin: "http://localhost:3000",
+        // origin: "https://xephra.vercel.app",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
       },
@@ -30,15 +30,13 @@ const AdminMessageModel = require("../models/AdminMessage");
     }
 
     // Handle sending messages
-    socket.on("sendMessage", async ({ chatGroupId, message }) => {
+    socket.on("sendMessage" , async ({ chatGroupId, message }) => {
       try {
         let savedMessage;
-        console.log("Received message:", message);
-        console.log("chatGroupId " , chatGroupId);
+        
     
         // Check if the chat group belongs to an admin
         const isAdminChat = await AdminChatGroupModel.exists({ _id: chatGroupId });
-        console.log("isAdminChat" ,isAdminChat);
     
         if (isAdminChat) {
          
