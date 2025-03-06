@@ -15,6 +15,7 @@ import {
   updateProfile,
   createProfile,
   getProfile,
+  fetchUserBadge
 } from "../../redux/features/userSlice";
 import {
   fetchUserRank
@@ -24,10 +25,18 @@ import Loading from "../../utils/Loading/Loading";
 const UserProfile = ({ dark, profile }) => {
   const { loading } = useSelector((state) => state.profile);
   const { userrank } = useSelector((state) => state.ranking);
+  const { badge } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const userData = JSON.parse(localStorage.getItem("user"));
   const userId = userData?.UserId;
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserBadge(userId));
+    }
+  }, [dispatch, userId]);
+  console.log("user badge", badge);
 
   const [profileData, setProfileData] = useState({
     userId: userId,
@@ -189,6 +198,9 @@ const UserProfile = ({ dark, profile }) => {
   {/* Rank Display */}
   <div className="absolute top-4 right-6 font-montserrat text-white text-3xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
     Rank: {userrank || "NA"}
+  </div>
+  <div className="absolute top-12 right-6 font-montserrat text-white text-3xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
+  Rank Tiers: {badge || "NA"}
   </div>
 
   {/* Profile Image Container */}

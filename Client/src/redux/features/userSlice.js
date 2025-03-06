@@ -68,11 +68,24 @@ export const checkUserProfile = createAsyncThunk(
   }
 );
 
+export const fetchUserBadge = createAsyncThunk(
+  "user/fetchUserBadge",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${apiUrl}/user/user-badge/${userId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Error fetching badge");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     profile: null,
     loading: false,
+    badge: "",
     profileExists: null,  
     error: null,
   },
@@ -127,6 +140,18 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(fetchUserBadge.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserBadge.fulfilled, (state, action) => {
+        state.loading = false;
+        state.badge = action.payload.badge;
+      })
+      .addCase(fetchUserBadge.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
