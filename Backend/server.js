@@ -21,34 +21,29 @@ require("dotenv").config();
 
 const server = http.createServer(app);
 
-// Middleware
-app.use(cookieParser());
-app.use(express.json());
-
 const corsOptions = {
-
   origin: "https://xephra.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // Allows cookies to be sent
-
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, // Allows cookies to be sent
 };
+app.use(cors(corsOptions));
 
-
-app.use(cors(corsOptions)); 
-app.use((req, res, next) => {
+// ✅ Handle preflight requests explicitly
+app.options("*", (req, res) => {
   res.header("Access-Control-Allow-Origin", "https://xephra.vercel.app");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
-
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  
-  next();
+  res.sendStatus(200);
 });
+
+
+// Middleware
+app.use(cookieParser());
+app.use(express.json());
+
+
 
 app.use(passport.initialize());
 
