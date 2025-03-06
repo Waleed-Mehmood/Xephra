@@ -8,7 +8,7 @@ const MessageModel = require("../models/Message");
 const AdminChat = require("../models/AdminChatGroup");
 const AdminMessageModel = require("../models/AdminMessage");
 const AdminMessage = require("../models/AdminMessage");
-
+const UserEventStats = require('../models/userEventStats');
 // POST: Create a new user profile
 exports.createProfile = async (req, res) => {
   const {
@@ -174,6 +174,42 @@ exports.updateProfile = async (req, res) => {
     res.status(500).json({ error: "Error updating profile" });
   }
 };
+
+const getBadge = (score) => {
+
+  if (score >= 3000) return "Mythical";
+  if (score >= 2000) return "Legendary";
+  if (score >= 1500) return "Diamond";
+  if (score >= 800) return "Platinum";
+  if (score >= 400) return "Gold";
+  if (score >= 200) return "Silver";
+  return "Bronze";
+};
+
+exports.getuserBadge = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const userStats = await UserEventStats.findOne({ userId });
+
+    if (!userStats) {
+        return res.status(404).json({ message: "User stats not found" });
+    }
+
+    // Determine badge based on weightedScore
+    const badge = getBadge(userStats.weightedScore);
+
+    res.status(200).json({ 
+        userId: userStats.userId,
+        weightedScore: userStats.weightedScore,
+        badge: badge // Sending badge without storing it in DB
+    });
+
+} catch (error) {
+  console.log(error)
+    res.status(500).json({ message: "Server Error", error });
+}
+}
 
 exports.getUsers = async (req, res) => {
   try {

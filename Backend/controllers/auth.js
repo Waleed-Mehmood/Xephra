@@ -93,6 +93,14 @@ exports.Login = async (req, res) => {
     }
 
     const token = generateToken(user);
+
+    // Store JWT in HTTP-only cookies
+    res.cookie("token", token, {
+      httpOnly: true, // Prevents access from JavaScript
+      secure: true,  // Set to true if using HTTPS
+      sameSite: "None", // Required for cross-origin cookies
+  });
+  
     res.status(200).json({
       message: "Login successful",
       token,

@@ -26,25 +26,29 @@ app.use(cookieParser());
 app.use(express.json());
 
 const corsOptions = {
-  origin: "http://localhost:3000", 
-  //  origin: "https://xephra.vercel.app", 
-  //origin: "https://xephra.net", // Allow only your frontend
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-  credentials: true, // **Required for JWT authentication**
+
+  origin: "https://xephra.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Allows cookies to be sent
+
 };
 
 
 app.use(cors(corsOptions)); 
-app.options("*", cors(corsOptions));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
+
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  
   next();
 });
-
 
 app.use(passport.initialize());
 
