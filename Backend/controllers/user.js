@@ -399,13 +399,35 @@ exports.getMessages = async (req, res) => {
   try {
     const { chatGroupId } = req.params;
 
+    // Fetch messages
     const messages = await MessageModel.find({
       chatGroupId: new mongoose.Types.ObjectId(chatGroupId),
     })
       .sort({ createdAt: 1 }) // Oldest messages first for proper chronological display
       .limit(100); // Limit to prevent overwhelming the client
 
-    res.status(200).json({ messages });
+    // Get usernames for all messages in a more efficient way
+    const messagesWithUsernames = await Promise.all(
+      messages.map(async (message) => {
+        // Convert the message to a plain object so we can add properties
+        const messageObj = message.toObject ? message.toObject() : {...message};
+        
+        try {
+          const userProfile = await User.findOne({ userId: message.senderId });
+          
+          // Add username to the message object
+          messageObj.username = userProfile ? userProfile.name : "Unknown User";
+        
+        } catch (err) {
+          console.error(`Error fetching user profile for senderId ${message.senderId}:`, err);
+          messageObj.username = "Unknown User";
+        }
+        
+        return messageObj;
+      })
+    );
+
+    res.status(200).json({ messages: messagesWithUsernames });
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ success: false, error: "Internal server error" });
@@ -558,7 +580,29 @@ exports.getSingleMessages = async (req, res) => {
     const messages = await AdminMessage.find({ chatGroupId: ObjectId }).sort(
       { createdAt: 1 }
     );
-    res.status(200).json({ messages });
+
+    // Add usernames to messages
+    const messagesWithUsernames = await Promise.all(
+      messages.map(async (message) => {
+        // Convert the message to a plain object so we can add properties
+        const messageObj = message.toObject ? message.toObject() : {...message};
+        
+        try {
+          const userProfile = await User.findOne({ userId: message.senderId });
+          
+          // Add username to the message object
+          messageObj.username = userProfile ? userProfile.name : "Unknown User";
+          
+          return messageObj;
+        } catch (error) {
+          console.log(`Error fetching user for message: ${error.message}`);
+          messageObj.username = "Unknown User";
+          return messageObj;
+        }
+      })
+    );
+
+    res.status(200).json({ messages: messagesWithUsernames });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -615,3 +659,15 @@ exports.getGroupsForAdmin = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.postuploadedfileinchat = async(req, res) =>{
+  console.log("Uploaded File:", req.file); // Debugging line
+  if(!req.file){
+    return res.status(400).json({error: "no file uploaded"})
+  }
+  res.status(200).json({
+    filename: req.file.filename,
+    path: `/uploads/${req.file.filename}`,
+    mimetype: req.file.mimetype,
+  })
+}

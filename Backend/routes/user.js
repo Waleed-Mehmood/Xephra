@@ -20,7 +20,9 @@ const {
   getSingleMessages,
   getAdminUserSingleChats,
   getGroupsForAdmin,
+  postuploadedfileinchat,
   getuserBadge
+
 } = require("../controllers/user");
 const upload = require("../config/multerConfig");
 
@@ -42,9 +44,10 @@ router.get("/events/hosted", getHostedEvents);
 router.get('/profile-exit/:userId', getProfileExisting);
 
 router.get("/messages/:chatGroupId", getMessages);
-router.get("/getOlderMessages/:chatGroupId", getOlderMessages);
+router.get("/getOlderMessages/:chatGroupId", getOlderMessages); 
 router.get("/AdminUserChatgroup", getAdminUserChatGroups);
 router.get('/single-chat/:chatGroupId', getSingleMessages);
 router.get('/single-allchats/:adminId', getAdminUserSingleChats);
 router.get('/admin-chatgroups/:adminId', getGroupsForAdmin);
+router.post('/uplaod-file-chat', upload.single("fileUpload") ,postuploadedfileinchat);
 module.exports = router;

@@ -15,11 +15,17 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  file : {
+    filename : {type: String},
+    path : {type:String},
+    mimetype : {type: String}
+  },
     time: {
       timestamp: { type: Date, required: true }, // Store full date and time
       weekday: { type: String, required: true }, // Ensure weekday name is stored
       hour: { type: Number, required: true },
       minute: { type: Number, required: true },
+
     },
 });
 
