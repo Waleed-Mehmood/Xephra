@@ -4,6 +4,7 @@ import { ImBrightnessContrast } from "react-icons/im";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
 import { FiBell } from "react-icons/fi";
 import logo from "../../assets/xephra logo-01.png";
+const apiUrl = process.env.REACT_APP_BACKEND;
 
 const Header = ({ profile, userData, settings, toggleTheme, toggleSideMenu }) => {
   return (
@@ -55,7 +56,7 @@ const Header = ({ profile, userData, settings, toggleTheme, toggleSideMenu }) =>
         <img
           src={
             profile?.profileImage
-              ? `http://localhost:5000/${profile?.profileImage}`
+              ? `${apiUrl}/${profile?.profileImage}`
               : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
           }
           alt="Profile"

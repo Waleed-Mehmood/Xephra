@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { addMessage } from "../../../redux/features/ChatsSlice";
+const apiUrl = process.env.REACT_APP_BACKEND;
 
 const useSocket = ({ userId, activeChat, setUnreadMessages }) => {
   const [socketConnected, setSocketConnected] = useState(false);
@@ -20,7 +21,7 @@ const useSocket = ({ userId, activeChat, setUnreadMessages }) => {
     if (!userId) return; // Don't connect if no user ID
     
     // Create socket connection with improved options
-    socket.current = io("http://localhost:5000", {
+    socket.current = io(apiUrl, {
       query: { userId }, // Identify user on connection
       reconnection: true,
       reconnectionAttempts: 5,
