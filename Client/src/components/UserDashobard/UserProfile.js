@@ -21,6 +21,7 @@ import {
   fetchUserRank
 } from "../../redux/features/rankingSlice";
 import Loading from "../../utils/Loading/Loading";
+const apiUrl = process.env.REACT_APP_BACKEND;
 
 const UserProfile = ({ dark, profile }) => {
   const { loading } = useSelector((state) => state.profile);
@@ -226,7 +227,7 @@ const UserProfile = ({ dark, profile }) => {
           profileImageView
             ? profileImageView
             : profileData?.profileImage
-            ? `http://localhost:5000/${profileData.profileImage}`
+            ? `${apiUrl}/${profileData.profileImage}`
             : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyKxD07vzVrTXqVFK0myyV8KT99ZWBNNwGA&s"
         }
         alt="Profile"
