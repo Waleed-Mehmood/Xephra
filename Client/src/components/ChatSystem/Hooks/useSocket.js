@@ -26,7 +26,6 @@ const useSocket = ({ userId, activeChat, setUnreadMessages }) => {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      withCredentials: true,
     transports: ["websocket", "polling"]  
     });
     
