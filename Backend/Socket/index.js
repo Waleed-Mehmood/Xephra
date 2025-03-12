@@ -12,6 +12,7 @@ const AdminMessageModel = require("../models/AdminMessage");
         methods: ["GET", "POST"],
         credentials: true
       },
+      transports: ["websocket", "polling"]  
     });
 
   // Keep track of online users and their socket connections
