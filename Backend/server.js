@@ -22,8 +22,8 @@ require("dotenv").config();
 const server = http.createServer(app);
 
 const corsOptions = {
-  origin: "https://xephra.vercel.app",
-  // origin: "http://localhost:3000",
+  // origin: "https://xephra.vercel.app",
+  origin: "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Allows cookies to be sent
@@ -32,8 +32,8 @@ app.use(cors(corsOptions));
 
 // ✅ Handle preflight requests explicitly
 app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://xephra.vercel.app");
-  // res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  // res.header("Access-Control-Allow-Origin", "https://xephra.vercel.app");
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");

@@ -21,6 +21,7 @@ import {
   fetchUserRank
 } from "../../redux/features/rankingSlice";
 import Loading from "../../utils/Loading/Loading";
+import RankInfo from "./RankInfo";
 const apiUrl = process.env.REACT_APP_BACKEND;
 
 const UserProfile = ({ dark, profile }) => {
@@ -122,7 +123,6 @@ const UserProfile = ({ dark, profile }) => {
 
   const handleUpdate = () => {
     const formData = new FormData();
-    console.log("selected file", selectedFile);
     if (selectedFile) {
       formData.append("profileImage", selectedFile); // Append profileImage if there's a new file
     }
@@ -202,6 +202,9 @@ const UserProfile = ({ dark, profile }) => {
   </div>
   <div className="absolute top-12 right-6 font-montserrat text-white text-3xl font-semibold drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]">
   Rank Tiers: {badge || "NA"}
+  </div>
+  <div className="absolute top-20 right-6 mt-2">
+    <RankInfo />
   </div>
 
   {/* Profile Image Container */}

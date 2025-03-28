@@ -178,7 +178,7 @@ exports.updateProfile = async (req, res) => {
 const getBadge = (score) => {
 
   if (score >= 3000) return "Mythical";
-  if (score >= 2000) return "Legendary";
+  if (score >= 2000) return "Champion";
   if (score >= 1500) return "Diamond";
   if (score >= 800) return "Platinum";
   if (score >= 400) return "Gold";
