@@ -27,6 +27,16 @@ export default function Header({
 
         {/* Right-side Buttons */}
         <div className="flex items-center space-x-4 ml-auto">
+          {/* Subscribe Button */}
+          <Link to="/paymentform">
+      <button
+        className="px-4 py-2 text-white bg-[#854951] hover:bg-[#994b55] rounded-full focus:outline-none"
+        aria-label="Subscribe"
+      >
+        Subscribe
+      </button>
+      </Link>
+
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleTheme}

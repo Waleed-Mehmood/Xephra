@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Loading from "./utils/Loading/Loading";
 import RegisterEventDetailUser from "./components/UserDashobard/RegisterEventDetailUser";
+import PaymentForm from "./pages/PaymentForm/PaymentForm";
 const Signup = lazy(() => import("./pages/Signup"));
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -100,6 +101,10 @@ export default function App() {
         <Route
           path="/dashboard/tournamentrankingapproval/:eventId"
           element={<TournamentUsersRankingApproval />}
+        />
+        <Route
+          path="/paymentform"
+          element={<PaymentForm />}
         />
       </Routes>
       </Suspense>
