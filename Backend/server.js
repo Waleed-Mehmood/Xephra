@@ -23,7 +23,7 @@ const server = http.createServer(app);
 
 const corsOptions = {
   // origin: "https://xephra.vercel.app",
-  origin: "http://localhost:3000",
+  // origin: "http://localhost:3000",
   origin: "https://xephra-two.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"],
