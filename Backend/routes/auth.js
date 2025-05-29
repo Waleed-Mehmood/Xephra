@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { signup, Login, forgot, reset } = require("../controllers/auth");
+const { signup, Login, forgot, reset, verifyEmail, resendVerificationEmail  } = require("../controllers/auth");
 const passport = require("passport");
 
 router.post("/signup", signup);
@@ -31,5 +31,10 @@ router.get(
       );
     }
   );
+
+
+// New email verification routes
+router.get('/verify-email/:token', verifyEmail);
+router.post('/resend-verification', resendVerificationEmail);  
   
 module.exports = router;

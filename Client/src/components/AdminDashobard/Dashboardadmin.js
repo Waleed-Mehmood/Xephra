@@ -15,7 +15,7 @@ import {
   BarElement,
 } from "chart.js";
 import { Link } from "react-router-dom";
-import { getEvents } from "../../redux/features/eventsSlice";
+import { getEvents,fetchHostedTournaments } from "../../redux/features/eventsSlice";
 import {
   getAllUsers,
   deleteUser,
@@ -43,7 +43,7 @@ ChartJS.register(
 
 const DashboardAdmin = ({ setActiveMenu, dark }) => {
   const dispatch = useDispatch();
-  const { events } = useSelector((state) => state.events);
+  const { events,hostedEvents } = useSelector((state) => state.events);
   const { users, profile } = useSelector((state) => state.profile);
   const { topranks } = useSelector((state) => state.ranking);
   const { userCount, eventCount } = useSelector((state) => state.profile);
@@ -54,6 +54,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
     dispatch(getAllUsers());
     dispatch(getTopRanking());
     dispatch(gettotaluserandevents());
+    dispatch(fetchHostedTournaments());
   }, []);
 
   const settings = {
@@ -81,6 +82,68 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
       },
     ],
   };
+
+  const sortedPostedEvents = [...events].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+
+  const sortedCompletedEvents = [...hostedEvents].sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+
+
+  const settings1 = {
+    dots: false,
+    infinite: sortedPostedEvents.length >= 3, // Jab 3 ya zyada events hon to infinite true hoga
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: sortedPostedEvents.length >= 3, // Jab 3 ya zyada events hon to autoplay on hoga
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: Math.min(2, sortedPostedEvents.length), // Jab 2 events ho to max 2 dikhayega
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 450,
+        settings: {
+          slidesToShow: 1, // Mobile screens pe ek ek slide dikhayega
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  const settings2 = {
+    dots: false,
+    infinite: sortedCompletedEvents.length >= 3, // Jab 3 ya zyada events hon to infinite true hoga
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: sortedCompletedEvents.length >= 3, // Jab 3 ya zyada events hon to autoplay on hoga
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: Math.min(2, sortedCompletedEvents.length), // Jab 2 events ho to max 2 dikhayega
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 450,
+        settings: {
+          slidesToShow: 1, // Mobile screens pe ek ek slide dikhayega
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
 
   const handleDelete = (userId) => {
     dispatch(deleteUser(userId));
@@ -192,7 +255,7 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
           >
               Posted Events
             </h2>
-            <Slider {...settings}>
+            <Slider {...settings1}>
               {events.map((event) => (
                 <Link
                   to={`/eventadmin/${event?._id}`}
@@ -225,8 +288,8 @@ const DashboardAdmin = ({ setActiveMenu, dark }) => {
             >
               Completed Events
             </h2>
-            <Slider {...settings}>
-              {events.map((event) => (
+            <Slider {...settings2}>
+              {hostedEvents.map((event) => (
                 <Link
                   to={`/eventadmin/${event?._id}`}
                   key={event._id}

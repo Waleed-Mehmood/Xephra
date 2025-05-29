@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Loading from "./utils/Loading/Loading";
 import RegisterEventDetailUser from "./components/UserDashobard/RegisterEventDetailUser";
 import PaymentForm from "./pages/PaymentForm/PaymentForm";
+import VerifyEmail from "./pages/VerifyEmail";
 const Signup = lazy(() => import("./pages/Signup"));
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -106,6 +107,7 @@ export default function App() {
           path="/paymentform"
           element={<PaymentForm />}
         />
+        <Route path="/verify-email/:token" element={<VerifyEmail />} />
       </Routes>
       </Suspense>
     </BrowserRouter>

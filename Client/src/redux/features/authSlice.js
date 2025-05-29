@@ -8,11 +8,9 @@ export const signUpUser = createAsyncThunk(
   "auth/signUpUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-         `${apiUrl}/auth/signup`,
-        userData,
-        { withCredentials: true } 
-      );
+      const response = await axios.post(`${apiUrl}/auth/signup`, userData, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data);
@@ -28,7 +26,7 @@ export const LoginUser = createAsyncThunk(
       const response = await axios.post(
         `${apiUrl}/auth/login`,
         userData
-        // { withCredentials: true } 
+        // { withCredentials: true }
       );
       return response.data;
     } catch (error) {
@@ -42,11 +40,9 @@ export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${apiUrl}/auth/forgot`,
-        email,
-        { withCredentials: true } 
-      );
+      const response = await axios.post(`${apiUrl}/auth/forgot`, email, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error?.response?.data);
@@ -62,7 +58,24 @@ export const resetPassword = createAsyncThunk(
       const response = await axios.post(
         `${apiUrl}/auth/reset/${token}`,
         { newPassword },
-        { withCredentials: true } 
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+// resend verification email
+export const resendVerificationEmail = createAsyncThunk(
+  "auth/resendVerificationEmail",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/auth/resend-verification`,
+        { email },
+        { withCredentials: true }
       );
       return response.data;
     } catch (error) {
@@ -100,11 +113,20 @@ const authSlice = createSlice({
         state.error = null;
       })
 
+      // .addCase(signUpUser.fulfilled, (state, action) => {
+      //   state.loading = false;
+      //   state.user = action.payload.user;
+      //   state.token = action.payload.token;
+      //   localStorage.setItem("token", action.payload.token);
+      // })
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token);
+        state.message =
+          action.payload.message ||
+          "Signup successful. Please verify your email.";
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.loading = false;
@@ -151,9 +173,21 @@ const authSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.error;
+      })
+      .addCase(resendVerificationEmail.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resendVerificationEmail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(resendVerificationEmail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.error;
       });
   },
 });
-export const {logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
