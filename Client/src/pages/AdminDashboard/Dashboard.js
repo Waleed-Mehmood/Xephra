@@ -67,7 +67,14 @@ function Sidebar({ onMenuClick, dark }) {
             <li
               key={item.key}
               className="relative px-6 py-3 cursor-pointer bg-transparent hover:bg-[#a3676f] text-[#D4AD66] hover:text-white"
-              onClick={() => onMenuClick(item.key)}
+              // onClick={() => onMenuClick(item.key)}
+              onClick={() => {
+                if (item.key === "PaymentPanel") {
+                  navigate("/payment-verification-panel");
+                } else {
+                  onMenuClick(item.key);
+                }
+              }}
             >
               <span
                 className={`absolute inset-y-0 left-0 w-1

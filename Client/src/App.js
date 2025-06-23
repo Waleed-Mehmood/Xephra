@@ -8,6 +8,8 @@ import Loading from "./utils/Loading/Loading";
 import RegisterEventDetailUser from "./components/UserDashobard/RegisterEventDetailUser";
 import PaymentForm from "./pages/PaymentForm/PaymentForm";
 import VerifyEmail from "./pages/VerifyEmail";
+import UserPaymentPortal from "./components/UserDashobard/PaymentPortal/PaymentPortal";
+import PaymentVerificationPanel from "./components/AdminDashobard/PaymentPanel/PaymentVerificationPanel";
 const Signup = lazy(() => import("./pages/Signup"));
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -108,6 +110,8 @@ export default function App() {
           element={<PaymentForm />}
         />
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
+        <Route path="/paymentportal" element={<UserPaymentPortal />} />
+        <Route path="/payment-verification-panel" element={<PaymentVerificationPanel />} />
       </Routes>
       </Suspense>
     </BrowserRouter>

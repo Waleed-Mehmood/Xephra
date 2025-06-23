@@ -10,9 +10,11 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
 const rankingRoutes = require('./routes/rankingRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const upload = require("./config/multerConfig");
 const cookieParser = require("cookie-parser");
 const socketSetup = require("./Socket/index"); // 
+const startSubscriptionCron = require('./utils/subscriptionCron');
 
 const passport = require('./config/passport');
 const app = express();
@@ -20,6 +22,9 @@ const port = process.env.PORT || 5000;
 require("dotenv").config();
 
 const server = http.createServer(app);
+
+// Start cron jobs
+startSubscriptionCron();
 
 const corsOptions = {
   // origin: "https://xephra.vercel.app",
@@ -61,6 +66,7 @@ app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.use("/user", userRoutes);
 app.use('/rank', rankingRoutes);
+app.use("/payments", paymentRoutes);
 
 // Connect to MongoDB
 connectDB();

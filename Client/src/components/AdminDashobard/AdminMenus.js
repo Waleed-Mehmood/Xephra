@@ -30,4 +30,8 @@ export const menuItems = [
     name: "Ranking Approval",
     key: "rankingApproval",
   },
+  {
+    name: "Payment Panel",
+    key: "PaymentPanel",
+  },
 ];
