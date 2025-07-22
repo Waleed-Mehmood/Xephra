@@ -197,13 +197,9 @@
 
 // export default paymentSlice.reducer;
 
-
-
-
-
 // src/redux/features/paymentSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const API_URL = process.env.REACT_APP_BACKEND;
 
@@ -211,165 +207,246 @@ const API_URL = process.env.REACT_APP_BACKEND;
 
 // 1. Submit new payment
 export const submitPayment = createAsyncThunk(
-  'payment/submitPayment',
+  "payment/submitPayment",
   async (formData, { rejectWithValue }) => {
     try {
       const res = await axios.post(`${API_URL}/payments/submit`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Payment submission failed');
+      return rejectWithValue(
+        err.response?.data?.message || "Payment submission failed"
+      );
     }
   }
 );
 
 // 2. Get payment by ID
 export const getPaymentById = createAsyncThunk(
-  'payment/getPaymentById',
+  "payment/getPaymentById",
   async (paymentId, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${API_URL}/api/payments/payment/${paymentId}`);
+      const res = await axios.get(
+        `${API_URL}/api/payments/payment/${paymentId}`
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to fetch payment');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch payment"
+      );
     }
   }
 );
 
 // 3. Get all user payments
 export const getUserPayments = createAsyncThunk(
-  'payment/getUserPayments',
+  "payment/getUserPayments",
   async (userId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_URL}/api/payments/user/${userId}/payments`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${API_URL}/api/payments/user/${userId}/payments`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to fetch user payments');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch user payments"
+      );
     }
   }
 );
 
 // 4. Get subscription status
 export const getSubscriptionStatus = createAsyncThunk(
-  'payment/getSubscriptionStatus',
+  "payment/getSubscriptionStatus",
   async (userId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.get(`${API_URL}/api/payments/user/${userId}/subscription-status`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${API_URL}/api/payments/user/${userId}/subscription-status`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to fetch subscription status');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch subscription status"
+      );
     }
   }
 );
 
 // 5. Get all payments (Admin)
 export const getAllPayments = createAsyncThunk(
-  'payment/getAllPayments',
+  "payment/getAllPayments",
   async (queryParams = {}, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const queryString = new URLSearchParams(queryParams).toString();
-      const res = await axios.get(`${API_URL}/payments/admin/all${queryString ? `?${queryString}` : ''}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.get(
+        `${API_URL}/payments/admin/all${queryString ? `?${queryString}` : ""}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to fetch all payments');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch all payments"
+      );
     }
   }
 );
 
 // 6. Admin: Update payment
 export const updatePaymentById = createAsyncThunk(
-  'payment/updatePaymentById',
+  "payment/updatePaymentById",
   async ({ paymentId, updatedData }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.patch(`${API_URL}/payments/admin/${paymentId}/update`, updatedData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(
+        `${API_URL}/payments/admin/${paymentId}/update`,
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to update payment');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to update payment"
+      );
     }
   }
 );
 
 // 7. Admin: Verify payment
 export const verifyPaymentById = createAsyncThunk(
-  'payment/verifyPaymentById',
+  "payment/verifyPaymentById",
   async (paymentId, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.patch(`${API_URL}/payments/admin/${paymentId}/verify`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(
+        `${API_URL}/payments/admin/${paymentId}/verify`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to verify payment');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to verify payment"
+      );
     }
   }
 );
 
 // 8. Admin: Reject payment
+// export const rejectPaymentById = createAsyncThunk(
+//   'payment/rejectPaymentById',
+//   async (paymentId, { rejectWithValue }) => {
+//     try {
+//       const token = localStorage.getItem('token');
+//       const res = await axios.patch(`${API_URL}/payments/admin/${paymentId}/reject`, {}, {
+//         headers: { Authorization: `Bearer ${token}` }
+//       });
+//       return res.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message || 'Failed to reject payment');
+//     }
+//   }
+// );
+
+// 8. Admin: Reject payment with reason
 export const rejectPaymentById = createAsyncThunk(
-  'payment/rejectPaymentById',
-  async (paymentId, { rejectWithValue }) => {
+  "payment/rejectPaymentById",
+  async ({ paymentId, rejectionReason }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.patch(`${API_URL}/payments/admin/${paymentId}/reject`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const res = await axios.patch(
+        `${API_URL}/payments/admin/${paymentId}/reject`,
+        { rejectionReason }, // Send rejection reason in request body
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message || 'Failed to reject payment');
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to reject payment"
+      );
     }
   }
 );
 
-
+// 9. Get categorized subscriptions for a user
+export const getCategorizedUserSubscriptions = createAsyncThunk(
+  "payment/getCategorizedUserSubscriptions",
+  async (userId, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${API_URL}/payments/user/${userId}/subscriptions`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return res.data; // { active: [], expired: [], pending: [], rejected: [], total: number }
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch user subscriptions"
+      );
+    }
+  }
+);
 
 // ========== Slice ==========
 
 const paymentSlice = createSlice({
-  name: 'payment',
+  name: "payment",
   initialState: {
     loading: false,
     error: null,
-    successMessage: '',
+    successMessage: "",
     submittedPayment: null,
     paymentDetails: null,
     userPayments: [],
     subscriptionStatus: null,
     adminPayments: [], // ✅ For admin payment list
-    pagination: null,   // ✅ For admin pagination
+    pagination: null, // ✅ For admin pagination
 
     // Additional state for UI control - removed uploadedFile
     fileMetadata: {
       name: null,
       size: null,
-      type: null
+      type: null,
     },
-    copiedText: '',
+    copiedText: "",
     showInstructions: false,
     selectedPlan: null,
     formData: {},
-    paymentMethod: ''
+    paymentMethod: "",
+    categorizedSubscriptions: {
+      active: [],
+      expired: [],
+      pending: [],
+      rejected: [],
+      total: 0,
+    },
   },
   reducers: {
     clearPaymentState: (state) => {
       state.loading = false;
       state.error = null;
-      state.successMessage = '';
+      state.successMessage = "";
       state.submittedPayment = null;
     },
     setFileMetadata: (state, action) => {
@@ -382,13 +459,13 @@ const paymentSlice = createSlice({
       state.fileMetadata = {
         name: null,
         size: null,
-        type: null
+        type: null,
       };
-      state.copiedText = '';
+      state.copiedText = "";
       state.showInstructions = false;
       state.selectedPlan = null;
       state.formData = {};
-      state.paymentMethod = '';
+      state.paymentMethod = "";
     },
     setShowInstructions: (state, action) => {
       state.showInstructions = action.payload;
@@ -401,7 +478,7 @@ const paymentSlice = createSlice({
     },
     setPaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -412,7 +489,7 @@ const paymentSlice = createSlice({
       })
       .addCase(submitPayment.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = 'Payment submitted successfully';
+        state.successMessage = "Payment submitted successfully";
         state.submittedPayment = action.payload;
       })
       .addCase(submitPayment.rejected, (state, action) => {
@@ -484,7 +561,7 @@ const paymentSlice = createSlice({
       })
       .addCase(updatePaymentById.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = 'Payment updated successfully';
+        state.successMessage = "Payment updated successfully";
       })
       .addCase(updatePaymentById.rejected, (state, action) => {
         state.loading = false;
@@ -498,7 +575,7 @@ const paymentSlice = createSlice({
       })
       .addCase(verifyPaymentById.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = 'Payment verified successfully';
+        state.successMessage = "Payment verified successfully";
       })
       .addCase(verifyPaymentById.rejected, (state, action) => {
         state.loading = false;
@@ -512,13 +589,27 @@ const paymentSlice = createSlice({
       })
       .addCase(rejectPaymentById.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = 'Payment rejected successfully';
+        state.successMessage = "Payment rejected successfully";
       })
       .addCase(rejectPaymentById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      // Get categorized subscriptions for a user
+      .addCase(getCategorizedUserSubscriptions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCategorizedUserSubscriptions.fulfilled, (state, action) => {
+        state.loading = false;
+        state.categorizedSubscriptions = action.payload;
+      })
+      .addCase(getCategorizedUserSubscriptions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
-  }
+  },
 });
 
 export const {
@@ -529,7 +620,7 @@ export const {
   setShowInstructions,
   setSelectedPlan,
   setFormData,
-  setPaymentMethod
+  setPaymentMethod,
 } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

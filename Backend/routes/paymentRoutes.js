@@ -90,14 +90,25 @@ router.get('/payment/:paymentId', PaymentController.getPaymentById);
 // USER AUTHENTICATED ROUTES
 // =======================
 
-// Get user's all payments
+// GET all categorized subscriptions for a user
 router.get('/user/:userId/subscriptions', authenticateUser, PaymentController.getUserSubscriptions);
 
-// Get user's subscription status
-router.get('/user/:userId/subscription-status', authenticateUser, PaymentController.getUserSubscriptionStatus);
+// UPDATE a pending subscription
+router.put('/user/:userId/subscriptions/pending/:subscriptionId', authenticateUser, PaymentController.updatePendingSubscription);
 
-// Download payment receipt (user can download their own receipt)
-router.get('/receipt/:paymentId/download', authenticateUser, PaymentController.downloadReceipt);
+// DELETE a pending subscription
+router.delete('/user/:userId/subscriptions/pending/:subscriptionId', authenticateUser, PaymentController.deletePendingSubscription);
+
+
+
+// // Get user's all payments
+// router.get('/user/:userId/subscriptions', authenticateUser, PaymentController.getUserSubscriptions);
+
+// // Get user's subscription status
+// router.get('/user/:userId/subscription-status', authenticateUser, PaymentController.getUserSubscriptionStatus);
+
+// // Download payment receipt (user can download their own receipt)
+// router.get('/receipt/:paymentId/download', authenticateUser, PaymentController.downloadReceipt);
 
 // =======================
 // ADMIN AUTHENTICATED ROUTES

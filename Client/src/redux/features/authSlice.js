@@ -9,6 +9,9 @@ export const signUpUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${apiUrl}/auth/signup`, userData, {
+        headers: {
+            'Content-Type': 'application/json',
+          },
         withCredentials: true,
       });
       return response.data;
@@ -25,8 +28,13 @@ export const LoginUser = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/auth/login`,
-        userData
-        // { withCredentials: true }
+        userData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
       );
       return response.data;
     } catch (error) {

@@ -168,6 +168,11 @@ const PaymentStatusSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User' // Reference to admin user
   },
+  rejectionReason: {
+    type: String,
+    maxlength: 500,
+    trim: true
+  },
   expiryDate: {
     type: Date
   },

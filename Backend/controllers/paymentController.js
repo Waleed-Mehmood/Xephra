@@ -250,7 +250,8 @@ const paymentController = {
   },
 
 
-  updatePaymentById: async (req, res) => {
+// (18 July 2025)
+updatePaymentById: async (req, res) => {
   try {
     const { paymentId } = req.params;
     if (!paymentId || paymentId.length < 8) {
@@ -334,7 +335,27 @@ const paymentController = {
       planChanged = true;
     }
 
-    // Step 4: If plan changed and status is verified, recalculate dates
+    // Step 4: Update paymentStatus (NEW SECTION)
+    if (updateData.paymentStatus) {
+      const { rejectionReason } = updateData.paymentStatus;
+      
+      // Update rejection reason if provided
+      if (rejectionReason !== undefined) {
+        // Allow empty string to clear the rejection reason
+        payment.paymentStatus.rejectionReason = rejectionReason;
+      }
+      
+      // Optional: Add validation for rejected payments
+      if (payment.paymentStatus.status === "rejected" && 
+          (!rejectionReason || rejectionReason.trim() === "")) {
+        return res.status(400).json({
+          success: false,
+          message: "Rejection reason is required for rejected payments",
+        });
+      }
+    }
+
+    // Step 5: If plan changed and status is verified, recalculate dates
     if (planChanged && payment.paymentStatus.status === "verified") {
       const now = new Date();
       let subscriptionStartDate = new Date(now);
@@ -375,7 +396,6 @@ const paymentController = {
     });
   }
 },
-
 
   verifyPayment: async (req, res) => {
     try {
@@ -457,10 +477,77 @@ const paymentController = {
     }
   },
 
+  // rejectPayment: async (req, res) => {
+  //   try {
+  //     const { paymentId } = req.params;
+  //     const adminId = req.user?.id;
+
+  //     const payment = await Payment.findOne({ paymentId });
+
+  //     if (!payment) {
+  //       return res.status(404).json({
+  //         success: false,
+  //         message: "Payment not found",
+  //       });
+  //     }
+
+  //     if (payment.paymentStatus.status !== "pending") {
+  //       return res.status(400).json({
+  //         success: false,
+  //         message: `Payment is already ${payment.paymentStatus.status}`,
+  //       });
+  //     }
+
+  //     // Update payment status to rejected
+  //     payment.paymentStatus = {
+  //       ...payment.paymentStatus,
+  //       status: "rejected",
+  //       verificationDate: new Date(),
+  //       verifiedBy: adminId,
+  //     };
+
+  //     await payment.save();
+
+  //     res.status(200).json({
+  //       success: true,
+  //       message: "Payment rejected successfully",
+  //       data: payment.paymentStatus,
+  //     });
+  //   } catch (error) {
+  //     console.error("Reject Payment Error:", error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Failed to reject payment",
+  //       error:
+  //         process.env.NODE_ENV === "development"
+  //           ? error.message
+  //           : "Internal server error",
+  //     });
+  //   }
+  // },
+
+
   rejectPayment: async (req, res) => {
     try {
       const { paymentId } = req.params;
+      const { rejectionReason } = req.body; // Get rejection reason from request body
       const adminId = req.user?.id;
+
+      // Validate rejection reason
+      if (!rejectionReason || !rejectionReason.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Rejection reason is required",
+        });
+      }
+
+      // Validate rejection reason length
+      if (rejectionReason.trim().length > 500) {
+        return res.status(400).json({
+          success: false,
+          message: "Rejection reason must be less than 500 characters",
+        });
+      }
 
       const payment = await Payment.findOne({ paymentId });
 
@@ -478,12 +565,13 @@ const paymentController = {
         });
       }
 
-      // Update payment status to rejected
+      // Update payment status to rejected with reason
       payment.paymentStatus = {
         ...payment.paymentStatus,
         status: "rejected",
         verificationDate: new Date(),
         verifiedBy: adminId,
+        rejectionReason: rejectionReason.trim(), // Store the rejection reason
       };
 
       await payment.save();
@@ -491,7 +579,13 @@ const paymentController = {
       res.status(200).json({
         success: true,
         message: "Payment rejected successfully",
-        data: payment.paymentStatus,
+        data: {
+          paymentId: payment.paymentId,
+          status: payment.paymentStatus.status,
+          rejectionReason: payment.paymentStatus.rejectionReason,
+          verificationDate: payment.paymentStatus.verificationDate,
+          verifiedBy: payment.paymentStatus.verifiedBy,
+        },
       });
     } catch (error) {
       console.error("Reject Payment Error:", error);
@@ -529,164 +623,309 @@ const paymentController = {
     }
   },
 
-  getUserSubscriptions: async (req, res) => {
-    try {
-      const { userId } = req.params;
-      const { page = 1, limit = 10 } = req.query;
-      const skip = (page - 1) * limit;
+  // getUserSubscriptions: async (req, res) => {
+  //   try {
+  //     const { userId } = req.params;
+  //     const { page = 1, limit = 10 } = req.query;
+  //     const skip = (page - 1) * limit;
 
-      // Get all payments for the user
-      const [allPayments, totalCount] = await Promise.all([
-        Payment.find({ "userDetails.userId": userId })
-          .sort({ "paymentStatus.submissionDate": -1 })
-          .skip(Number(skip))
-          .limit(Number(limit)),
-        Payment.countDocuments({ "userDetails.userId": userId }),
-      ]);
+  //     // Get all payments for the user
+  //     const [allPayments, totalCount] = await Promise.all([
+  //       Payment.find({ "userDetails.userId": userId })
+  //         .sort({ "paymentStatus.submissionDate": -1 })
+  //         .skip(Number(skip))
+  //         .limit(Number(limit)),
+  //       Payment.countDocuments({ "userDetails.userId": userId }),
+  //     ]);
 
-      // Separate verified and pending subscriptions
-      const verifiedSubscriptions = allPayments.filter(
-        (payment) =>
-          payment.paymentStatus?.status === "completed" ||
-          payment.paymentStatus?.status === "verified" ||
-          payment.paymentStatus?.status === "success"
-      );
+  //     // Separate verified and pending subscriptions
+  //     const verifiedSubscriptions = allPayments.filter(
+  //       (payment) =>
+  //         payment.paymentStatus?.status === "completed" ||
+  //         payment.paymentStatus?.status === "verified" ||
+  //         payment.paymentStatus?.status === "success"
+  //     );
 
-      const pendingSubscriptions = allPayments.filter(
-        (payment) =>
-          payment.paymentStatus?.status === "pending" ||
-          payment.paymentStatus?.status === "processing" ||
-          payment.paymentStatus?.status === "initiated"
-      );
+  //     const pendingSubscriptions = allPayments.filter(
+  //       (payment) =>
+  //         payment.paymentStatus?.status === "pending" ||
+  //         payment.paymentStatus?.status === "processing" ||
+  //         payment.paymentStatus?.status === "initiated"
+  //     );
 
-      // Format response data
-      const formatSubscription = (payment) => ({
-        id: payment._id,
-        plan_name: payment.planDetails?.planName || payment.planDetails?.name,
-        amount: payment.paymentDetails?.amount,
-        currency: payment.paymentDetails?.currency || "PKR",
-        payment_method: payment.paymentDetails?.method,
-        status: payment.paymentStatus?.status,
-        created_date: payment.paymentStatus?.submissionDate,
-        start_date: payment.subscriptionDetails?.startDate,
-        end_date: payment.subscriptionDetails?.endDate,
-        // Add actions for pending subscriptions
-        actions:
-          payment.paymentStatus?.status === "pending"
-            ? {
-                can_edit: true,
-                can_delete: true,
-              }
-            : undefined,
-      });
+  //     // Format response data
+  //     const formatSubscription = (payment) => ({
+  //       id: payment._id,
+  //       plan_name: payment.planDetails?.planName || payment.planDetails?.name,
+  //       amount: payment.paymentDetails?.amount,
+  //       currency: payment.paymentDetails?.currency || "PKR",
+  //       payment_method: payment.paymentDetails?.method,
+  //       status: payment.paymentStatus?.status,
+  //       created_date: payment.paymentStatus?.submissionDate,
+  //       start_date: payment.subscriptionDetails?.startDate,
+  //       end_date: payment.subscriptionDetails?.endDate,
+  //       // Add actions for pending subscriptions
+  //       actions:
+  //         payment.paymentStatus?.status === "pending"
+  //           ? {
+  //               can_edit: true,
+  //               can_delete: true,
+  //             }
+  //           : undefined,
+  //     });
 
-      res.status(200).json({
-        success: true,
-        data: {
-          verified_subscriptions: verifiedSubscriptions.map(formatSubscription),
-          pending_subscriptions: pendingSubscriptions.map(formatSubscription),
-          pagination: {
-            currentPage: Number(page),
-            totalPages: Math.ceil(totalCount / limit),
-            totalCount,
-            verifiedCount: verifiedSubscriptions.length,
-            pendingCount: pendingSubscriptions.length,
-          },
-        },
-      });
-    } catch (error) {
-      console.error("Get User Subscriptions Error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch user subscriptions",
-        error:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
+  //     res.status(200).json({
+  //       success: true,
+  //       data: {
+  //         verified_subscriptions: verifiedSubscriptions.map(formatSubscription),
+  //         pending_subscriptions: pendingSubscriptions.map(formatSubscription),
+  //         pagination: {
+  //           currentPage: Number(page),
+  //           totalPages: Math.ceil(totalCount / limit),
+  //           totalCount,
+  //           verifiedCount: verifiedSubscriptions.length,
+  //           pendingCount: pendingSubscriptions.length,
+  //         },
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error("Get User Subscriptions Error:", error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Failed to fetch user subscriptions",
+  //       error:
+  //         process.env.NODE_ENV === "development"
+  //           ? error.message
+  //           : "Internal server error",
+  //     });
+  //   }
+  // },
+
+  // // Additional methods for pending subscription management
+  // updatePendingSubscription: async (req, res) => {
+  //   try {
+  //     const { userId, subscriptionId } = req.params;
+  //     const updateData = req.body;
+
+  //     // Only allow editing if status is pending
+  //     const subscription = await Payment.findOne({
+  //       _id: subscriptionId,
+  //       "userDetails.userId": userId,
+  //       "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
+  //     });
+
+  //     if (!subscription) {
+  //       return res.status(404).json({
+  //         success: false,
+  //         message: "Pending subscription not found or cannot be edited",
+  //       });
+  //     }
+
+  //     const updatedSubscription = await Payment.findByIdAndUpdate(
+  //       subscriptionId,
+  //       { $set: updateData },
+  //       { new: true, runValidators: true }
+  //     );
+
+  //     res.status(200).json({
+  //       success: true,
+  //       message: "Subscription updated successfully",
+  //       data: updatedSubscription,
+  //     });
+  //   } catch (error) {
+  //     console.error("Update Pending Subscription Error:", error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Failed to update subscription",
+  //       error:
+  //         process.env.NODE_ENV === "development"
+  //           ? error.message
+  //           : "Internal server error",
+  //     });
+  //   }
+  // },
+
+  // deletePendingSubscription: async (req, res) => {
+  //   try {
+  //     const { userId, subscriptionId } = req.params;
+
+  //     // Only allow deletion if status is pending
+  //     const subscription = await Payment.findOne({
+  //       _id: subscriptionId,
+  //       "userDetails.userId": userId,
+  //       "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
+  //     });
+
+  //     if (!subscription) {
+  //       return res.status(404).json({
+  //         success: false,
+  //         message: "Pending subscription not found or cannot be deleted",
+  //       });
+  //     }
+
+  //     await Payment.findByIdAndDelete(subscriptionId);
+
+  //     res.status(200).json({
+  //       success: true,
+  //       message: "Subscription deleted successfully",
+  //     });
+  //   } catch (error) {
+  //     console.error("Delete Pending Subscription Error:", error);
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Failed to delete subscription",
+  //       error:
+  //         process.env.NODE_ENV === "development"
+  //           ? error.message
+  //           : "Internal server error",
+  //     });
+  //   }
+  // },
+
+
+//   // GET subscriptions categorized by status
+// getUserSubscriptions: async (req, res) => {
+//   const { userId } = req.params;
+
+//   try {
+//     const subscriptions = await Payment.find({ "userDetails.userId": userId });
+
+//     const active = [];
+//     const expired = [];
+//     const pending = [];
+//     const rejected = [];
+
+//     subscriptions.forEach((sub) => {
+//       const status = sub.paymentStatus.status;
+//       const isActive = sub.paymentStatus.isActive;
+
+//       if (status === 'verified' && isActive) active.push(sub);
+//       else if (status === 'expired') expired.push(sub);
+//       else if (status === 'pending') pending.push(sub);
+//       else if (status === 'rejected') rejected.push(sub);
+//     });
+
+//     res.json([...active, ...expired, ...pending, ...rejected]); // frontend filters again
+//   } catch (err) {
+//     console.error('Error fetching subscriptions:', err);
+//     res.status(500).json({ message: 'Server error fetching subscriptions' });
+//   }
+// },
+
+
+getUserSubscriptions: async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Add basic validation
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    const subscriptions = await Payment.find({ "userDetails.userId": userId }).lean();
+
+    // Return early if no subscriptions found
+    if (!subscriptions || subscriptions.length === 0) {
+      return res.json({
+        active: [],
+        expired: [],
+        pending: [],
+        rejected: [],
+        total: 0
       });
     }
-  },
 
-  // Additional methods for pending subscription management
-  updatePendingSubscription: async (req, res) => {
-    try {
-      const { userId, subscriptionId } = req.params;
-      const updateData = req.body;
+    // Use reduce for more efficient categorization
+    const categorized = subscriptions.reduce((acc, sub) => {
+      const status = sub.paymentStatus?.status;
+      const isActive = sub.paymentStatus?.isActive;
 
-      // Only allow editing if status is pending
-      const subscription = await Payment.findOne({
-        _id: subscriptionId,
-        "userDetails.userId": userId,
-        "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
-      });
-
-      if (!subscription) {
-        return res.status(404).json({
-          success: false,
-          message: "Pending subscription not found or cannot be edited",
-        });
+      // Handle potential missing paymentStatus
+      if (!status) {
+        acc.pending.push(sub);
+        return acc;
       }
 
-      const updatedSubscription = await Payment.findByIdAndUpdate(
-        subscriptionId,
-        { $set: updateData },
-        { new: true, runValidators: true }
-      );
-
-      res.status(200).json({
-        success: true,
-        message: "Subscription updated successfully",
-        data: updatedSubscription,
-      });
-    } catch (error) {
-      console.error("Update Pending Subscription Error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to update subscription",
-        error:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
-    }
-  },
-
-  deletePendingSubscription: async (req, res) => {
-    try {
-      const { userId, subscriptionId } = req.params;
-
-      // Only allow deletion if status is pending
-      const subscription = await Payment.findOne({
-        _id: subscriptionId,
-        "userDetails.userId": userId,
-        "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
-      });
-
-      if (!subscription) {
-        return res.status(404).json({
-          success: false,
-          message: "Pending subscription not found or cannot be deleted",
-        });
+      if (status === 'verified' && isActive) {
+        acc.active.push(sub);
+      } else if (status === 'expired') {
+        acc.expired.push(sub);
+      } else if (status === 'pending') {
+        acc.pending.push(sub);
+      } else if (status === 'rejected') {
+        acc.rejected.push(sub);
       }
 
-      await Payment.findByIdAndDelete(subscriptionId);
+      return acc;
+    }, {
+      active: [],
+      expired: [],
+      pending: [],
+      rejected: []
+    });
 
-      res.status(200).json({
-        success: true,
-        message: "Subscription deleted successfully",
-      });
-    } catch (error) {
-      console.error("Delete Pending Subscription Error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to delete subscription",
-        error:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
+    // Return structured response instead of flattened array
+    res.json({
+      ...categorized,
+      total: subscriptions.length
+    });
+
+  } catch (err) {
+    console.error('Error fetching user subscriptions:', err);
+    res.status(500).json({ 
+      message: 'Failed to fetch subscriptions',
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+  }
+},
+
+
+// PUT update a pending subscription
+updatePendingSubscription: async (req, res) => {
+  const { userId, subscriptionId } = req.params;
+  const updatedFields = req.body;
+
+  try {
+    const subscription = await Payment.findOne({ _id: subscriptionId, userId });
+
+    if (!subscription || subscription.paymentStatus.status !== 'pending') {
+      return res.status(404).json({ message: 'Pending subscription not found' });
     }
-  },
+
+    // Update selectedPlan or other fields as needed
+    Object.assign(subscription.selectedPlan, updatedFields.selectedPlan || {});
+    subscription.paymentStatus.updatedAt = Date.now(); // optional
+
+    await subscription.save();
+    res.json({ message: 'Subscription updated', subscription });
+  } catch (err) {
+    console.error('Error updating subscription:', err);
+    res.status(500).json({ message: 'Error updating pending subscription' });
+  }
+},
+
+// DELETE a pending subscription
+deletePendingSubscription: async (req, res) => {
+  const { userId, subscriptionId } = req.params;
+
+  try {
+    const subscription = await Payment.findOne({
+      _id: subscriptionId,
+      userId,
+      'paymentStatus.status': 'pending'
+    });
+
+    if (!subscription) {
+      return res.status(404).json({ message: 'Pending subscription not found' });
+    }
+
+    await Payment.deleteOne({ _id: subscriptionId });
+    res.json({ message: 'Subscription deleted' });
+  } catch (err) {
+    console.error('Error deleting subscription:', err);
+    res.status(500).json({ message: 'Error deleting pending subscription' });
+  }
+},
 
   getUserSubscriptionStatus: async (req, res) => {
     try {

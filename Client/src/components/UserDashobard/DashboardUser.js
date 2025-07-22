@@ -234,7 +234,7 @@ const DashboardUser = ({ dark }) => {
         </div>
         {/* Rankings Section */}
         <div
-          className={`col-span-12 lg:col-span-3 p-4 rounded shadow ${
+          className={`col-span-12 lg:col-span-3 p-4 rounded shadow text-white ${
             dark ? "bg-[#292622c4] " : "bg-[#292622c4]"
           }`}
         >

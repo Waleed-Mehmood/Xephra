@@ -108,7 +108,7 @@ export default function App() {
         <Route
           path="/paymentform"
           element={<PaymentForm />}
-        />
+        /> 
         <Route path="/verify-email/:token" element={<VerifyEmail />} />
         <Route path="/paymentportal" element={<UserPaymentPortal />} />
         <Route path="/payment-verification-panel" element={<PaymentVerificationPanel />} />
