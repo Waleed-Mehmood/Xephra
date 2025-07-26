@@ -623,196 +623,6 @@ updatePaymentById: async (req, res) => {
     }
   },
 
-  // getUserSubscriptions: async (req, res) => {
-  //   try {
-  //     const { userId } = req.params;
-  //     const { page = 1, limit = 10 } = req.query;
-  //     const skip = (page - 1) * limit;
-
-  //     // Get all payments for the user
-  //     const [allPayments, totalCount] = await Promise.all([
-  //       Payment.find({ "userDetails.userId": userId })
-  //         .sort({ "paymentStatus.submissionDate": -1 })
-  //         .skip(Number(skip))
-  //         .limit(Number(limit)),
-  //       Payment.countDocuments({ "userDetails.userId": userId }),
-  //     ]);
-
-  //     // Separate verified and pending subscriptions
-  //     const verifiedSubscriptions = allPayments.filter(
-  //       (payment) =>
-  //         payment.paymentStatus?.status === "completed" ||
-  //         payment.paymentStatus?.status === "verified" ||
-  //         payment.paymentStatus?.status === "success"
-  //     );
-
-  //     const pendingSubscriptions = allPayments.filter(
-  //       (payment) =>
-  //         payment.paymentStatus?.status === "pending" ||
-  //         payment.paymentStatus?.status === "processing" ||
-  //         payment.paymentStatus?.status === "initiated"
-  //     );
-
-  //     // Format response data
-  //     const formatSubscription = (payment) => ({
-  //       id: payment._id,
-  //       plan_name: payment.planDetails?.planName || payment.planDetails?.name,
-  //       amount: payment.paymentDetails?.amount,
-  //       currency: payment.paymentDetails?.currency || "PKR",
-  //       payment_method: payment.paymentDetails?.method,
-  //       status: payment.paymentStatus?.status,
-  //       created_date: payment.paymentStatus?.submissionDate,
-  //       start_date: payment.subscriptionDetails?.startDate,
-  //       end_date: payment.subscriptionDetails?.endDate,
-  //       // Add actions for pending subscriptions
-  //       actions:
-  //         payment.paymentStatus?.status === "pending"
-  //           ? {
-  //               can_edit: true,
-  //               can_delete: true,
-  //             }
-  //           : undefined,
-  //     });
-
-  //     res.status(200).json({
-  //       success: true,
-  //       data: {
-  //         verified_subscriptions: verifiedSubscriptions.map(formatSubscription),
-  //         pending_subscriptions: pendingSubscriptions.map(formatSubscription),
-  //         pagination: {
-  //           currentPage: Number(page),
-  //           totalPages: Math.ceil(totalCount / limit),
-  //           totalCount,
-  //           verifiedCount: verifiedSubscriptions.length,
-  //           pendingCount: pendingSubscriptions.length,
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.error("Get User Subscriptions Error:", error);
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "Failed to fetch user subscriptions",
-  //       error:
-  //         process.env.NODE_ENV === "development"
-  //           ? error.message
-  //           : "Internal server error",
-  //     });
-  //   }
-  // },
-
-  // // Additional methods for pending subscription management
-  // updatePendingSubscription: async (req, res) => {
-  //   try {
-  //     const { userId, subscriptionId } = req.params;
-  //     const updateData = req.body;
-
-  //     // Only allow editing if status is pending
-  //     const subscription = await Payment.findOne({
-  //       _id: subscriptionId,
-  //       "userDetails.userId": userId,
-  //       "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
-  //     });
-
-  //     if (!subscription) {
-  //       return res.status(404).json({
-  //         success: false,
-  //         message: "Pending subscription not found or cannot be edited",
-  //       });
-  //     }
-
-  //     const updatedSubscription = await Payment.findByIdAndUpdate(
-  //       subscriptionId,
-  //       { $set: updateData },
-  //       { new: true, runValidators: true }
-  //     );
-
-  //     res.status(200).json({
-  //       success: true,
-  //       message: "Subscription updated successfully",
-  //       data: updatedSubscription,
-  //     });
-  //   } catch (error) {
-  //     console.error("Update Pending Subscription Error:", error);
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "Failed to update subscription",
-  //       error:
-  //         process.env.NODE_ENV === "development"
-  //           ? error.message
-  //           : "Internal server error",
-  //     });
-  //   }
-  // },
-
-  // deletePendingSubscription: async (req, res) => {
-  //   try {
-  //     const { userId, subscriptionId } = req.params;
-
-  //     // Only allow deletion if status is pending
-  //     const subscription = await Payment.findOne({
-  //       _id: subscriptionId,
-  //       "userDetails.userId": userId,
-  //       "paymentStatus.status": { $in: ["pending", "processing", "initiated"] },
-  //     });
-
-  //     if (!subscription) {
-  //       return res.status(404).json({
-  //         success: false,
-  //         message: "Pending subscription not found or cannot be deleted",
-  //       });
-  //     }
-
-  //     await Payment.findByIdAndDelete(subscriptionId);
-
-  //     res.status(200).json({
-  //       success: true,
-  //       message: "Subscription deleted successfully",
-  //     });
-  //   } catch (error) {
-  //     console.error("Delete Pending Subscription Error:", error);
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "Failed to delete subscription",
-  //       error:
-  //         process.env.NODE_ENV === "development"
-  //           ? error.message
-  //           : "Internal server error",
-  //     });
-  //   }
-  // },
-
-
-//   // GET subscriptions categorized by status
-// getUserSubscriptions: async (req, res) => {
-//   const { userId } = req.params;
-
-//   try {
-//     const subscriptions = await Payment.find({ "userDetails.userId": userId });
-
-//     const active = [];
-//     const expired = [];
-//     const pending = [];
-//     const rejected = [];
-
-//     subscriptions.forEach((sub) => {
-//       const status = sub.paymentStatus.status;
-//       const isActive = sub.paymentStatus.isActive;
-
-//       if (status === 'verified' && isActive) active.push(sub);
-//       else if (status === 'expired') expired.push(sub);
-//       else if (status === 'pending') pending.push(sub);
-//       else if (status === 'rejected') rejected.push(sub);
-//     });
-
-//     res.json([...active, ...expired, ...pending, ...rejected]); // frontend filters again
-//   } catch (err) {
-//     console.error('Error fetching subscriptions:', err);
-//     res.status(500).json({ message: 'Server error fetching subscriptions' });
-//   }
-// },
-
-
 getUserSubscriptions: async (req, res) => {
   const { userId } = req.params;
 
@@ -904,45 +714,74 @@ updatePendingSubscription: async (req, res) => {
   }
 },
 
-// DELETE a pending subscription
-deletePendingSubscription: async (req, res) => {
-  const { userId, subscriptionId } = req.params;
 
+// DELETE a pending subscription using paymentId
+  deletePendingSubscriptionByPaymentId: async (req, res) => {
+    const { paymentId } = req.params;
+    const userId = req.user.UserId;
+
+    try {
+      const subscription = await Payment.findOne({
+        paymentId,
+        userId,
+        'paymentStatus.status': 'pending',
+      });
+
+      if (!subscription) {
+        return res.status(404).json({ message: 'Pending subscription not found' });
+      }
+
+      await Payment.deleteOne({ paymentId });
+      res.json({ message: 'Subscription deleted successfully' });
+    } catch (err) {
+      console.error('Error deleting subscription:', err);
+      res.status(500).json({ message: 'Error deleting pending subscription' });
+    }
+  },
+
+  getSubscriptionStatus: async (req, res) => {
   try {
-    const subscription = await Payment.findOne({
-      _id: subscriptionId,
-      userId,
-      'paymentStatus.status': 'pending'
-    });
+    const { userId } = req.params;
 
-    if (!subscription) {
-      return res.status(404).json({ message: 'Pending subscription not found' });
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required"
+      });
     }
 
-    await Payment.deleteOne({ _id: subscriptionId });
-    res.json({ message: 'Subscription deleted' });
-  } catch (err) {
-    console.error('Error deleting subscription:', err);
-    res.status(500).json({ message: 'Error deleting pending subscription' });
+    // Find any subscription that is verified and active for this user
+    const subscription = await Payment.findOne({
+      'userDetails.userId': userId,
+      'paymentStatus.status': 'verified',
+      'paymentStatus.isActive': true
+    }).sort({ 'paymentStatus.submissionDate': -1 });
+
+    if (subscription) {
+      return res.status(200).json({
+        success: true,
+        isVerified: true,
+        isActive: true,
+        message: "User has a verified and active subscription"
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        isVerified: false,
+        isActive: false,
+        message: "User does not have a verified and active subscription"
+      });
+    }
+
+  } catch (error) {
+    console.error('Subscription status check error:', error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while checking subscription status"
+    });
   }
 },
 
-  getUserSubscriptionStatus: async (req, res) => {
-    try {
-      const status = await Payment.getUserSubscriptionStatus(req.params.userId);
-      res.status(200).json({ success: true, data: status });
-    } catch (error) {
-      console.error("Get Subscription Status Error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch subscription status",
-        error:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
-    }
-  },
 
   getPendingPayments: async (req, res) => {
     try {

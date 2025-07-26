@@ -96,19 +96,15 @@ router.get('/user/:userId/subscriptions', authenticateUser, PaymentController.ge
 // UPDATE a pending subscription
 router.put('/user/:userId/subscriptions/pending/:subscriptionId', authenticateUser, PaymentController.updatePendingSubscription);
 
-// DELETE a pending subscription
-router.delete('/user/:userId/subscriptions/pending/:subscriptionId', authenticateUser, PaymentController.deletePendingSubscription);
+// DELETE pending subscription using paymentId
+router.delete(
+  '/subscriptions/pending/by-payment-id/:paymentId',
+  authenticateUser,
+  PaymentController.deletePendingSubscriptionByPaymentId
+);
 
-
-
-// // Get user's all payments
-// router.get('/user/:userId/subscriptions', authenticateUser, PaymentController.getUserSubscriptions);
-
-// // Get user's subscription status
-// router.get('/user/:userId/subscription-status', authenticateUser, PaymentController.getUserSubscriptionStatus);
-
-// // Download payment receipt (user can download their own receipt)
-// router.get('/receipt/:paymentId/download', authenticateUser, PaymentController.downloadReceipt);
+// Get user's subscription status
+router.get('/user/:userId/subscription-status', authenticateUser, PaymentController.getSubscriptionStatus);
 
 // =======================
 // ADMIN AUTHENTICATED ROUTES

@@ -10,6 +10,7 @@ import PaymentForm from "./pages/PaymentForm/PaymentForm";
 import VerifyEmail from "./pages/VerifyEmail";
 import UserPaymentPortal from "./components/UserDashobard/PaymentPortal/PaymentPortal";
 import PaymentVerificationPanel from "./components/AdminDashobard/PaymentPanel/PaymentVerificationPanel";
+import HomeV2 from "./pages/HomeV2";
 const Signup = lazy(() => import("./pages/Signup"));
 const ForgetPassword = lazy(() => import("./pages/ForgetPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
@@ -28,6 +29,7 @@ const AllUserRankingUser = lazy(() => import("./components/UserDashobard/AllUser
 const GoogleSuccess = lazy(() => import("./components/GoogleSuccess"));
 const Home = lazy(() => import("./pages/Home"));
 const ChatSystem = lazy(() => import("./components/ChatSystem"));
+// const HomeV2 = lazy(() => import("./pages/HomeV2"));
 
 
 export default function App() {
@@ -40,8 +42,9 @@ export default function App() {
     <BrowserRouter>
     <Suspense fallback={<Loading />} >
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<Home />} />
+        <Route path="/" element={<HomeV2 />} />
+        <Route path="*" element={<HomeV2 />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/google-success" element={<GoogleSuccess />} />
